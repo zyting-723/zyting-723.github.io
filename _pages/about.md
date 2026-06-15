@@ -1,133 +1,59 @@
 ---
 permalink: /
-title: "Hompage of Zhuming Shi"
-excerpt: "About me"
+title: "Dora's Projects"
+excerpt: "AI 产品作品集"
 author_profile: true
 redirect_from: 
   - /about/
   - /about.html
 ---
 
-Hi, I'm an undergraduate student at Peking University, [School of Electronics Engineering and Computer Science (EECS)](http://eecs.pku.edu.cn/Home/HOME.htm) and [Center of Frontiers of Computing Studies](http://cfcs.pku.edu.cn). I'm a student of professor Deng Xiaotie, work in daGAME laboratory. My research interests are theoretical computer science and its applications in economics, such like fair divisions, auction design, and machine learning applications. I have 2 publications in progress，and some ongoing research projects.
+我是张钰渟，北京大学信息管理系毕业，目前在探索 AI 在教育与职业方向上的产品落地。
 
-My email is shizhuming at pku.edu.cn
+以下是我正在构建的两个项目。
 
-Publications
-======
-  <ul>{% for post in site.publications %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
+---
 
-Research experience
-======
+## 高考志愿系统
 
-June 2022 -- Present Summer Research Intern
-------
-Mentors: Yang Cai (Yale University).
+> 让 1200 万高考生填报志愿时，不再靠「感觉」和「听说」。
 
-We focus on lower bounds of regret in No-regret learning algorithms in self-play games. Our target is to achieve a near optimal lower bound of no-regret learning in games, for example, $O(1)$ lower bound. Numerical experiments are employed in our research. This research is still in process.
+每年高考填志愿，大多数家庭的信息来源是：父母的经验、学长学姐的一句话、社交媒体的碎片。**高考志愿系统**用 AI 为考生提供基于数据的专业解读、录取概率预测和个性化志愿匹配。
 
+**核心能力**：
+- **专业解读**：覆盖全部本科专业的层级化解读（课程 / AI 替代性 / 薪资 / 考公适配度 / 升学数据），用信号标签（高危专业、AI 风险、扩招提示）帮考生一眼识别关键信息
+- **志愿匹配**：基于考生成绩、选科、MBTI 性格的智能匹配引擎，给出「冲 / 稳 / 保」三档志愿推荐
+- **录取概率**：结合历年录取数据的录取概率预测
 
-October 2021 - October 2022 Undergraduate Research
-------
-Mentors: Xiaotie Deng (Peking University).
+**项目状态**：产品设计阶段 — 线框图 + 需求文档已完成
 
-Throttling is one of the most popular budget control methods in today's online advertising markets. When a budget-constrained advertiser employs throttling, she can choose whether or not to participate in an auction after the advertising platform recommends a bid. This paper focuses on the dynamic budget throttling process in repeated second-price auctions from a theoretical view. Different information structures, whether or not the bidder can access the highest competing bid, were also taken into consideration. We propose the OGD-CB algorithm, which involves simultaneous distribution learning and revenue optimization. In both settings, we demonstrate that this algorithm guarantees an $O(\sqrt{T\log T})$ regret with probability $1−O(1/T)$ relative to the fluid adaptive throttling benchmark.
+[查看项目仓库 →](https://github.com/zyting-723/gaokao-volunteer)
 
-October 2020 - May 2021 Challenge Cup 2021
-------
-Mentors: Ming Zhang (Peking University).
+---
 
-We use an artificial neural network to predict old people's weakness in two years with biochemical indicators. And then we construct a website to make the model accessible to the world. The source code will be open source when this project finished.
+## 职业生涯系统
 
-October 2019 - May 2020 Challenge Cup 2020
-------
-Mentors: Jiaying Liu (Peking University).
+> 不是帮你找工作，是帮你经营职业生涯。
 
-An artificial neural network was imployed in our work to map the IIM data to the distribution of the six major oxides on the moon. Finally we got new maps of lunar surface chemistry. The source code is open source on [https://github.com/ShiZhuming/ChallengeCup](https://github.com/ShiZhuming/ChallengeCup)
+招聘产品（猎聘、BOSS 直聘、脉脉）的共同终点是「你签了 Offer，平台拿到佣金，故事结束」。但对年轻人来说，入职三个月后发现跟 JD 不一样、两年后想跳槽不知道市场价、五年后想转行不知道从哪学起——这些才是真正影响职业命运的时刻。
 
-Talks
-======
-  <ul>{% for post in site.talks %}
-    {% include archive-single-talk-cv.html %}
-  {% endfor %}</ul>
-  
+**职业生涯系统**用 AI 在「不知道该投什么」「拿到 Offer 不敢信」「入职后迷茫」「想跳槽但怕跳错」这些时刻出现，陪用户走完整条职业成长之路。
 
-Teaching Assistant Experience
-======
+**核心能力**：
+- **职业诊断**：基于简历 + 能力 + 性格 + 市场岗位的跨维度匹配
+- **Offer 评估**：多 Offer 横向对比、薪资市场价参考
+- **成长路径**：长期职业路径规划与技能缺口识别
 
-- Fall 2022 **Teaching assistant** 
-  
-  Introduction to Computer Systems (Peking University)
+**项目状态**：MVP 定义阶段 — 计划书 + 数据库设计已完成
 
-- Fall 2021 **Teaching assistant** 
-  
-  Introduction to Computer Systems (Peking University)
+[查看项目仓库 →](https://github.com/zyting-723/career-compass)
 
-- Fall 2019 **Teaching assistant** 
-  
-  Cycling education (Peking University)
+---
 
-Academic Volunteer experience
-======
-- August 2022 **ijtcs 2022 Organizing Committee**
+## 为什么用 AI 做这件事
 
-  International Joint Conference on Theoretical Computer Science – Frontier of Algorithmic Wisdom, City University of Hong Kong, Hong Kong
+给一个人做职业诊断，需要同时理解三件事：**他是谁**（能力、性格、偏好）、**市场有什么**（岗位、城市、行业）、**这两者之间怎么匹配**。
 
-  [https://conference.cs.cityu.edu.hk/ijtcs2022/](https://conference.cs.cityu.edu.hk/ijtcs2022/)
+这在人工时代成本极高——一个职业咨询师一小时几千块，大多数人付不起。AI 把这个等式改写了：大模型可以读简历、拆解能力、映射岗位需求，把「帮一个人看清方向」的边际成本降到接近零。
 
-- August 2021 **ijtcs 2021 Volunteer**
-
-  International Joint Conference On Theoretical Computer Science, Peking University, Beijing
-
-  [https://econcs.pku.edu.cn/ijtcs2021/](https://econcs.pku.edu.cn/ijtcs2021/)
-
-Education
-======
-- 2020 - Present **Peking University** 
-
-  Turing Class, Center on Frontiers of Computing Studies
-
-- 2019 - 2020 **Peking University** 
-
-  School of Electronics Engineering and Computer Science
-
-- 2018 -- 2019 **Peking University** 
-
-  College of Chemistry and Molecular Engineering
-
-Honors and scholarships
-======
-- 2020 Excellent Scientific Research Award (Peking University)
-
-- 2020 Third Prize as first author (Challenge Cup of Peking University)
-
-- 2019 Second Class Scholarship of Peking University (Peking University)
-
-- 2019 Sanhao student (Peking University)
-
-- 2019 Second Prize (Contemporary Undergraduate Mathematical Contest in Modeling)
-
-- 2017 Gold medal of 31st Chinese Chemical Olympiad (Southern University of Science and Technology, Chinese Chemical Society, China Association for Science and Technology)
-
-Technical skills
-======
-- Programming languages
-  
-  - Proficient in: Python, C++
-  
-  - Familiar with: HTML
-
-- Software : LaTeX, Git
-
-- Languages : English, Japanese
-
-Other interests
-======
-- Bike cycling
-
-  I have been captain of Peking University Venue Cycling Team for one term.
-
-- Photographing
-
-  My photos have been posted on website of Center on Frontiers of Computing Studies of Peking University.
+这不是「把人工咨询搬上线」，这是把一件以前少数人付得起的奢侈品，变成每个人都有权利用的基础设施。

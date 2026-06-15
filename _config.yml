@@ -6,14 +6,14 @@
 # `jekyll serve`. If you change this file, please restart the server process.
 
 # Site Settings
-locale                   : "en-US"
-title                    : "Zhuming Shi"
-title_separator          : "-"
-name                     : &name "Zhuming Shi"
-description              : &description "Homepage of Zhuming Shi"
-url                      : https://ShiZhuming.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+locale                   : "zh-CN"
+title                    : "Dora's Projects"
+title_separator          : "·"
+name                     : &name "张钰渟"
+description              : &description "AI 产品作品集 — 高考志愿系统 & 职业生涯系统"
+url                      : https://zyting-723.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "ShiZhuming.github.io"
+repository               : "zyting-723.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
@@ -80,14 +80,14 @@ analytics:
 
 # Site Author
 author:
-  name             : "Zhuming Shi"
+  name             : "张钰渟"
   avatar           : "profile.png"
-  bio              : "Undergraduate of Peking University interested in theoretical computer science with economics"
-  location         : "Beijing, China"
+  bio              : "北京大学信息管理系 · AI 教育产品探索中"
+  location         : "深圳 / 北京"
   employer         :
   pubmed           : 
-  googlescholar    : "https://scholar.google.com/citations?user=oCO_wTcAAAAJ&hl=en&oi=ao"
-  email            : "shizhuming@pku.edu.cn"
+  googlescholar    : 
+  email            : "doraytzhang@gmail.com"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
@@ -96,20 +96,20 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           : "ShiZhuming"
+  github           : "zyting-723"
   google_plus      :
   keybase          :
   instagram        :
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
   linkedin         :
-  orcid            : "https://orcid.org/0000-0001-7992-5265"
+  orcid            :
   pinterest        :
   soundcloud       :
   stackoverflow    : # http://stackoverflow.com/users/123456/username
   steam            :
   tumblr           :
-  twitter          : # "replacethistwitterhandle"
+  twitter          :
   vine             :
   weibo            :
   xing             :
@@ -255,7 +255,7 @@ sass:
 permalink: /:categories/:title/
 # paginate: 5 # amount of posts to show
 # paginate_path: /page:num/
-timezone: America/Los_Angeles # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: Asia/Shanghai # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 
 # Plugins
