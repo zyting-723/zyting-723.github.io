@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>专业解读页 · 志愿tab · 线框图 v21</title>
+<style>
+  :root {
+    --bg: #f5f5f5;
+    --card-bg: #fff;
+    --text: #333;
+    --text-secondary: #999;
+    --text-hint: #bbb;
+    --border: #e0e0e0;
+    --border-dash: #ccc;
+    --accent: #5B9BD5;
+    --accent-light: #EDF4FB;
+    --accent-text: #3A6B9E;
+    --green: #4CAF50;
+    --green-bg: #E8F5E9;
+    --green-light: #2E7D32;
+    --orange: #FF9800;
+    --orange-bg: #FFF3E0;
+    --red: #E74C3C;
+    --red-bg: #FDEDEC;
+    --red-light: #C0392B;
+    --gold: #B8860B;
+    --gold-bg: #FFF8E1;
+    --tag-bg: #f0f0f0;
+    --section-gap: 10px;
+    --score-ring-size: 72px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a2e;
+      --card-bg: #252540;
+      --text: #e0e0e0;
+      --text-secondary: #888;
+      --text-hint: #666;
+      --border: #3a3a5c;
+      --border-dash: #555;
+      --accent-light: #1a2840;
+      --accent-text: #64b5f6;
+      --green-bg: #1a3a1a;
+      --orange-bg: #3a2810;
+      --red-bg: #3a1820;
+      --gold-bg: #3a3010;
+      --tag-bg: #2a2a40;
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #e8e8e8;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh; padding: 20px;
+    color: var(--text);
+  }
+  .container { max-width: 430px; width: 100%; }
+
+  .page-header { text-align: center; margin-bottom: 20px; }
+  .page-header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .page-header .subtitle { font-size: 12px; color: var(--text-secondary); }
+  .collab-section { max-width: 430px; margin: 24px auto 0; padding: 16px 18px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); }
+  .collab-section h3 { font-size: 14px; font-weight: 700; margin: 0 0 10px; color: var(--text); }
+  .collab-item { font-size: 12px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 6px; }
+  .collab-item:last-child { margin-bottom: 0; }
+  .collab-role { color: var(--accent-text); font-weight: 600; }
+
+  .phone-frame {
+    width: 100%; height: 844px; max-height: 90vh;
+    background: var(--bg);
+    border-radius: 36px; overflow: hidden; position: relative;
+    border: 4px dashed var(--border-dash);
+    display: flex; flex-direction: column;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px 8px; font-size: 13px; font-weight: 600;
+    color: var(--text); background: var(--bg);
+    border-bottom: 1px dashed var(--border-dash);
+  }
+
+  /* Nav */
+  .nav-bar {
+    display: flex; align-items: center; padding: 10px 16px;
+    background: var(--card-bg); gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-back {
+    font-size: 18px; color: var(--accent); cursor: pointer;
+    text-decoration: none; padding: 4px;
+  }
+  .nav-title {
+    flex:1; font-size: 16px; font-weight: 600;
+    text-align: center; margin-right: 32px;
+  }
+
+  /* Scroll */
+  .scroll-body {
+    flex: 1; overflow-y: auto; padding: 0 12px 100px;
+    display: flex; flex-direction: column; gap: var(--section-gap);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg); border-radius: 12px;
+    padding: 16px; border: 1px solid var(--border);
+  }
+  .card-header {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 12px; font-size: 14px; font-weight: 600;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 16px; background: var(--card-bg);
+    border-radius: 12px; margin-top: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* Row 1: 专业名 + 概率 + 匹配标签（对齐匹配结果页 name-row 布局） */
+  .hero-name-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .hero-major-name {
+    font-size: 18px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-fit-badge {
+    font-size: 11px; font-weight: 600; color: var(--accent-text);
+    background: var(--accent-light); padding: 3px 10px; border-radius: 12px;
+    white-space: nowrap;
+    border: 1px solid var(--accent);
+  }
+  .hero-prob {
+    display: flex; align-items: baseline; gap: 4px;
+    flex-shrink: 0;
+  }
+  .hero-prob-num {
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1;
+  }
+  .hero-prob-tag {
+    font-size: 10px; color: var(--text-secondary);
+  }
+
+  /* Row 2: AI 一句话解读 + 追问入口（同行，解读左 + 链接右） */
+  .hero-ai-summary {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: var(--text-secondary); line-height: 1.55;
+    padding: 8px 10px; margin-bottom: 12px;
+    background: var(--accent-light); border-radius: 8px;
+    border: 1px dashed var(--accent);
+  }
+  .hero-ai-summary .ai-summary-text {
+    flex: 1; min-width: 0;
+  }
+  .ai-ask-btn {
+    flex-shrink: 0; font-size: 11px; color: #fff; font-weight: 500;
+    cursor: pointer; white-space: nowrap; align-self: center;
+    background: var(--accent); padding: 4px 10px; border-radius: 12px;
+    border: none;
+  }
+  /* Row 4: 匹配相关导师 CTA */
+  .hero-mentor-btn {
+    display: block; width: 100%; padding: 8px 0; margin-top: 8px;
+    text-align: center; font-size: 12px; font-weight: 500;
+    border: 1px dashed var(--border-dash);
+    color: var(--text-secondary);
+    background: var(--card-bg); cursor: pointer;
+    user-select: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .hero-mentor-btn:hover {
+    color: var(--accent); border-color: var(--accent);
+  }
+
+  /* Row 3: 精简客观属性标签 */
+  .hero-tags-attrs {
+    display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+    margin-bottom: 14px;
+  }
+
+  /* 标签 */
+  .h-tag {
+    padding: 2px 8px; font-size: 10px; border-radius: 3px;
+    font-weight: 500; white-space: nowrap; line-height: 1.4;
+  }
+  .h-tag.t-subject   { background: #fce4ec; color: #c62828; border: 1px solid #ef9a9a; }
+  .h-tag.t-unlimited { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+  .h-tag.t-national  { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .h-tag.t-neutral   { background: var(--tag-bg); color: var(--text-secondary); border: 1px solid var(--border); }
+
+  /* CTA */
+  .hero-cta {
+    display: flex; gap: 8px;
+  }
+  .btn-primary {
+    flex:1; padding: 10px 0; border-radius: 8px;
+    background: var(--accent); color: #fff; border: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    text-align: center;
+  }
+  .btn-outline {
+    flex:1; padding: 10px 0; border-radius: 8px;
+    background: var(--card-bg); color: var(--accent);
+    border: 1.5px solid var(--accent);
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    text-align: center;
+  }
+  @media (prefers-color-scheme: dark) {
+    .h-tag.t-subject   { background: #3a1420; color: #ef9a9a; border-color: #5a2040; }
+    .h-tag.t-unlimited { background: #1a3a1a; color: #66bb6a; border-color: #2e5a2e; }
+    .h-tag.t-national  { background: #0d2137; color: #64b5f6; border-color: #1a3a5e; }
+    .hero-fit-badge { background: #1a2840; color: #64b5f6; border-color: #3a5a8e; }
+  }
+
+  /* ===== 你有多适合？ ===== */
+  .fit-subsection {
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .fit-subsection:first-child { padding-top: 0; }
+  .fit-subsection:last-child { border-bottom: none; padding-bottom: 0; }
+  .fit-subsection-title {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  /* 学科适合度 bars */
+  .fit-bars { display: flex; flex-direction: column; gap: 8px; }
+  .fit-row { display: flex; align-items: center; gap: 8px; }
+  .fit-label { width: 36px; font-size: 12px; font-weight: 500; text-align: right; flex-shrink: 0; }
+  .fit-bar-wrap { flex: 1; height: 20px; background: var(--tag-bg); border-radius: 10px; overflow: hidden; position: relative; }
+  .fit-bar-fill { height: 100%; border-radius: 10px; background: var(--accent); transition: width 0.4s; }
+  .fit-bar-fill.high  { background: var(--green); }
+  .fit-bar-fill.mid  { background: var(--accent); }
+  .fit-bar-fill.low  { background: var(--orange); }
+  .fit-score { width: 36px; font-size: 12px; font-weight: 600; text-align: right; }
+  .fit-your { width: 44px; font-size: 10px; color: var(--text-hint); text-align: right; }
+
+  /* MBTI */
+  .mbti-row {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .mbti-type {
+    font-size: 18px; font-weight: 700; color: var(--accent);
+    padding: 4px 10px; border-radius: 8px;
+    background: var(--accent-light); border: 1px solid var(--border);
+  }
+  .mbti-stars { font-size: 15px; letter-spacing: 2px; }
+  .mbti-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* ===== 核心课程 ===== */
+  .course-list { display: flex; flex-direction: column; gap: 10px; }
+  .course-school {
+    border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+  }
+  .course-school-name {
+    font-size: 13px; font-weight: 600; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .course-school-name .level-tag {
+    font-size: 10px; padding: 1px 6px; border-radius: 4px;
+    background: var(--tag-bg); color: var(--text-secondary); font-weight: 400;
+  }
+  .course-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .course-tag {
+    font-size: 11px; padding: 3px 8px; border-radius: 12px;
+    background: var(--accent-light); color: var(--accent-text);
+    border: 1px solid var(--border);
+  }
+  .course-diff {
+    font-size: 11px; color: var(--text-hint); margin-top: 4px;
+  }
+
+  /* ===== 毕业去向 ===== */
+
+  /* 毕业去向 Tab */
+  .tab-bar {
+    display: flex; gap: 0; margin-bottom: 12px;
+    background: var(--tag-bg); border-radius: 8px;
+    padding: 3px;
+  }
+  .tab-btn {
+    flex: 1; padding: 8px 0; border-radius: 6px;
+    text-align: center; font-size: 13px; font-weight: 500;
+    color: var(--text-secondary); cursor: pointer;
+    transition: all 0.2s; border: none; background: transparent;
+  }
+  .tab-btn.active {
+    color: #fff; background: var(--accent); font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* 薪资 */
+  .salary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .salary-row:last-child { border-bottom: none; }
+  .salary-label { font-size: 13px; color: var(--text-secondary); }
+  .salary-value { font-size: 15px; font-weight: 700; }
+  .salary-sub  { font-size: 11px; color: var(--text-hint); }
+
+  /* 考公/升学 */
+  .info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { font-size: 13px; color: var(--text-secondary); }
+  .info-value { font-size: 13px; font-weight: 600; }
+
+  /* Bottom Fixed CTA */
+  .bottom-cta {
+    position: absolute; bottom: 0; left: 12px; right: 12px;
+    padding: 12px 4px 20px; background: var(--bg);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .bottom-cta .btn-primary { padding: 14px 0; font-size: 16px; border-radius: 12px; }
+
+  /* ===== 问导师区（手风琴，参考导师端日程Tab） ===== */
+  .mentor-section {
+    margin-top: 8px;
+  }
+  .mentor-panel {
+    position: relative;
+  }
+  /* 手风琴：折叠态隐藏第4条及之后 */
+  .mentor-list.collapsed .mentor-item:nth-child(n+4) { display: none; }
+  .mentor-expand-btn {
+    display: block; width: 100%; padding: 7px 0; margin-top: 6px;
+    text-align: center; font-size: 12px;
+    border: 1px dashed var(--border-dash);
+    color: var(--text-secondary); cursor: pointer;
+    background: var(--card-bg);
+  }
+  .mentor-collapse-btn {
+    display: none; width: 100%; padding: 7px 0; margin-top: 4px;
+    text-align: center; font-size: 12px;
+    border: 1px dashed var(--border-dash);
+    color: var(--text-secondary); cursor: pointer;
+    background: var(--card-bg);
+  }
+  .mentor-list:not(.collapsed) .mentor-collapse-btn { display: block; }
+  .mentor-header-row {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .mentor-header-left {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .mentor-refresh-btn {
+    font-size: 12px; color: var(--accent); cursor: pointer;
+    font-weight: 500; padding: 3px 10px;
+    border: 1px solid var(--accent); border-radius: 12px;
+    background: transparent;
+  }
+  .mentor-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+  .mentor-item {
+    display: flex; gap: 8px; padding: 6px 8px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--card-bg);
+    opacity: 0; transform: translateY(16px); transition: all 0.35s ease;
+  }
+  .mentor-item.revealed {
+    opacity: 1; transform: translateY(0);
+  }
+  .mentor-avatar {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-light); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--accent-text);
+    border: 1px solid var(--border);
+  }
+  .mentor-info { flex: 1; min-width: 0; }
+  .mentor-name-row {
+    display: flex; align-items: center; gap: 4px;
+    margin-bottom: 1px;
+  }
+  .mentor-name { font-size: 12px; font-weight: 600; }
+  .mentor-match-badge {
+    font-size: 9px; padding: 1px 5px; border-radius: 6px;
+    font-weight: 500; white-space: nowrap;
+  }
+  .mentor-match-badge.double-match {
+    background: var(--green-bg); color: var(--green-light);
+    border: 1px solid var(--green);
+  }
+  .mentor-match-badge.major-match {
+    background: var(--accent-light); color: var(--accent-text);
+    border: 1px solid var(--accent);
+  }
+  .mentor-match-badge.school-match {
+    background: var(--orange-bg); color: #E65100;
+    border: 1px solid var(--orange);
+  }
+  .mentor-match-badge.tier-match {
+    background: var(--tag-bg); color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .mentor-school-major {
+    font-size: 10px; color: var(--text-secondary);
+    margin-bottom: 2px;
+  }
+  .mentor-ask-btn {
+    flex-shrink: 0; align-self: center;
+    font-size: 10px; color: var(--accent); font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+    padding: 3px 8px; border: 1px solid var(--accent);
+    border-radius: 10px; background: transparent;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="page-header">
+    <h1>专业解读页 · 线框图 v18</h1>
+    <p class="subtitle" style="text-align:left; max-width:420px; margin:0 auto; line-height:1.8;">
+      核心理解：专业解读页的本质不是「介绍一个专业」，是「帮一个考生做决定」。<br>
+      ① 这是决策，不是百科——给判决书，不给说明书。<br>
+      ② 这是双边匹配，不是通用模板——同一专业对不同考生结论不同。<br>
+      ③ 决策有天然节奏——先结论→再验证→再权衡，页面结构顺应而非对抗。
+    </p>
+    <p class="subtitle" style="text-align:left; max-width:420px; margin:24px auto 0; line-height:1.8;">
+      关键设计（v21 去掉导师个人介绍，卡片更短）：<br>
+      ① 用户路径——首屏 Hero AI 判断 → 点击「问小马」跳转独立 AI 对话页 → 点击「匹配相关导师」在 Hero 内展开导师面板（默认只显示 3 位，手风琴折叠） → 向下滚动浏览客观数据<br>
+      ② 问导师——手风琴：默认折叠显示 3 位，点击「展开全部 5 位导师」展开剩余，点击「收起导师列表」折叠回 3 位；全部在文档流内<br>
+      ③ 问小马——点 Hero「问小马」跳转到小马对话页，不在此页面内渲染<br>
+      ④ 导师卡片——仅保留头像+名字+标签+学校·专业+问TA按钮，去掉个人介绍
+    </p>
+  </div>
+
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>信号 电量</span>
+    </div>
+
+    <div class="nav-bar">
+      <span class="nav-back">&larr;</span>
+      <span class="nav-title">专业解读</span>
+    </div>
+
+    <div class="scroll-body">
+
+      <!-- ════════════════════════════════════════════════
+           模块 1/4：Hero — AI 解读 + 问小马跳转 + 导师手风琴
+           ════════════════════════════════════════════════ -->
+      <div class="hero">
+        <!-- Row 1: 专业名 + 匹配标签（左）| 82% 稳（右） — 对齐匹配结果页 name-row -->
+        <div class="hero-name-row">
+          <div class="hero-major-name">
+            计算机科学与技术
+            <span class="hero-fit-badge">高度匹配</span>
+          </div>
+          <div class="hero-prob">
+            <span class="hero-prob-num">82%</span>
+            <span class="hero-prob-tag">稳</span>
+          </div>
+        </div>
+
+        <!-- Row 2: AI 一句话解读 + 追问入口 -->
+        <div class="hero-ai-summary">
+          <div class="ai-summary-text">
+            对你来说很稳——分数够用，学科匹配高，就业前景也不错
+          </div>
+          <span class="ai-ask-btn">问小马</span>
+        </div>
+
+        <!-- Row 3: 精简客观属性标签（仅保留学科属性，风险信息已收入 AI 解读） -->
+        <div class="hero-tags-attrs">
+          <span class="h-tag t-subject">工学</span>
+          <span class="h-tag t-unlimited">选考物理</span>
+          <span class="h-tag t-national">一级学科</span>
+          <span class="h-tag t-neutral">四年制</span>
+          <span class="h-tag t-neutral">工学学士</span>
+        </div>
+
+        <!-- Row 4: 匹配相关导师 CTA -->
+        <div class="hero-mentor-btn" id="heroMentorBtn">匹配相关导师 ▸</div>
+
+        <!-- 问导师区（手风琴：默认折叠显示3位） -->
+        <div class="mentor-section" id="mentorSection" style="display:none;">
+        <div class="mentor-panel">
+          <div class="mentor-header-row">
+            <div class="mentor-header-left">
+              <span class="card-header" style="margin-bottom:0;">问导师</span>
+              <span class="mentor-refresh-btn" title="换一批导师" style="font-size:11px;">换一批</span>
+            </div>
+          </div>
+          <div class="mentor-list collapsed" id="mentorList">
+            <!-- 导师 1：专业+学校双匹配 -->
+            <div class="mentor-item">
+              <div class="mentor-avatar">张</div>
+              <div class="mentor-info">
+                <div class="mentor-name-row">
+                  <span class="mentor-name">张明哲</span>
+                  <span class="mentor-match-badge double-match">专业+学校双匹配</span>
+                </div>
+                <div class="mentor-school-major">浙江大学 · 计算机科学与技术</div>
+              </div>
+              <span class="mentor-ask-btn">问TA</span>
+            </div>
+            <!-- 导师 2：专业匹配 -->
+            <div class="mentor-item">
+              <div class="mentor-avatar">李</div>
+              <div class="mentor-info">
+                <div class="mentor-name-row">
+                  <span class="mentor-name">李晓琳</span>
+                  <span class="mentor-match-badge major-match">专业匹配</span>
+                </div>
+                <div class="mentor-school-major">南京大学 · 计算机科学与技术</div>
+              </div>
+              <span class="mentor-ask-btn">问TA</span>
+            </div>
+            <!-- 导师 3：专业匹配 -->
+            <div class="mentor-item">
+              <div class="mentor-avatar">陈</div>
+              <div class="mentor-info">
+                <div class="mentor-name-row">
+                  <span class="mentor-name">陈雨萱</span>
+                  <span class="mentor-match-badge major-match">专业匹配</span>
+                </div>
+                <div class="mentor-school-major">电子科技大学 · 计算机科学与技术</div>
+              </div>
+              <span class="mentor-ask-btn">问TA</span>
+            </div>
+            <!-- 导师 4：学校匹配 -->
+            <div class="mentor-item">
+              <div class="mentor-avatar">王</div>
+              <div class="mentor-info">
+                <div class="mentor-name-row">
+                  <span class="mentor-name">王浩然</span>
+                  <span class="mentor-match-badge school-match">学校匹配</span>
+                </div>
+                <div class="mentor-school-major">重庆大学 · 软件工程</div>
+              </div>
+              <span class="mentor-ask-btn">问TA</span>
+            </div>
+            <!-- 导师 5：学校档次匹配 -->
+            <div class="mentor-item">
+              <div class="mentor-avatar">刘</div>
+              <div class="mentor-info">
+                <div class="mentor-name-row">
+                  <span class="mentor-name">刘思远</span>
+                  <span class="mentor-match-badge tier-match">同档次院校</span>
+                </div>
+                <div class="mentor-school-major">华东师范大学 · 数据科学与大数据</div>
+              </div>
+              <span class="mentor-ask-btn">问TA</span>
+            </div>
+            <div class="mentor-collapse-btn" id="mentorCollapseBtn" onclick="toggleMentorAccordion()">收起导师列表 ▴</div>
+          </div><!-- /mentor-list -->
+          <div class="mentor-expand-btn" id="mentorExpandBtn" onclick="toggleMentorAccordion()">展开全部 5 位导师 ▸</div>
+        </div><!-- /mentor-panel -->
+      </div><!-- /mentor-section -->
+      </div><!-- /hero -->
+
+      <!-- ════════════════════════════════════════════════
+           模块 2/4：你有多适合？— 学科匹配 + 性格匹配
+           ════════════════════════════════════════════════ -->
+      <div class="card">
+        <div class="card-header">你有多适合？</div>
+
+        <!-- 学科匹配 -->
+        <div class="fit-subsection">
+          <div class="fit-subsection-title">学科匹配</div>
+          <div class="fit-bars">
+            <div class="fit-row">
+              <span class="fit-label">数学</span>
+              <div class="fit-bar-wrap"><div class="fit-bar-fill high" style="width:88%"></div></div>
+              <span class="fit-score">88%</span>
+              <span class="fit-your">你:132</span>
+            </div>
+            <div class="fit-row">
+              <span class="fit-label">物理</span>
+              <div class="fit-bar-wrap"><div class="fit-bar-fill high" style="width:75%"></div></div>
+              <span class="fit-score">75%</span>
+              <span class="fit-your">你:85</span>
+            </div>
+            <div class="fit-row">
+              <span class="fit-label">英语</span>
+              <div class="fit-bar-wrap"><div class="fit-bar-fill mid" style="width:62%"></div></div>
+              <span class="fit-score">62%</span>
+              <span class="fit-your">你:118</span>
+            </div>
+            <div class="fit-row">
+              <span class="fit-label">语文</span>
+              <div class="fit-bar-wrap"><div class="fit-bar-fill low" style="width:38%"></div></div>
+              <span class="fit-score">38%</span>
+              <span class="fit-your">你:96</span>
+            </div>
+            <div class="fit-row">
+              <span class="fit-label">化学</span>
+              <div class="fit-bar-wrap"><div class="fit-bar-fill low" style="width:25%"></div></div>
+              <span class="fit-score">—</span>
+              <span class="fit-your">未选</span>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-secondary);">
+            该专业对<strong>数学</strong>和<strong>物理</strong>要求较高，你的成绩匹配良好。
+            <span style="color:var(--orange);">化学未选考</span>，不影响（多数院校不限化学）。
+          </div>
+        </div>
+
+        <!-- 性格匹配 -->
+        <div class="fit-subsection">
+          <div class="fit-subsection-title">性格匹配</div>
+          <div class="mbti-row">
+            <span class="mbti-type">INTJ</span>
+            <span>
+              <span class="mbti-stars">★★★★☆</span>
+              <div class="mbti-desc">高匹配 · 理性分析型人格与计算机专业环境高度适配</div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════
+           模块 3/4：核心课程 — 不同层次院校课程对比
+           ════════════════════════════════════════════════ -->
+      <div class="card">
+        <div class="card-header">核心课程</div>
+        <div class="course-list">
+          <div class="course-school">
+            <div class="course-school-name">复旦大学 <span class="level-tag">985</span></div>
+            <div class="course-tags">
+              <span class="course-tag">数据结构</span>
+              <span class="course-tag">操作系统</span>
+              <span class="course-tag">计算机组成原理</span>
+              <span class="course-tag">编译原理</span>
+              <span class="course-tag">计算机网络</span>
+              <span class="course-tag">算法设计</span>
+            </div>
+          </div>
+          <div class="course-school">
+            <div class="course-school-name">河海大学 <span class="level-tag">211</span></div>
+            <div class="course-tags">
+              <span class="course-tag">C语言程序设计</span>
+              <span class="course-tag">数据结构</span>
+              <span class="course-tag">操作系统</span>
+              <span class="course-tag">计算机组成原理</span>
+              <span class="course-tag">数据库原理</span>
+              <span class="course-tag">软件工程</span>
+            </div>
+            <div class="course-diff">vs 复旦：基础课更重实践（C语言+数据库），理论课少于985</div>
+          </div>
+          <div class="course-school">
+            <div class="course-school-name">南京信息工程大学 <span class="level-tag">双一流</span></div>
+            <div class="course-tags">
+              <span class="course-tag">程序设计基础</span>
+              <span class="course-tag">数据结构</span>
+              <span class="course-tag">操作系统</span>
+              <span class="course-tag">数据库</span>
+              <span class="course-tag">计算机网络</span>
+              <span class="course-tag">Web开发</span>
+            </div>
+            <div class="course-diff">vs 985/211：应用导向更明显，含Web开发等实践课</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════
+           模块 4/4：毕业去向 — 薪资/考公/升学 Tab
+           ════════════════════════════════════════════════ -->
+      <div class="card">
+        <div class="card-header">毕业去向</div>
+
+        <div class="tab-bar" id="tabBar">
+          <div class="tab-btn active" data-tab="salary">薪资</div>
+          <div class="tab-btn" data-tab="gov">考公</div>
+          <div class="tab-btn" data-tab="study">升学</div>
+        </div>
+
+        <!-- Tab: 薪资 -->
+        <div class="tab-content active" id="tab-salary">
+          <div class="salary-row">
+            <span class="salary-label">毕业起薪</span>
+            <span class="salary-value">8K – 12K<span class="salary-sub"> /月</span></span>
+          </div>
+          <div class="salary-row">
+            <span class="salary-label">Top 5%</span>
+            <span class="salary-value">25K+ <span class="salary-sub">/月</span></span>
+          </div>
+          <div class="salary-row">
+            <span class="salary-label">毕业5年</span>
+            <span class="salary-value">20K – 35K <span class="salary-sub">/月</span></span>
+          </div>
+        </div>
+
+        <!-- Tab: 考公 -->
+        <div class="tab-content" id="tab-gov">
+          <div class="info-row">
+            <span class="info-label">适配岗位类型</span>
+            <span class="info-value">信息技术类</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">国考岗位占比</span>
+            <span class="info-value">~15%</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">省/市级岗位占比</span>
+            <span class="info-value">~42%</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">平均竞争比（国考）</span>
+            <span class="info-value">58:1</span>
+          </div>
+        </div>
+
+        <!-- Tab: 升学 -->
+        <div class="tab-content" id="tab-study">
+          <div class="info-row">
+            <span class="info-label">平均保研率</span>
+            <span class="info-value">12.5%</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">考研率</span>
+            <span class="info-value">28.3%</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">年均清北录取</span>
+            <span class="info-value">3 – 5 人</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">985/211深造比例</span>
+            <span class="info-value">~40%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Fixed CTA -->
+    <div class="bottom-cta">
+      <div class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+        + 加入志愿表 <span style="font-weight:400;font-size:12px;opacity:0.8;">（已选 3/96）</span>
+      </div>
+    </div>
+
+  </div><!-- phone-frame -->
+
+  <div class="collab-section">
+    <h3>协作待办</h3>
+    <div class="collab-item">① <span class="collab-role">AI/算法</span>：AI一句话解读实时生成（≤40字）；追问对话需支持连续3轮上下文，单轮响应&lt;2s</div>
+    <div class="collab-item">② <span class="collab-role">后端</span>：匹配标签计算规则 + Hero聚合接口 + 追问对话API，单次请求返回全量信息</div>
+    <div class="collab-item">③ <span class="collab-role">数据</span>：专业客观属性全量覆盖；导师库匹配（专业+学校维度的召回排序）</div>
+    <div class="collab-item">④ <span class="collab-role">前端</span>：AI解读loading过渡态 + 导师手风琴展开/折叠动画（参考日程Tab模式）+ 导师卡暖色视觉主题 + 导师卡逐条reveal动画 + 复用匹配结果页name-row组件</div>
+  </div>
+</div><!-- container -->
+
+<script>
+(function() {
+  const tabBar = document.getElementById('tabBar');
+  const tabBtns = tabBar.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  function activateTab(tabName) {
+    tabBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabName));
+    tabContents.forEach(c => c.classList.toggle('active', c.id === 'tab-' + tabName));
+  }
+
+  tabBar.addEventListener('click', function(e) {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    activateTab(btn.dataset.tab);
+  });
+
+  // ===== 问小马：跳转独立对话页 =====
+  var aiAskBtn = document.querySelector('.ai-ask-btn');
+  if (aiAskBtn) {
+    aiAskBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '小马对话页.html';
+    });
+  }
+
+  // ===== 问导师：手风琴（参考导师端日程Tab） =====
+  var mentorBtn = document.getElementById('heroMentorBtn');
+  var mentorSection = document.getElementById('mentorSection');
+
+  function revealFirstMentors() {
+    var items = document.querySelectorAll('#mentorList .mentor-item');
+    for (var i = 0; i < Math.min(3, items.length); i++) {
+      setTimeout(function(idx) {
+        items[idx].classList.add('revealed');
+      }.bind(null, i), i * 80);
+    }
+  }
+
+  function revealMoreMentors() {
+    var items = document.querySelectorAll('#mentorList .mentor-item');
+    for (var i = 3; i < items.length; i++) {
+      setTimeout(function(idx) {
+        items[idx].classList.add('revealed');
+      }.bind(null, i), (i - 3) * 80);
+    }
+  }
+
+  // 点击「匹配相关导师」→ 显示导师区 + 自动展示前3位
+  if (mentorBtn) {
+    mentorBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      mentorSection.style.display = 'block';
+      mentorBtn.style.display = 'none';
+      revealFirstMentors();
+    });
+  }
+
+  // 手风琴展开/折叠
+  window.toggleMentorAccordion = function() {
+    var list = document.getElementById('mentorList');
+    var expandBtn = document.getElementById('mentorExpandBtn');
+    var isCollapsed = list.classList.contains('collapsed');
+    if (isCollapsed) {
+      list.classList.remove('collapsed');
+      expandBtn.style.display = 'none';
+      revealMoreMentors();
+    } else {
+      list.classList.add('collapsed');
+      expandBtn.style.display = '';
+    }
+  };
+
+})();
+</script>
+
+</body>
+</html>

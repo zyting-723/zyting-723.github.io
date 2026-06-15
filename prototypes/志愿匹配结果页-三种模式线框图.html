@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>志愿匹配结果页 · 三种模式线框图 v9</title>
+<style>
+  :root {
+    --bg: #f5f5f5;
+    --card-bg: #fff;
+    --text: #333;
+    --text-secondary: #999;
+    --border: #e0e0e0;
+    --border-dash: #ccc;
+    --accent-blue: #5b9bd5;
+    --accent-blue-light: #f0f4ff;
+    --tag-bg: #f0f0f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a2e;
+      --card-bg: #252540;
+      --text: #e0e0e0;
+      --text-secondary: #888;
+      --border: #3a3a5c;
+      --border-dash: #555;
+    --accent-blue-light: #1a2440;
+    --tag-bg: #2a2a40;
+  }
+  /* dark mode 标签色系 */
+  .mi-tag.t-subject   { background: #3a1420; color: #ef9a9a; border-color: #5a2040; }
+  .mi-tag.t-unlimited { background: #1a3a1a; color: #66bb6a; border-color: #2e5a2e; }
+  .mi-tag.t-national  { background: #0d2137; color: #64b5f6; border-color: #1a3a5e; }
+  .mi-tag.t-top       { background: #3a3010; color: #ffd54f; border-color: #5a4a20; }
+  .mi-tag.t-city      { background: #2a1540; color: #ce93d8; border-color: #4a2060; }
+  .mi-tag.t-province  { background: #3a2010; color: #ff9800; border-color: #5a4020; }
+  .mi-tag.t-emerging  { background: #0d2828; color: #4dd0e1; border-color: #1a4848; }
+  .mi-tag.t-history   { background: #3e2a14; color: #e0a456; border-color: #6b4c28; }
+  .mi-tag.t-physics   { background: #1a1040; color: #b39ddb; border-color: #3a2060; }
+}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container { max-width: 1100px; width: 100%; }
+
+  .page-header { text-align: center; margin-bottom: 24px; }
+  .page-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .page-header .subtitle { font-size: 13px; color: var(--text-secondary); }
+
+  .mode-switcher {
+    display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;
+  }
+  .mode-btn {
+    padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card-bg); cursor: pointer; font-size: 13px; color: var(--text-secondary);
+    transition: all .2s;
+  }
+  .mode-btn.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+
+  .phone-frame {
+    max-width: 390px; margin: 0 auto 30px;
+    border: 8px solid #ddd; border-radius: 32px; overflow: hidden;
+    background: var(--bg);
+  }
+  .phone-screen {
+    height: 760px; overflow-y: auto;
+    background: var(--bg);
+    scrollbar-width: none;
+  }
+  .phone-screen::-webkit-scrollbar { display: none; }
+
+  /* ===== 通用线框图组件 ===== */
+  .wire-section { margin-bottom: 1px; }
+
+  .wire-header {
+    background: #fafafa; border-bottom: 1px dashed var(--border-dash);
+    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .wire-header .back { font-size: 16px; color: var(--text-secondary); }
+  .wire-header .title { font-size: 15px; font-weight: 600; flex:1; }
+  .wire-header .rt-cta {
+    border: 1px dashed var(--border-dash); padding: 4px 10px; border-radius: 12px;
+    font-size: 11px; color: var(--text-secondary);
+  }
+
+  .wire-filter-bar {
+    background: var(--card-bg);
+    padding: 10px 14px;
+    border-bottom: 1px dashed var(--border-dash);
+  }
+  .wire-filter-bar .row1 {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .wire-filter-bar .count { font-size: 15px; font-weight: 600; }
+  .wire-filter-bar .meta {
+    font-size: 11px; color: var(--text-secondary);
+    border: 1px dashed var(--border-dash);
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .wire-filter-tabs {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .wire-filter-tab {
+    padding: 5px 12px; font-size: 12px; cursor: pointer;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+  }
+  .wire-filter-tab.active {
+    border: 1px dashed var(--accent-blue);
+    background: var(--accent-blue-light);
+    color: var(--accent-blue);
+    font-weight: 500;
+  }
+  .wire-filter-btn {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 3px;
+    padding: 5px 10px; border: 1px dashed var(--border-dash);
+    font-size: 12px; color: var(--text-secondary);
+    cursor: pointer;
+    background: var(--card-bg);
+  }
+
+  .wire-cards { padding: 8px 12px; }
+
+  .wire-card {
+    background: var(--card-bg);
+    border: 1px dashed var(--border-dash);
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .wire-card .row {
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .wire-card .logo {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border: 1px dashed var(--border-dash);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: var(--text-secondary);
+  }
+  .wire-card .info { flex:1; min-width: 0; }
+  .wire-card .name-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 3px;
+  }
+  .wire-card .school-name { font-size: 15px; font-weight: 600; }
+  .wire-card .prob {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 13px; font-weight: 600;
+    color: var(--accent-blue);
+  }
+  .wire-card .prob-tag {
+    font-size: 10px; padding: 1px 6px;
+    border: 1px dashed var(--border-dash);
+    color: var(--text-secondary); font-weight: 400;
+  }
+  .wire-card .meta-row {
+    font-size: 11px; color: var(--text-secondary);
+    display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 2px;
+  }
+  .wire-card .meta-chip {
+    padding: 1px 5px; border: 1px solid var(--border);
+    background: var(--tag-bg);
+    white-space: nowrap;
+  }
+  .wire-card > .rank-row {
+    font-size: 11px; color: var(--text-secondary);
+    padding: 4px 8px; margin: 8px 0 8px;
+    border: 1px dashed var(--border-dash);
+    background: var(--tag-bg);
+    cursor: pointer;
+    display: flex; align-items: center; gap: 4px;
+    user-select: none;
+    transition: background .15s;
+  }
+  .wire-card > .rank-row:hover { background: var(--accent-blue-light); }
+  .wire-card > .rank-row .toggle-arrow {
+    font-size: 9px; color: var(--text-secondary);
+    flex-shrink: 0; transition: transform .15s;
+  }
+  .wire-card > .rank-row .rank-row-text { flex:1; min-width:0; }
+  .wire-card > .rank-row .rank-hl { font-weight: 600; color: var(--text); }
+  .wire-card > .rank-row .rank-diff { color: var(--accent-blue); font-weight: 500; }
+
+  .rank-history {
+    display: none;
+    margin: -2px 0 8px; padding: 8px 10px;
+    border: 1px dashed var(--border-dash);
+    border-top: none;
+    background: var(--tag-bg);
+    font-size: 11px; color: var(--text-secondary);
+  }
+  .rank-history.open { display: block; }
+  .rank-history .rh-title {
+    font-size: 11px; font-weight: 600; color: var(--text);
+    margin-bottom: 6px;
+  }
+  .rank-history .rh-table {
+    width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr;
+    gap: 2px 8px;
+  }
+  .rank-history .rh-cell {
+    padding: 2px 4px; white-space: nowrap;
+  }
+  .rank-history .rh-cell.rh-header {
+    font-size: 10px; font-weight: 600; color: var(--text-secondary);
+    padding-bottom: 4px; border-bottom: 1px solid var(--border);
+  }
+  .rank-history .rh-cell.rh-year { color: var(--text-secondary); }
+  .rank-history .rh-cell.rh-rank { text-align: right; font-weight: 500; color: var(--text); }
+  .rank-history .rh-cell.rh-ref {
+    text-align: right; font-weight: 500; color: var(--accent-blue);
+  }
+
+  .wire-expand-btn {
+    display: block; width: 100%; padding: 7px 0;
+    margin-top: 6px; text-align: center; font-size: 12px;
+    border: 1px dashed var(--border-dash);
+    color: var(--text-secondary);
+    background: var(--card-bg); cursor: pointer;
+  }
+  .wire-action-btn {
+    display: block; width: 100%; padding: 8px 0;
+    margin-top: 8px; text-align: center; font-size: 13px;
+    border: 1px dashed var(--border-dash);
+    color: var(--accent-blue);
+    background: var(--accent-blue-light); cursor: pointer;
+  }
+
+  /* ===== 专业信息介绍（重庆 + 广东展开） ===== */
+  .major-info {
+    margin: -2px 0 8px; padding: 8px 10px;
+    border: 1px dashed var(--border-dash);
+    border-top: none;
+    background: var(--tag-bg);
+  }
+  .mi-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 6px;
+  }
+  .mi-tag {
+    padding: 2px 8px; font-size: 10px;
+    border-radius: 3px; font-weight: 500;
+    white-space: nowrap; line-height: 1.4;
+  }
+  .mi-tag.t-subject   { background: #fce4ec; color: #c62828; border: 1px solid #ef9a9a; }
+  .mi-tag.t-unlimited { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+  .mi-tag.t-national  { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .mi-tag.t-top       { background: #fff8e1; color: #f9a825; border: 1px solid #ffe082; }
+  .mi-tag.t-city      { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .mi-tag.t-province  { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+  .mi-tag.t-emerging  { background: #e0f7fa; color: #00838f; border: 1px solid #80deea; }
+  .mi-tag.t-history   { background: #fef3e2; color: #b87322; border: 1px solid #f0c88e; }
+  .mi-tag.t-physics   { background: #ede7f6; color: #4527a0; border: 1px solid #b39ddb; }
+
+  .mi-fit {
+    font-size: 11px; color: var(--accent-blue);
+    font-weight: 500;
+  }
+
+  /* ===== 专业组展开列表（广东） ===== */
+  .major-list {
+    display: none;
+    margin: -2px 0 8px;
+    border: 1px dashed var(--border-dash);
+    border-top: none;
+    background: var(--tag-bg);
+  }
+  .major-list.open { display: block; }
+  .major-item {
+    padding: 10px 12px;
+    border-bottom: 1px dashed var(--border-dash);
+  }
+  .major-item:last-child { border-bottom: none; }
+  .major-item-name {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    margin-bottom: 2px;
+  }
+  .major-item .major-info {
+    margin: 4px 0 0; padding: 6px 8px;
+    border: 1px dashed var(--border-dash);
+    background: var(--card-bg);
+  }
+  .major-item .mi-fit { font-size: 11px; }
+
+  .wire-expand-btn .expand-arrow {
+    font-size: 9px; transition: transform .15s;
+    display: inline-block; margin-left: 4px;
+  }
+
+  /* 专业列表底部收起按钮 */
+  .wire-collapse-btn {
+    display: none;
+    width: 100%; padding: 7px 0; margin-top: 4px;
+    text-align: center; font-size: 12px;
+    border: 1px dashed var(--border-dash);
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    cursor: pointer;
+  }
+  .major-list.open .wire-collapse-btn {
+    display: block;
+  }
+
+  .wire-notice {
+    margin: 8px 14px; padding: 8px 12px;
+    border: 1px dashed var(--border-dash);
+    background: var(--accent-blue-light);
+    font-size: 12px; color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .section-label {
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    padding: 0 16px; margin: 12px 0 4px;
+  }
+
+  /* ===== 筛选面板 ===== */
+  .filter-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.3);
+    z-index: 100; opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .filter-overlay.show { opacity: 1; pointer-events: auto; }
+  .filter-panel {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: var(--card-bg);
+    border-top: 2px dashed var(--border-dash);
+    max-height: 85vh; overflow-y: auto;
+    transform: translateY(100%); transition: transform .3s ease-out;
+    z-index: 101;
+    max-width: 390px; margin: 0 auto;
+  }
+  .filter-panel.show { transform: translateY(0); }
+  .filter-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-bottom: 1px dashed var(--border-dash);
+    position: sticky; top: 0; background: var(--card-bg); z-index: 2;
+  }
+  .filter-panel-title { font-size: 15px; font-weight: 600; }
+  .filter-panel-close { font-size: 18px; color: var(--text-secondary); cursor: pointer; background: none; border: none; }
+
+  .filter-group { padding: 12px 16px; border-bottom: 1px dashed var(--border-dash); }
+  .filter-group-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .filter-group-title { font-size: 13px; font-weight: 500; }
+  .filter-group-hint { font-size: 11px; color: var(--text-secondary); }
+  .filter-select {
+    width: 100%; padding: 8px 10px;
+    border: 1px dashed var(--border-dash); font-size: 12px;
+    color: var(--text-secondary); display: flex; justify-content: space-between;
+    background: var(--card-bg); cursor: pointer;
+  }
+  .filter-chip-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .filter-chip {
+    padding: 4px 10px; font-size: 12px;
+    border: 1px dashed var(--border-dash);
+    color: var(--text-secondary); cursor: pointer;
+    background: var(--card-bg);
+  }
+  .filter-chip.active {
+    border-color: var(--accent-blue);
+    background: var(--accent-blue-light);
+    color: var(--accent-blue);
+  }
+  .filter-input {
+    width: 100%; padding: 8px 10px;
+    border: 1px dashed var(--border-dash);
+    font-size: 12px; background: var(--card-bg);
+    color: var(--text); resize: none;
+  }
+  .filter-input::placeholder { color: var(--text-secondary); }
+  .filter-charcount { text-align: right; font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+  .filter-panel-footer {
+    display: flex; gap: 10px; padding: 12px 16px;
+    position: sticky; bottom: 0; background: var(--card-bg);
+    border-top: 1px dashed var(--border-dash);
+  }
+  .btn-reset {
+    flex: 1; padding: 10px 0; text-align: center;
+    border: 1px dashed var(--border-dash); font-size: 13px;
+    color: var(--text); cursor: pointer; background: var(--card-bg);
+  }
+  .btn-confirm {
+    flex: 2; padding: 10px 0; text-align: center;
+    border: 1px dashed var(--accent-blue); font-size: 13px;
+    color: var(--accent-blue); background: var(--accent-blue-light); cursor: pointer;
+  }
+
+  /* ===== 志愿表购物车（选择态底部栏） ===== */
+  .cart-bar {
+    position: sticky; bottom: 0;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    padding: 10px 14px;
+    display: none; align-items: center; justify-content: space-between;
+    z-index: 10;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+  }
+  .cart-bar.selecting { display: flex; }
+  .cart-bar .cart-info {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .cart-bar .cart-count-big {
+    font-size: 15px; font-weight: 600; color: var(--text);
+    line-height: 1.3;
+  }
+  .cart-bar .cart-count-big .cart-num {
+    color: var(--accent-blue); font-weight: 700;
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+    display: inline-block;
+  }
+  .cart-bar .cart-count-big .cart-num.bump {
+    transform: scale(1.25);
+  }
+  .cart-bar .cart-count-sub {
+    font-size: 11px; color: var(--text-secondary);
+  }
+  .cart-bar .cart-actions {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cart-bar .cart-btn {
+    padding: 6px 12px; border-radius: 6px; font-size: 13px;
+    font-weight: 500; cursor: pointer; white-space: nowrap;
+    border: none; line-height: 1.4;
+  }
+  .cart-bar .cart-btn-outline {
+    background: var(--tag-bg); color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+  }
+  .cart-bar .cart-btn-solid {
+    background: var(--accent-blue); color: #fff;
+  }
+  .cart-bar .cart-btn-solid:disabled {
+    background: #c0c0c0; color: #fff; cursor: not-allowed;
+  }
+  @media (prefers-color-scheme: dark) {
+    .cart-bar .cart-btn-outline {
+      background: rgba(91,155,213,0.12);
+      border-color: var(--accent-blue);
+    }
+    .cart-bar .cart-btn-solid:disabled {
+      background: #555; color: #999;
+    }
+  }
+
+  /* 加入志愿表按钮 */
+  .wire-action-btn {
+    cursor: pointer; user-select: none;
+    transition: all .25s;
+  }
+  .wire-action-btn.added {
+    background: #e8f5e9;
+    border-color: #66bb6a; border-style: solid;
+    color: #2e7d32; font-weight: 500;
+  }
+  @media (prefers-color-scheme: dark) {
+    .wire-action-btn.added {
+      background: #1a3a1a;
+      border-color: #2e7d32;
+      color: #66bb6a;
+    }
+    .cart-bar { box-shadow: 0 -2px 12px rgba(0,0,0,0.3); }
+  }
+
+  /* 卡片脉冲 */
+  .wire-card.just-added {
+    animation: cardPulse .5s ease;
+  }
+  @keyframes cardPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(91,155,213,0.35); }
+    50%  { box-shadow: 0 0 0 8px rgba(91,155,213,0); }
+    100% { box-shadow: 0 0 0 0 rgba(91,155,213,0); }
+  }
+
+  /* +1 飞行粒子 */
+  .fly-particle {
+    position: fixed;
+    font-size: 15px; font-weight: 800;
+    color: var(--accent-blue);
+    pointer-events: none;
+    z-index: 200;
+    animation: flyToCart .55s ease-out forwards;
+  }
+  @keyframes flyToCart {
+    0%   { opacity: 1; transform: translate(0, 0) scale(0.7); }
+    25%  { opacity: 1; transform: translate(0, -24px) scale(1.35); }
+    100% { opacity: 0; transform: translate(0, 90px) scale(0.5); }
+  }
+
+  /* ===== 底部 CTA：开始选择志愿（浏览态） ===== */
+  .bottom-cta-bar {
+    position: sticky; bottom: 0;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    padding: 12px 14px 16px;
+    z-index: 10;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    .bottom-cta-bar { box-shadow: 0 -2px 12px rgba(0,0,0,0.3); }
+  }
+  .bottom-cta-bar.hidden { display: none; }
+
+  .btn-start-select {
+    display: block; width: 100%;
+    padding: 14px 0; text-align: center;
+    font-size: 16px; font-weight: 600;
+    background: var(--accent-blue); color: #fff;
+    border: none; border-radius: 10px;
+    cursor: pointer; letter-spacing: 0.5px;
+  }
+  .btn-start-select:active { opacity: 0.85; }
+
+  /* 选择模式：卡片上的勾选框 */
+  .card-checkbox {
+    display: none;
+    position: absolute; top: 12px; right: 14px;
+    width: 26px; height: 26px; border-radius: 13px;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all .2s;
+    z-index: 2; user-select: none;
+  }
+  .wire-card.selecting .card-checkbox { display: flex; }
+  .card-checkbox.checked {
+    background: var(--accent-blue); border-color: var(--accent-blue);
+    color: #fff;
+  }
+
+  /* 选择模式：cart-bar 替代 bottom-cta-bar */
+  .wire-card.selecting {
+    position: relative;
+    padding-right: 44px;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    .phone-frame { border-width: 6px; border-radius: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="page-header">
+    <h1>志愿匹配结果页 · 三种模式线框图 v11</h1>
+    <p class="subtitle">专业组手风琴交互：列表底部可收起 + 展开一张自动收起其他 | 基于原始页面布局 + 20%~30% 改动</p>
+  </div>
+
+  <div class="mode-switcher">
+    <button class="mode-btn active" onclick="switchMode('guangdong')">广东 · 专业组</button>
+    <button class="mode-btn" onclick="switchMode('chongqing')">重庆 · 专业+院校</button>
+    <button class="mode-btn" onclick="switchMode('xinjiang')">新疆 · 按院校录取</button>
+  </div>
+
+  <!-- ===== 广东·专业组 ===== -->
+  <div id="mode-guangdong" class="mode-content">
+    <div class="phone-frame">
+      <div class="phone-screen">
+
+        <div class="wire-header">
+          <span class="back">&#x25c0;</span>
+          <span class="title">智能匹配结果</span>
+          <span class="rt-cta">AI报告</span>
+        </div>
+
+        <div class="wire-filter-bar">
+          <div class="row1">
+            <span class="count">已筛出 245 个专业组</span>
+            <span class="meta">广东 · 580 分 · 位次 25,680</span>
+          </div>
+          <div class="wire-filter-tabs">
+            <span class="wire-filter-tab active">全部 245</span>
+            <span class="wire-filter-tab">冲 45</span>
+            <span class="wire-filter-tab">稳 80</span>
+            <span class="wire-filter-tab">保 120</span>
+            <span class="wire-filter-btn" onclick="openFilterPanel()">筛选 ...</span>
+          </div>
+        </div>
+
+        <div class="wire-cards">
+          <!-- 卡片 1 -->
+          <div class="wire-card">
+            <div class="card-checkbox" onclick="event.stopPropagation();toggleCardSelect(this,'guangdong')"></div>
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">华南理工大学 · 201专业组</span>
+                  <div class="prob">78.5% <span class="prob-tag">冲</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">广东 · 广州</span>
+                  <span class="meta-chip">985</span>
+                  <span class="meta-chip">211</span>
+                  <span class="meta-chip">双一流</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">23,500</span>，推测<span class="rank-diff">落后 2,180</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">6</span><span class="rh-cell">586</span><span class="rh-cell rh-rank rh-ref">23,500（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">5</span><span class="rh-cell">578</span><span class="rh-cell rh-rank">24,800</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">7</span><span class="rh-cell">592</span><span class="rh-cell rh-rank">22,100</span>
+              </div>
+            </div>
+            <div class="wire-expand-btn" onclick="toggleMajorList(this)">查看 5 个专业 <span class="expand-arrow">▸</span></div>
+            <div class="major-list">
+              <div class="major-item">
+                <div class="major-item-name">计算机科学与技术</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-national">国家重点</span>
+                    <span class="mi-tag t-top">A+学科</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配85%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">软件工程</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-national">国家级一流</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配82%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">信息工程</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-province">省级一流</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配78%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">自动化</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-physics">物理必选</span>
+                    <span class="mi-tag t-national">国家重点</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配72%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">数据科学与大数据技术</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-emerging">新兴学科</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配88%</div>
+                </div>
+              </div>
+              <div class="wire-collapse-btn" onclick="var b=this.parentElement.previousElementSibling;toggleMajorList(b)">收起专业列表 ▴</div>
+            </div>
+          </div>
+
+          <!-- 卡片 2 -->
+          <div class="wire-card">
+            <div class="card-checkbox" onclick="event.stopPropagation();toggleCardSelect(this,'guangdong')"></div>
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">暨南大学 · 103专业组</span>
+                  <div class="prob">85.2% <span class="prob-tag">稳</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">广东 · 广州</span>
+                  <span class="meta-chip">211</span>
+                  <span class="meta-chip">双一流</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">26,200</span>，推测<span class="rank-diff">领先 480</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">12</span><span class="rh-cell">572</span><span class="rh-cell rh-rank rh-ref">26,200（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">10</span><span class="rh-cell">565</span><span class="rh-cell rh-rank">27,500</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">11</span><span class="rh-cell">570</span><span class="rh-cell rh-rank">25,800</span>
+              </div>
+            </div>
+            <div class="wire-expand-btn" onclick="toggleMajorList(this)">查看 8 个专业 <span class="expand-arrow">▸</span></div>
+            <div class="major-list">
+              <div class="major-item">
+                <div class="major-item-name">经济学</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">经济学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-national">国家重点</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配90%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">金融学</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">经济学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-national">国家级一流</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配85%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">国际经济与贸易</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">经济学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-province">省级一流</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配75%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">财务管理</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">管理学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配70%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">会计学</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">管理学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-national">国家级一流</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配78%</div>
+                </div>
+              </div>
+              <div class="major-item" style="text-align:center;color:var(--text-secondary);font-size:11px;padding:8px;">等 8 个专业</div>
+              <div class="wire-collapse-btn" onclick="var b=this.parentElement.previousElementSibling;toggleMajorList(b)">收起专业列表 ▴</div>
+            </div>
+          </div>
+
+          <!-- 卡片 3 -->
+          <div class="wire-card">
+            <div class="card-checkbox" onclick="event.stopPropagation();toggleCardSelect(this,'guangdong')"></div>
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">深圳大学 · 202专业组</span>
+                  <div class="prob">92.8% <span class="prob-tag">保</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">广东 · 深圳</span>
+                  <span class="meta-chip">省重点</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">28,500</span>，推测<span class="rank-diff">领先 2,820</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">8</span><span class="rh-cell">568</span><span class="rh-cell rh-rank rh-ref">28,500（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">6</span><span class="rh-cell">560</span><span class="rh-cell rh-rank">30,200</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">9</span><span class="rh-cell">575</span><span class="rh-cell rh-rank">27,100</span>
+              </div>
+            </div>
+            <div class="wire-expand-btn" onclick="toggleMajorList(this)">查看 6 个专业 <span class="expand-arrow">▸</span></div>
+            <div class="major-list">
+              <div class="major-item">
+                <div class="major-item-name">电子信息工程</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-province">省级一流</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配80%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">通信工程</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配76%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">计算机科学与技术</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                    <span class="mi-tag t-city">市级重点</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配83%</div>
+                </div>
+              </div>
+              <div class="major-item">
+                <div class="major-item-name">软件工程</div>
+                <div class="major-info">
+                  <div class="mi-tags">
+                    <span class="mi-tag t-subject">工学</span>
+                    <span class="mi-tag t-unlimited">不限选科</span>
+                  </div>
+                  <div class="mi-fit">与你性格匹配79%</div>
+                </div>
+              </div>
+              <div class="major-item" style="text-align:center;color:var(--text-secondary);font-size:11px;padding:8px;">等 6 个专业</div>
+              <div class="wire-collapse-btn" onclick="var b=this.parentElement.previousElementSibling;toggleMajorList(b)">收起专业列表 ▴</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-cta-bar" id="bottomBar-guangdong">
+          <button class="btn-start-select" onclick="enterSelectMode('guangdong')">开始选择志愿</button>
+        </div>
+        <div class="cart-bar" id="cartBar-guangdong">
+          <div class="cart-info">
+            <div class="cart-count-big">已选 <span class="cart-num" id="cartNum-guangdong">0</span>/45 个院校专业</div>
+            <div class="cart-count-sub">选好后会生成到「我的志愿」</div>
+          </div>
+          <div class="cart-actions">
+            <button class="cart-btn cart-btn-outline" onclick="exitSelectMode('guangdong')">退出选择</button>
+            <button class="cart-btn cart-btn-outline" onclick="clearCart('guangdong')">清空</button>
+            <button class="cart-btn cart-btn-solid" id="cartBtnGenerate-guangdong" disabled onclick="alert('生成志愿单')">生成志愿单</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 重庆·专业+院校 ===== -->
+  <div id="mode-chongqing" class="mode-content" style="display:none;">
+    <div class="phone-frame">
+      <div class="phone-screen">
+
+        <div class="wire-header">
+          <span class="back">&#x25c0;</span>
+          <span class="title">智能匹配结果</span>
+          <span class="rt-cta">AI报告</span>
+        </div>
+
+        <div class="wire-filter-bar">
+          <div class="row1">
+            <span class="count">已筛出 301 个专业</span>
+            <span class="meta">重庆 · 580 分 · 位次 3,140</span>
+          </div>
+          <div class="wire-filter-tabs">
+            <span class="wire-filter-tab active">全部 301</span>
+            <span class="wire-filter-tab">冲 18</span>
+            <span class="wire-filter-tab">稳 20</span>
+            <span class="wire-filter-tab">保 263</span>
+            <span class="wire-filter-btn" onclick="openFilterPanel()">筛选 ...</span>
+          </div>
+        </div>
+
+        <div class="wire-cards">
+          <div class="wire-card">
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">山东大学威海分校 · 外国语言文学类</span>
+                  <div class="prob">88.6% <span class="prob-tag">冲</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">山东 · 威海</span>
+                  <span class="meta-chip">985</span>
+                  <span class="meta-chip">211</span>
+                  <span class="meta-chip">双一流</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">2,589</span>，推测<span class="rank-diff">落后 551</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">6</span><span class="rh-cell">586</span><span class="rh-cell rh-rank rh-ref">2,589（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">-</span><span class="rh-cell">-</span><span class="rh-cell rh-rank">2,310</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">-</span><span class="rh-cell">-</span><span class="rh-cell rh-rank">2,700</span>
+              </div>
+            </div>
+            <div class="major-info">
+              <div class="mi-tags">
+                <span class="mi-tag t-subject">文学</span>
+                <span class="mi-tag t-unlimited">不限选科</span>
+                <span class="mi-tag t-national">国家级一流</span>
+                <span class="mi-tag t-top">A类学科</span>
+              </div>
+              <div class="mi-fit">与你性格匹配82%</div>
+            </div>
+            <div class="wire-action-btn">加入志愿表</div>
+          </div>
+
+          <div class="wire-card">
+            <div class="card-checkbox" onclick="event.stopPropagation();toggleCardSelect(this,'chongqing')"></div>
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">中央财经大学 · 经济学类</span>
+                  <div class="prob">86.8% <span class="prob-tag">冲</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">北京 · 海淀</span>
+                  <span class="meta-chip">211</span>
+                  <span class="meta-chip">双一流</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">2,504</span>，推测<span class="rank-diff">落后 636</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">4</span><span class="rh-cell">588</span><span class="rh-cell rh-rank rh-ref">2,504（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">-</span><span class="rh-cell">-</span><span class="rh-cell rh-rank">2,180</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">-</span><span class="rh-cell">-</span><span class="rh-cell rh-rank">2,620</span>
+              </div>
+            </div>
+            <div class="major-info">
+              <div class="mi-tags">
+                <span class="mi-tag t-subject">经济学</span>
+                <span class="mi-tag t-unlimited">不限选科</span>
+                <span class="mi-tag t-national">国家重点</span>
+                <span class="mi-tag t-top">A+学科</span>
+              </div>
+              <div class="mi-fit">与你性格匹配88%</div>
+            </div>
+          </div>
+
+          <div class="wire-card">
+            <div class="card-checkbox" onclick="event.stopPropagation();toggleCardSelect(this,'chongqing')"></div>
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">重庆大学 · 计算机类</span>
+                  <div class="prob">91.2% <span class="prob-tag">稳</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">重庆 · 沙坪坝</span>
+                  <span class="meta-chip">985</span>
+                  <span class="meta-chip">211</span>
+                  <span class="meta-chip">双一流</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">3,200</span>，推测<span class="rank-diff">领先 60</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">10</span><span class="rh-cell">580</span><span class="rh-cell rh-rank rh-ref">3,200（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">-</span><span class="rh-cell">-</span><span class="rh-cell rh-rank">3,450</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">-</span><span class="rh-cell">-</span><span class="rh-cell rh-rank">3,080</span>
+              </div>
+            </div>
+            <div class="major-info">
+              <div class="mi-tags">
+                <span class="mi-tag t-subject">工学</span>
+                <span class="mi-tag t-physics">物理必选</span>
+                <span class="mi-tag t-national">国家级一流</span>
+                <span class="mi-tag t-city">市级重点</span>
+              </div>
+              <div class="mi-fit">与你性格匹配85%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-cta-bar" id="bottomBar-chongqing">
+          <button class="btn-start-select" onclick="enterSelectMode('chongqing')">开始选择志愿</button>
+        </div>
+        <div class="cart-bar" id="cartBar-chongqing">
+          <div class="cart-info">
+            <div class="cart-count-big">已选 <span class="cart-num" id="cartNum-chongqing">0</span>/96 个院校专业</div>
+            <div class="cart-count-sub">选好后会生成到「我的志愿」</div>
+          </div>
+          <div class="cart-actions">
+            <button class="cart-btn cart-btn-outline" onclick="exitSelectMode('chongqing')">退出选择</button>
+            <button class="cart-btn cart-btn-outline" onclick="clearCart('chongqing')">清空</button>
+            <button class="cart-btn cart-btn-solid" id="cartBtnGenerate-chongqing" disabled onclick="alert('生成志愿单')">生成志愿单</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 新疆·按院校录取 ===== -->
+  <div id="mode-xinjiang" class="mode-content" style="display:none;">
+    <div class="phone-frame">
+      <div class="phone-screen">
+
+        <div class="wire-header">
+          <span class="back">&#x25c0;</span>
+          <span class="title">智能匹配结果</span>
+          <span class="rt-cta">AI报告</span>
+        </div>
+
+        <div class="wire-filter-bar">
+          <div class="row1">
+            <span class="count">已筛出 156 个院校</span>
+            <span class="meta">新疆 · 480 分 · 位次 12,500</span>
+          </div>
+          <div class="wire-filter-tabs">
+            <span class="wire-filter-tab active">全部 156</span>
+            <span class="wire-filter-tab">冲 30</span>
+            <span class="wire-filter-tab">稳 50</span>
+            <span class="wire-filter-tab">保 76</span>
+            <span class="wire-filter-btn" onclick="openFilterPanel()">筛选 ...</span>
+          </div>
+        </div>
+
+        <div class="wire-notice">
+          新疆采用「按院校录取」模式：考生先填报院校，录取后统一分配专业。调剂风险需前置提示。
+        </div>
+
+        <div class="wire-cards">
+          <div class="wire-card">
+            <div class="card-checkbox" onclick="event.stopPropagation();toggleCardSelect(this,'xinjiang')"></div>
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">新疆大学</span>
+                  <div class="prob">82.3% <span class="prob-tag">稳</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">新疆 · 乌鲁木齐</span>
+                  <span class="meta-chip">211</span>
+                  <span class="meta-chip">双一流</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">12,800</span>，推测<span class="rank-diff">领先 300</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">15</span><span class="rh-cell">555</span><span class="rh-cell rh-rank rh-ref">12,800（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">12</span><span class="rh-cell">548</span><span class="rh-cell rh-rank">13,500</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">14</span><span class="rh-cell">550</span><span class="rh-cell rh-rank">12,200</span>
+              </div>
+            </div>
+            <div class="wire-expand-btn">查看校内 42 个专业</div>
+          </div>
+
+          <div class="wire-card">
+            <div class="card-checkbox" onclick="event.stopPropagation();toggleCardSelect(this,'xinjiang')"></div>
+            <div class="row">
+              <div class="logo">logo</div>
+              <div class="info">
+                <div class="name-row">
+                  <span class="school-name">石河子大学</span>
+                  <div class="prob">90.5% <span class="prob-tag">保</span></div>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-chip">新疆 · 石河子</span>
+                  <span class="meta-chip">211</span>
+                  <span class="meta-chip">双一流</span>
+                </div>
+              </div>
+            </div>
+            <div class="rank-row" onclick="toggleRank(this)">
+              <span class="toggle-arrow">▸</span>
+              <span class="rank-row-text">参考往年<span class="rank-hl">14,200</span>，推测<span class="rank-diff">领先 1,700</span></span>
+            </div>
+            <div class="rank-history">
+              <div class="rh-title">历史录取</div>
+              <div class="rh-table">
+                <span class="rh-cell rh-header">年份</span><span class="rh-cell rh-header">录取</span><span class="rh-cell rh-header">最低分</span><span class="rh-cell rh-header rh-rank">位次</span>
+                <span class="rh-cell rh-year">2025</span><span class="rh-cell">20</span><span class="rh-cell">540</span><span class="rh-cell rh-rank rh-ref">14,200（参考年）</span>
+                <span class="rh-cell rh-year">2024</span><span class="rh-cell">18</span><span class="rh-cell">535</span><span class="rh-cell rh-rank">15,800</span>
+                <span class="rh-cell rh-year">2023</span><span class="rh-cell">19</span><span class="rh-cell">538</span><span class="rh-cell rh-rank">13,500</span>
+              </div>
+            </div>
+            <div class="wire-expand-btn">查看校内 38 个专业</div>
+          </div>
+        </div>
+
+        <div class="bottom-cta-bar" id="bottomBar-xinjiang">
+          <button class="btn-start-select" onclick="enterSelectMode('xinjiang')">开始选择志愿</button>
+        </div>
+        <div class="cart-bar" id="cartBar-xinjiang">
+          <div class="cart-info">
+            <div class="cart-count-big">已选 <span class="cart-num" id="cartNum-xinjiang">0</span>/18 个院校专业</div>
+            <div class="cart-count-sub">选好后会生成到「我的志愿」</div>
+          </div>
+          <div class="cart-actions">
+            <button class="cart-btn cart-btn-outline" onclick="exitSelectMode('xinjiang')">退出选择</button>
+            <button class="cart-btn cart-btn-outline" onclick="clearCart('xinjiang')">清空</button>
+            <button class="cart-btn cart-btn-solid" id="cartBtnGenerate-xinjiang" disabled onclick="alert('生成志愿单')">生成志愿单</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 筛选面板 ===== -->
+  <div class="filter-overlay" id="filterOverlay" onclick="closeFilterPanel()"></div>
+  <div class="filter-panel" id="filterPanel">
+    <div class="filter-panel-header">
+      <span class="filter-panel-title">筛选条件</span>
+      <button class="filter-panel-close" onclick="closeFilterPanel()">&#x2715;</button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">目标院校</span>
+        <span class="filter-group-hint">可多选</span>
+      </div>
+      <div class="filter-select">点击选择院校 ▾</div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">地域偏好</span>
+        <span class="filter-group-hint">可多选</span>
+      </div>
+      <div class="filter-select">点击选择地区 ▾</div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">专业偏好</span>
+        <span class="filter-group-hint">可多选</span>
+      </div>
+      <div class="filter-select">点击选择专业 ▾</div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">优先策略</span>
+        <span class="filter-group-hint">选志愿时你最看重什么？</span>
+      </div>
+      <div class="filter-chip-row">
+        <span class="filter-chip active">院校优先</span>
+        <span class="filter-chip">专业优先</span>
+        <span class="filter-chip">地域优先</span>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">毕业规划</span>
+        <span class="filter-group-hint">可多选</span>
+      </div>
+      <div class="filter-chip-row">
+        <span class="filter-chip active">不限</span>
+        <span class="filter-chip">直接就业</span>
+        <span class="filter-chip">国内读研</span>
+        <span class="filter-chip">出国留学</span>
+        <span class="filter-chip">专升本</span>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">职业倾向</span>
+        <span class="filter-group-hint">可多选</span>
+      </div>
+      <div class="filter-chip-row">
+        <span class="filter-chip active">不限</span>
+        <span class="filter-chip">公务员</span>
+        <span class="filter-chip">教师</span>
+        <span class="filter-chip">医生</span>
+        <span class="filter-chip">会计</span>
+        <span class="filter-chip">程序员</span>
+      </div>
+      <input type="text" class="filter-input" style="margin-top:8px;" placeholder="输入想从事的职业">
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">学费倾向</span>
+        <span class="filter-group-hint">年学费上限</span>
+      </div>
+      <div class="filter-chip-row">
+        <span class="filter-chip">8千以内</span>
+        <span class="filter-chip active">3万以内</span>
+        <span class="filter-chip">不限</span>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-header">
+        <span class="filter-group-title">其他信息</span>
+        <span class="filter-group-hint">个人爱好、家庭背景、体检、年薪、专项计划等</span>
+      </div>
+      <textarea class="filter-input" rows="3" placeholder="补充其他信息"></textarea>
+      <div class="filter-charcount">0/200</div>
+    </div>
+
+    <div class="filter-panel-footer">
+      <button class="btn-reset">重置</button>
+      <button class="btn-confirm" onclick="closeFilterPanel()">确定</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchMode(mode) {
+  document.querySelectorAll('.mode-content').forEach(el => el.style.display = 'none');
+  document.getElementById('mode-' + mode).style.display = 'block';
+  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function openFilterPanel() {
+  document.getElementById('filterOverlay').classList.add('show');
+  document.getElementById('filterPanel').classList.add('show');
+}
+function closeFilterPanel() {
+  document.getElementById('filterOverlay').classList.remove('show');
+  document.getElementById('filterPanel').classList.remove('show');
+}
+function toggleRank(rankRow) {
+  var arrow = rankRow.querySelector('.toggle-arrow');
+  var history = rankRow.nextElementSibling;
+  var isOpen = history.classList.contains('open');
+  if (isOpen) {
+    history.classList.remove('open');
+    arrow.textContent = '▸';
+  } else {
+    history.classList.add('open');
+    arrow.textContent = '▾';
+  }
+}
+function toggleMajorList(btn) {
+  var arrow = btn.querySelector('.expand-arrow');
+  var list = btn.nextElementSibling;
+  var isOpen = list.classList.contains('open');
+  if (isOpen) {
+    list.classList.remove('open');
+    arrow.textContent = '▸';
+  } else {
+    // 手风琴：先收起同一模式下所有已展开的专业列表
+    var modeContent = btn.closest('.mode-content');
+    if (modeContent) {
+      modeContent.querySelectorAll('.major-list.open').forEach(function(ml) {
+        ml.classList.remove('open');
+      });
+      modeContent.querySelectorAll('.wire-expand-btn .expand-arrow').forEach(function(ar) {
+        ar.textContent = '▸';
+      });
+    }
+    // 展开当前
+    list.classList.add('open');
+    arrow.textContent = '▾';
+  }
+}
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  chip.addEventListener('click', function() { this.classList.toggle('active'); });
+});
+
+/* ===== 志愿选择模式 ===== */
+var cartCounts = { guangdong: 0, chongqing: 0, xinjiang: 0 };
+
+function enterSelectMode(mode) {
+  var modeContent = document.getElementById('mode-' + mode);
+  if (!modeContent) return;
+
+  // 隐藏浏览态底部按钮
+  var bottomBar = document.getElementById('bottomBar-' + mode);
+  if (bottomBar) bottomBar.classList.add('hidden');
+
+  // 显示选择态底部栏
+  var cartBar = document.getElementById('cartBar-' + mode);
+  if (cartBar) cartBar.classList.add('selecting');
+
+  // 所有卡片进入选择模式
+  modeContent.querySelectorAll('.wire-card').forEach(function(card) {
+    card.classList.add('selecting');
+  });
+}
+
+function exitSelectMode(mode) {
+  var modeContent = document.getElementById('mode-' + mode);
+  if (!modeContent) return;
+
+  // 显示浏览态底部按钮
+  var bottomBar = document.getElementById('bottomBar-' + mode);
+  if (bottomBar) bottomBar.classList.remove('hidden');
+
+  // 隐藏选择态底部栏
+  var cartBar = document.getElementById('cartBar-' + mode);
+  if (cartBar) cartBar.classList.remove('selecting');
+
+  // 所有卡片退出选择模式
+  modeContent.querySelectorAll('.wire-card').forEach(function(card) {
+    card.classList.remove('selecting');
+  });
+}
+
+function toggleCardSelect(checkbox, mode) {
+  var isChecked = checkbox.classList.contains('checked');
+
+  if (isChecked) {
+    checkbox.classList.remove('checked');
+    checkbox.textContent = '';
+    cartCounts[mode] = Math.max(0, cartCounts[mode] - 1);
+  } else {
+    checkbox.classList.add('checked');
+    checkbox.textContent = '✓';
+    cartCounts[mode]++;
+
+    // 卡片脉冲
+    var card = checkbox.closest('.wire-card');
+    if (card) {
+      card.classList.add('just-added');
+      setTimeout(function() { card.classList.remove('just-added'); }, 500);
+    }
+  }
+
+  updateCartBar(mode);
+}
+
+function updateCartBar(mode) {
+  var count = cartCounts[mode];
+  var bar   = document.getElementById('cartBar-' + mode);
+  var num   = document.getElementById('cartNum-' + mode);
+  var btn   = document.getElementById('cartBtnGenerate-' + mode);
+  if (!bar || !num) return;
+
+  num.textContent = count;
+
+  if (count > 0 && btn) {
+    btn.disabled = false;
+    num.classList.add('bump');
+    setTimeout(function() { num.classList.remove('bump'); }, 250);
+  } else if (btn) {
+    btn.disabled = true;
+  }
+}
+
+function clearCart(mode) {
+  cartCounts[mode] = 0;
+  var modeContent = document.getElementById('mode-' + mode);
+  if (!modeContent) return;
+  modeContent.querySelectorAll('.card-checkbox.checked').forEach(function(cb) {
+    cb.classList.remove('checked');
+    cb.textContent = '';
+  });
+  updateCartBar(mode);
+}
+</script>
+</body>
+</html>
