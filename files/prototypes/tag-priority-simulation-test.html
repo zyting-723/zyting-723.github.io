@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标签优先级模拟测试</title>
+<style>
+  :root {
+    --bg: #f5f5f5;
+    --card-bg: #fff;
+    --text: #333;
+    --text-secondary: #666;
+    --text-muted: #999;
+    --border: #e0e0e0;
+    --accent: #2563eb;
+    --tag-bg: #f0f4ff;
+    --tag-text: #2563eb;
+    --tag-danger: #fef2f2;
+    --tag-danger-text: #b91c1c;
+    --tag-warning: #fffbeb;
+    --tag-warning-text: #b45309;
+    --tag-success: #f0fdf4;
+    --tag-success-text: #15803d;
+    --tag-path: #f0fdfa;
+    --tag-path-text: #0f766e;
+    --tag-uncertain: #f5f3ff;
+    --tag-uncertain-text: #6d28d9;
+    --tag-static: #f3f4f6;
+    --tag-static-text: #6b7280;
+    --hero-bg: linear-gradient(135deg, #f8faff 0%, #eef2ff 100%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a2e;
+      --card-bg: #242438;
+      --text: #e0e0e0;
+      --text-secondary: #a0a0b0;
+      --text-muted: #666;
+      --border: #3a3a5c;
+      --tag-bg: #1e2a4a;
+      --tag-text: #60a5fa;
+      --tag-danger: #3b1818;
+      --tag-danger-text: #f87171;
+      --tag-warning: #3b2e10;
+      --tag-warning-text: #fbbf24;
+      --tag-success: #183a1a;
+      --tag-success-text: #4ade80;
+      --tag-path: #103630;
+      --tag-path-text: #2dd4bf;
+      --tag-uncertain: #2a1840;
+      --tag-uncertain-text: #a78bfa;
+      --tag-static: #2a2a35;
+      --tag-static-text: #9ca3af;
+      --hero-bg: linear-gradient(135deg, #1a1a3e 0%, #1e2a4a 100%);
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    line-height: 1.5;
+  }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  .subtitle { color: var(--text-secondary); font-size: 13px; margin-bottom: 20px; }
+
+  /* Controls */
+  .controls {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .controls label {
+    font-size: 12px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .controls .hint {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .tag-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .tag-selector .chip {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s;
+    background: var(--card-bg);
+    color: var(--text-secondary);
+  }
+  .tag-selector .chip.on { border-width: 2px; }
+  .tag-selector .chip.danger.on { background: var(--tag-danger); color: var(--tag-danger-text); border-color: var(--tag-danger-text); }
+  .tag-selector .chip.warning.on { background: var(--tag-warning); color: var(--tag-warning-text); border-color: var(--tag-warning-text); }
+  .tag-selector .chip.success.on { background: var(--tag-success); color: var(--tag-success-text); border-color: var(--tag-success-text); }
+  .tag-selector .chip.path.on { background: var(--tag-path); color: var(--tag-path-text); border-color: var(--tag-path-text); }
+  .tag-selector .chip.uncertain.on { background: var(--tag-uncertain); color: var(--tag-uncertain-text); border-color: var(--tag-uncertain-text); }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    background: var(--card-bg);
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn:hover { opacity: 0.8; }
+  .btn.active-preset {
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Scenarios — compact horizontal strip */
+  .scenarios {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    flex-shrink: 0;
+  }
+  .scenario-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 6px 12px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .scenario-card:hover { border-color: var(--accent); }
+  .scenario-card.active { border-color: var(--accent); background: var(--tag-bg); }
+  .scenario-card .name {
+    font-weight: 700;
+    display: inline;
+  }
+  .scenario-card .school {
+    color: var(--text-secondary);
+    display: inline;
+    margin-left: 4px;
+  }
+  .scenario-card .meta {
+    display: none;
+  }
+
+  /* Hero preview */
+  .hero-preview {
+    background: var(--hero-bg);
+    border-radius: 12px;
+    padding: 14px 12px;
+    border: 1.5px solid var(--border);
+    max-width: 375px;
+    width: 375px;
+    flex: 0 0 auto;
+  }
+  .hero-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .hero-major-name {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 2px;
+  }
+  .hero-major-school {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .tag-row:last-child { margin-bottom: 0; }
+  .tag {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    white-space: nowrap;
+  }
+  .tag.danger { background: var(--tag-danger); color: var(--tag-danger-text); }
+  .tag.warning { background: var(--tag-warning); color: var(--tag-warning-text); }
+  .tag.success { background: var(--tag-success); color: var(--tag-success-text); }
+  .tag.path { background: var(--tag-path); color: var(--tag-path-text); }
+  .tag.uncertain { background: var(--tag-uncertain); color: var(--tag-uncertain-text); }
+  .tag.static-tag { background: var(--tag-static); color: var(--tag-static-text); }
+  .tag.match { background: #dbeafe; color: #3b82f6; border-radius: 20px; }
+  @media (prefers-color-scheme: dark) {
+    .tag.match { background: #1e3a5f; color: #60a5fa; }
+  }
+  .hero-empty {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* Priority table */
+  .prio-table-wrap {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    flex: 1;
+    overflow-y: auto;
+  }
+  .prio-table-wrap h3 { font-size: 12px; margin-bottom: 6px; }
+  .prio-row {
+    display: flex;
+    align-items: center;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    gap: 6px;
+  }
+  .prio-row:last-child { border-bottom: none; }
+  .prio-rank {
+    width: 20px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .prio-rank.in { color: var(--accent); }
+  .prio-name { flex: 1; }
+  .prio-status {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .prio-status.hit { background: var(--tag-success); color: var(--tag-success-text); }
+  .prio-status.miss { background: #f3f4f6; color: #9ca3af; }
+  .prio-status.in-hero { background: var(--tag-bg); color: var(--tag-text); font-weight: 600; }
+
+  /* Tag style key for danger/warning */
+  .prio-row .tag { margin-left: auto; margin-right: 0; }
+  .card-modules {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    max-width: 375px;
+  }
+  .card-modules h3 { font-size: 12px; margin-bottom: 4px; }
+  .card-module {
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .card-module:last-child { border-bottom: none; }
+  .card-module .card-name { font-weight: 600; margin-bottom: 1px; }
+  .card-module .card-tags { color: var(--text-secondary); font-size: 10px; }
+
+  hr { display: none; }
+
+  .stats-row {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    max-width: 375px;
+  }
+  .stats-row strong { color: var(--text); }
+
+  /* Two-column layout */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: calc(100vh - 120px);
+    overflow: hidden;
+  }
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<h1>📊 标签优先级模拟测试</h1>
+<p class="subtitle"><strong>高度匹配</strong>和<strong>录取概率</strong>为 Hero 固定元素（Row 1），不参与排队<br>其余 <strong>13 个动态标签</strong>按优先级填入 Hero 标签区（最多 2 行）→ 动态标签 &lt; 3 个时，静态标签作为补充填充<br>
+<span style="display:inline-flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#fef2f2;border:1px solid #dc2626;"></span> 风险</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#f0fdf4;border:1px solid #16a34a;"></span> 利好</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#fffbeb;border:1px solid #d97706;"></span> 认证</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#f0fdfa;border:1px solid #0f766e;"></span> 路径</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#f5f3ff;border:1px solid #7c3aed;"></span> 不确定</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#f3f4f6;border:1px solid #6b7280;"></span> 静态</span>
+</span></p>
+
+<div class="scenarios" id="scenarios">
+  <!-- JS populated -->
+</div>
+
+<div class="main-layout">
+  <!-- Left: controls + priority table -->
+  <div class="left-panel">
+    <div class="controls" id="controls">
+      <label>✏️ 手动调节</label>
+      <p class="hint">当前：<strong id="currentScenario">-</strong></p>
+      <div class="tag-selector" id="tagSelector"></div>
+      <div class="btn-row">
+        <button class="btn primary" onclick="clearAllTags()">清空</button>
+        <button class="btn" onclick="renderPreview()">刷新</button>
+      </div>
+    </div>
+    <div class="prio-table-wrap" id="prioTable">
+      <!-- JS populated -->
+    </div>
+  </div>
+
+  <!-- Right: hero preview + card modules -->
+  <div class="right-panel">
+    <div class="stats-row" id="statsRow"></div>
+    <div class="hero-preview" id="heroPreview">
+      <!-- JS populated -->
+    </div>
+    <div class="card-modules" id="cardModules">
+      <!-- JS populated -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ====== DATA ======
+
+// Fixed hero elements (always show, not part of tag queue)
+const FIXED_HERO = {
+  matchLevel: '高度匹配',  // badge next to major name
+  probText: '82%',        // right side of Row 1
+  probTag: '稳',
+};
+
+// 录取概率颜色映射（对齐线上范式）
+const PROB_STYLES = {
+  '冲': { bg: '#fee2e2', color: '#ef4444' },
+  '稳': { bg: '#fef3c7', color: '#f59e0b' },
+  '保': { bg: '#dcfce7', color: '#22c55e' },
+};
+
+// 13 dynamic tags that compete for hero real estate (2 rows max)
+const ALL_TAGS = [
+  { id: 'danger',    name: '高危专业',        rank: 1,  style: 'danger' },
+  { id: 'ai_risk',   name: 'AI替代风险高',    rank: 2,  style: 'danger' },
+  { id: 'salary',    name: '薪资优势',        rank: 3,  style: 'success' },
+  { id: 'value',     name: '性价比高',        rank: 4,  style: 'success' },
+  { id: 'gwy',       name: '考公适配度',      rank: 5,  style: 'warning' },
+  { id: 'king',      name: '该校王牌',        rank: 6,  style: 'warning' },
+  { id: 'national',  name: '国家认证',        rank: 7,  style: 'warning' },
+  { id: 'master',    name: '硕士点',          rank: 8,  style: 'path' },
+  { id: 'phd',       name: '博士点',          rank: 9,  style: 'path' },
+  { id: 'grad_rate', name: '深造率高',        rank: 10, style: 'path' },
+  { id: 'future',    name: '新质生产力',      rank: 11, style: 'success' },
+  { id: 'industry',  name: '产教融合',        rank: 12, style: 'path' },
+  { id: 'new_major', name: '新增专业',        rank: 13, style: 'uncertain' },
+];
+
+// Preset scenarios (match/prob always shown as fixed, not in tag queue)
+const SCENARIOS = [
+  {
+    id: 'cs_tsinghua',
+    name: '计算机科学与技术',
+    school: '清华大学',
+    desc: '顶尖院校强专业 · 几乎全触发',
+    tags: ['king','national','salary','value','gwy','future','grad_rate','master','phd','industry'],
+  },
+  {
+    id: 'chinese_avg',
+    name: '汉语言文学',
+    school: '某省属师范',
+    desc: '普通一本普通专业 · 标签少',
+    tags: ['gwy'],
+  },
+  {
+    id: 'marketing',
+    name: '市场营销',
+    school: '某地方学院',
+    desc: '高危信号场景',
+    tags: ['danger','ai_risk'],
+  },
+  {
+    id: 'smart_mfg',
+    name: '智能制造工程',
+    school: '某新升格理工院校',
+    desc: '新专业 + 新质生产力',
+    tags: ['future','new_major','value'],
+  },
+  {
+    id: 'math_211',
+    name: '数学与应用数学',
+    school: '某211师范',
+    desc: '中等场景 · 学术路',
+    tags: ['king','national','grad_rate','master','phd'],
+  },
+];
+
+// Card module tag assignments (independent of hero)
+const CARD_TAGS = {
+  '学科匹配': null, // XX要求高 is static, shown as subtitle
+  '毕业去向·薪资': ['salary'],
+  '毕业去向·考公': ['gwy'],
+  '毕业去向·升学': ['grad_rate'],
+  '院校资源': ['king','national','master','phd','industry'],
+  '专业概览': ['future','new_major'],
+};
+
+// ====== STATE ======
+let activeTagStates = {}; // id -> true/false
+let activeScenario = null;
+
+// ====== INIT ======
+function init() {
+  ALL_TAGS.forEach(t => { activeTagStates[t.id] = false; });
+  renderTagSelector();
+  renderScenarios();
+  selectScenario('cs_tsinghua');
+}
+
+// ====== RENDER ======
+function renderTagSelector() {
+  const el = document.getElementById('tagSelector');
+  el.innerHTML = ALL_TAGS.map(t => {
+    const on = activeTagStates[t.id];
+    const cls = `chip ${t.style} ${on ? 'on' : ''}`;
+    return `<span class="${cls}" data-id="${t.id}" onclick="toggleTag('${t.id}')">${t.name}</span>`;
+  }).join('');
+}
+
+function renderScenarios() {
+  const el = document.getElementById('scenarios');
+  el.innerHTML = SCENARIOS.map(s => {
+    const active = activeScenario === s.id ? ' active' : '';
+    return `<div class="scenario-card${active}" onclick="selectScenario('${s.id}')">
+      <span class="name">${s.name}</span><span class="school"> · ${s.school}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectScenario(id) {
+  activeScenario = id;
+  const s = SCENARIOS.find(x => x.id === id);
+  // Reset
+  ALL_TAGS.forEach(t => { activeTagStates[t.id] = false; });
+  // Activate
+  s.tags.forEach(tid => { activeTagStates[tid] = true; });
+  document.getElementById('currentScenario').textContent = `${s.name} · ${s.school}`;
+  renderTagSelector();
+  renderScenarios();
+  renderPreview();
+}
+
+function toggleTag(id) {
+  activeTagStates[id] = !activeTagStates[id];
+  activeScenario = null;
+  document.getElementById('currentScenario').textContent = '手动模式';
+  renderTagSelector();
+  renderScenarios();
+  renderPreview();
+}
+
+function clearAllTags() {
+  ALL_TAGS.forEach(t => { activeTagStates[t.id] = false; });
+  activeScenario = null;
+  document.getElementById('currentScenario').textContent = '手动模式';
+  renderTagSelector();
+  renderScenarios();
+  renderPreview();
+}
+
+function renderPreview() {
+  const s = activeScenario ? SCENARIOS.find(x => x.id === activeScenario) : null;
+  const majorName = s ? s.name : '自定义专业';
+  const schoolName = s ? s.school : '自定义院校';
+
+  // Which tags are triggered, sorted by rank
+  let triggered = ALL_TAGS.filter(t => activeTagStates[t.id]);
+
+  // Merge: if both 硕士点 and 博士点 triggered → collapse to "硕博点" (save 1 pill slot)
+  const hasMaster = triggered.find(t => t.id === 'master');
+  const hasPhd = triggered.find(t => t.id === 'phd');
+  if (hasMaster && hasPhd) {
+    triggered = triggered.filter(t => t.id !== 'master' && t.id !== 'phd');
+    // Insert "硕博点" at rank 8 (same style: path)
+    const mergedTag = { id: 'merged_sd', name: '硕博点', rank: 8, style: 'path' };
+    triggered.push(mergedTag);
+    triggered.sort((a, b) => a.rank - b.rank);
+  }
+
+  const MAX_HERO_PILLS = 8;
+  const heroTags = triggered.slice(0, MAX_HERO_PILLS);
+  const overflowTags = triggered.slice(MAX_HERO_PILLS);
+
+  // Stats (13 queueable + 2 fixed = 15 total)
+  const totalTags = triggered.length + 2; // +2 for fixed match+prob
+  const heroVisible = heroTags.length + 2;
+  const statsEl = document.getElementById('statsRow');
+  statsEl.innerHTML = `固定 <strong>2</strong>（高度匹配 + 录取概率） + 排队触发 <strong>${triggered.length}</strong>/13 = 共 <strong>${totalTags}</strong> 标签 | Hero 展示 <strong>${heroVisible}</strong> 个 | 排队溢出 <strong>${overflowTags.length}</strong> 个`;
+
+  // Hero preview
+  const heroEl = document.getElementById('heroPreview');
+  let heroHTML = `<div class="hero-label">📱 Hero 区域（375px 手机屏）</div>`;
+
+  // Row 1: major name + match badge (left) | prob (right) — FIXED
+  heroHTML += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">`;
+  heroHTML += `<div style="display:flex;align-items:center;gap:8px;flex:1;">`;
+  heroHTML += `<span class="hero-major-name" style="margin-bottom:0;">${majorName}</span>`;
+  heroHTML += `<span class="tag match">${FIXED_HERO.matchLevel}</span>`;
+  heroHTML += `</div>`;
+  const ps = PROB_STYLES[FIXED_HERO.probTag] || PROB_STYLES['稳'];
+  heroHTML += `<div style="text-align:right;"><span style="font-size:22px;font-weight:800;color:${ps.color};">${FIXED_HERO.probText}</span> <span style="font-size:12px;background:${ps.bg};color:${ps.color};padding:2px 8px;border-radius:4px;">${FIXED_HERO.probTag}</span></div>`;
+  heroHTML += `</div>`;
+  heroHTML += `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">${schoolName}</div>`;
+
+  const MIN_DYNAMIC = 3; // threshold: show static filler when dynamic tags < this
+  const staticTagList = ['选考物理', '四年制', '工学学士']; // B1-B3 内部排序
+
+  // All hero pills in one flex-wrap flow (dynamic + optional static filler), capped
+  const allHeroPills = heroTags.map(t => `<span class="tag ${t.style}">${t.name}</span>`);
+  if (heroTags.length < MIN_DYNAMIC) {
+    // Fill with static tags inline, respect total cap
+    const slotsLeft = MAX_HERO_PILLS - allHeroPills.length;
+    const fillCount = Math.min(staticTagList.length, slotsLeft);
+    for (let i = 0; i < fillCount; i++) {
+      allHeroPills.push(`<span class="tag static-tag">${staticTagList[i]}</span>`);
+    }
+  }
+  if (allHeroPills.length > 0) {
+    heroHTML += `<div style="display:flex;flex-wrap:wrap;gap:4px;">${allHeroPills.join('')}</div>`;
+  }
+  
+  heroEl.innerHTML = heroHTML;
+
+  // Priority table
+  const tableEl = document.getElementById('prioTable');
+  let tableHTML = `<h3>📋 动态标签排队优先级（固定项不参与）</h3>`;
+  // Fixed row
+  tableHTML += `<div class="prio-row" style="background:var(--tag-bg);font-weight:600;">
+    <span class="prio-rank" style="color:var(--accent);">🅵</span>
+    <span class="prio-name">高度匹配 + 录取概率</span>
+    <span class="prio-status in-hero">固定位置</span>
+  </div>`;
+  ALL_TAGS.forEach((t, i) => {
+    const isTriggered = activeTagStates[t.id];
+    const isInHero = heroTags.includes(t);
+    let statusHTML = '';
+    if (!isTriggered) {
+      statusHTML = `<span class="prio-status miss">未触发</span>`;
+    } else if (isInHero) {
+      statusHTML = `<span class="prio-status in-hero">Hero</span>`;
+    } else {
+      statusHTML = `<span class="prio-status hit">触发·溢出</span>`;
+    }
+    const rankClass = isInHero ? 'in' : '';
+    tableHTML += `<div class="prio-row">
+      <span class="prio-rank ${rankClass}">${t.rank}</span>
+      <span class="prio-name">${t.name}</span>
+      ${statusHTML}
+    </div>`;
+  });
+  tableEl.innerHTML = tableHTML;
+
+  // Card modules
+  const cardEl = document.getElementById('cardModules');
+  let cardHTML = `<h3>📦 卡片区标签（独立展示，不受 Hero 影响）</h3>`;
+  for (const [cardName, tagIds] of Object.entries(CARD_TAGS)) {
+    if (!tagIds) continue;
+    const activeInCard = tagIds.filter(tid => activeTagStates[tid]);
+    let tagNames = [];
+    tagIds.forEach(tid => {
+      const t = ALL_TAGS.find(x => x.id === tid);
+      if (!t) return; // skip merged tags
+      const active = activeTagStates[tid];
+      if (active) {
+        tagNames.push(`<strong><span class="tag ${t.style}" style="font-size:11px;">${t.name}</span></strong>`);
+      } else {
+        tagNames.push(`<span style="color:#ccc;text-decoration:line-through;">${t.name}</span>`);
+      }
+    });
+    // Merge: if both 硕士点 and 博士点 active in card → show "硕博点"
+    if (cardName === '院校资源' && activeTagStates['master'] && activeTagStates['phd']) {
+      tagNames = tagNames.filter(n => !n.includes('硕士点') && !n.includes('博士点'));
+      tagNames.splice(2, 0, `<strong><span class="tag path" style="font-size:11px;">硕博点</span></strong>`);
+    }
+    cardHTML += `<div class="card-module">
+      <div class="card-name">${cardName}</div>
+      <div class="card-tags">${tagNames.join(' ')}</div>
+    </div>`;
+  }
+  cardEl.innerHTML = cardHTML;
+}
+
+// ====== BOOT ======
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标签优先级 · 用户画像走查报告</title>
+<style>
+:root {
+  --bg: #f8f9fa; --card: #fff; --text: #1a1a2e; --text2: #555; --text3: #999;
+  --border: #e0e0e0; --accent: #5B9BD5; --accent-l: #edf4fb;
+  --green: #4CAF50; --green-bg: #e8f5e9; --green-t: #2e7d32;
+  --red: #e53935; --red-bg: #ffebee; --red-t: #c62828;
+  --gold: #f9a825; --gold-bg: #fff8e1; --gold-t: #7a5d00;
+  --tag-bg: #eee;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121220; --card: #1e1e38; --text: #e0e0e0; --text2: #999; --text3: #666;
+    --border: #3a3a5c; --accent-l: #1a2840;
+    --green-bg: #1a3a1a; --red-bg: #391818; --gold-bg: #3a3010;
+    --tag-bg: #2a2a40;
+  }
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); padding: 24px; max-width: 960px; margin: 0 auto; }
+h1 { font-size: 22px; margin-bottom: 4px; }
+h2 { font-size: 17px; margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--accent); }
+h3 { font-size: 14px; margin: 16px 0 8px; color: var(--accent); }
+.subtitle { color: var(--text3); font-size: 12px; margin-bottom: 20px; }
+
+/* Persona card */
+.persona { background: var(--card); border-radius: 12px; padding: 16px; border: 1.5px solid var(--border); margin-bottom: 16px; }
+.persona-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.persona-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.persona-name { font-size: 16px; font-weight: 700; }
+.persona-tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
+.persona-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--accent-l); color: var(--accent); }
+.persona-context { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* Scenario */
+.scenario { background: var(--card); border-radius: 10px; padding: 14px; border: 1px solid var(--border); margin-bottom: 10px; }
+.scenario-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.scenario-major { font-size: 15px; font-weight: 700; }
+.scenario-school { font-size: 12px; color: var(--text2); margin-bottom: 10px; }
+
+/* Hero simulation — locked at 375px iPhone width */
+.hero-sim { background: linear-gradient(135deg, #e8f0fe 0%, #f0f4ff 100%); border-radius: 12px; padding: 14px 12px; border: 1.5px solid #c8d6e5; max-width: 375px; margin-bottom: 8px; }
+@media (prefers-color-scheme: dark) { .hero-sim { background: linear-gradient(135deg, #1a2840 0%, #162030 100%); border-color: #3a5080; } }
+.hero-row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.hero-row1-left { display: flex; align-items: center; gap: 6px; }
+.hero-row1-right { text-align: right; }
+.hero-school { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
+.tag.success { background: var(--green-bg); color: var(--green-t); }
+.tag.danger { background: var(--red-bg); color: var(--red-t); }
+.tag.stable { background: #fef3c7; color: #f59e0b; }
+.tag.warning { background: var(--gold-bg); color: var(--gold-t); }
+.tag.path { background: #f0fdfa; color: #0f766e; }
+.tag.uncertain { background: #f5f3ff; color: #6d28d9; }
+.tag.static-tag { background: #f3f4f6; color: #6b7280; }
+.tag.fixed { background: var(--accent-l); color: var(--accent); font-weight: 600; }
+@media (prefers-color-scheme: dark) {
+  .tag.path { background: #103630; color: #2dd4bf; }
+  .tag.stable { background: #3a3010; color: #f59e0b; }
+  .tag.uncertain { background: #2a1840; color: #a78bfa; }
+  .tag.static-tag { background: #2a2a35; color: #9ca3af; }
+}
+
+.hero-static { font-size: 10px; color: var(--text3); margin-top: 8px; }
+.hero-empty { font-size: 11px; color: var(--text3); font-style: italic; }
+
+.eval { font-size: 12px; padding: 8px 10px; border-radius: 6px; margin-top: 6px; }
+.eval.good { background: var(--green-bg); color: var(--green-t); }
+.eval.warn { background: var(--gold-bg); color: var(--gold-t); }
+.eval.bad { background: var(--red-bg); color: var(--red-t); }
+
+/* Issues log */
+.issue { background: var(--card); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--border); margin-bottom: 8px; }
+.issue-type { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
+.issue-type.bug { background: var(--red-bg); color: var(--red-t); }
+.issue-type.suggest { background: var(--gold-bg); color: var(--gold-t); }
+.issue-type.note { background: var(--accent-l); color: var(--accent); }
+.issue-text { font-size: 12px; line-height: 1.6; }
+
+/* Summary */
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.summary-card { background: var(--card); border-radius: 10px; padding: 14px; border: 1px solid var(--border); text-align: center; }
+.summary-card .num { font-size: 28px; font-weight: 800; color: var(--accent); }
+.summary-card .label { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  .summary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<h1>🔬 标签优先级 · 用户画像走查报告</h1>
+<p class="subtitle">5 个典型高考生画像 × 每画像 2 个真实场景 = 10 个场景系统走查<br>Hero 区：高度匹配（badge）+ 录取概率%（Row1）| 动态标签按优先级排队，<strong>上限 8 个 pill</strong> | 动态 &lt; 3 时静态标签补位（3个：学制·学位·选考要求）<br>
+<span style="display:inline-flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#ffebee;border:1px solid #b91c1c;"></span> 风险</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#e8f5e9;border:1px solid #15803d;"></span> 利好</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#fff8e1;border:1px solid #b45309;"></span> 认证</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#f0fdfa;border:1px solid #0f766e;"></span> 路径</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#f5f3ff;border:1px solid #6d28d9;"></span> 不确定</span>
+<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#f3f4f6;border:1px solid #6b7280;"></span> 静态</span>
+</span></p>
+
+<!-- ====== 画像 1 ====== -->
+<h2>画像 1：理科尖子 · 李明</h2>
+<div class="persona">
+  <div class="persona-header">
+    <div class="persona-avatar" style="background:#5B9BD5;">李</div>
+    <div>
+      <div class="persona-name">李明 · 理科尖子型</div>
+      <div class="persona-tags">
+        <span class="persona-tag">680分</span><span class="persona-tag">物化生</span><span class="persona-tag">冲清北</span><span class="persona-tag">学术导向</span>
+      </div>
+    </div>
+  </div>
+  <div class="persona-context">
+    家长知识分子，从小被期望上顶尖大学。他自己也争气，对计算机和数学有真正的兴趣。看专业解读时，最关心：<strong>这个学校有多强？能一路读上去吗（硕博点）？毕业后出路怎么样？</strong> 标签触达率高——因为他看的都是顶尖院校的强专业，几乎全触发。
+  </div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 A</div>
+  <div class="scenario-major">计算机科学与技术 · 清华大学</div>
+  <div class="scenario-school">顶尖 985 · 标签几乎全触发（12/15）</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">计算机科学与技术</span>
+        <span class="tag fixed">高度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#f59e0b;">82%</span>
+        <span class="tag stable">稳</span>
+      </div>
+    </div>
+    <div class="hero-school">清华大学</div>
+    <div class="hero-tags">
+      <span class="tag danger">高危专业</span>
+      <span class="tag danger">AI替代风险高</span>
+      <span class="tag success">薪资优势</span>
+      <span class="tag success">性价比高</span>
+      <span class="tag warning">考公适配度</span>
+      <span class="tag warning">该校王牌</span>
+      <span class="tag warning">国家认证</span>
+      <span class="tag path">硕博点</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval good">✅ 硕博合并后触发达 11 个，8-pill 上限裁 3 个（深造率高/新质生产力/产教融合）。风险优先排序——高危+AI替代在第一行，用户焦虑驱动点击专业解读（付费）或问小马（付费）。「硕博点」保留在 Hero 内。</div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 B</div>
+  <div class="scenario-major">数学与应用数学 · 北京大学</div>
+  <div class="scenario-school">顶尖 985 · 标签触发 9/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">数学与应用数学</span>
+        <span class="tag fixed">高度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#f59e0b;">75%</span>
+        <span class="tag stable">稳</span>
+      </div>
+    </div>
+    <div class="hero-school">北京大学</div>
+    <div class="hero-tags">
+      <span class="tag warning">该校王牌</span>
+      <span class="tag warning">国家认证</span>
+      <span class="tag path">硕博点</span>
+      <span class="tag path">深造率高</span>
+      <span class="tag path">产教融合</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval good">✅ 硕博点合并，动态标签 5 个 ≥ 3。学术路径：硕博点+深造率+产教融合，省出一个 pill 位。</div>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+
+<!-- ====== 画像 2 ====== -->
+<h2>画像 2：中分段 · 张悦</h2>
+<div class="persona">
+  <div class="persona-header">
+    <div class="persona-avatar" style="background:#4CAF50;">张</div>
+    <div>
+      <div class="persona-name">张悦 · 务实就业型</div>
+      <div class="persona-tags">
+        <span class="persona-tag">550分</span><span class="persona-tag">物化地</span><span class="persona-tag">专业＞学校</span><span class="persona-tag">薪资敏感</span>
+      </div>
+    </div>
+  </div>
+  <div class="persona-context">
+    父亲是普通工人，家里对她上大学有一个朴素期望：<strong>毕业能找到好工作</strong>。她不太在乎学校名气，更在乎专业对口率、起薪、就业稳定性。标签触达率中等，她需要标签帮她快速判断"这个专业值不值得选"。
+  </div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 A</div>
+  <div class="scenario-major">软件工程 · 某双一流理工</div>
+  <div class="scenario-school">中上 211 · 标签触发 6/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">软件工程</span>
+        <span class="tag fixed">高度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#f59e0b;">68%</span>
+        <span class="tag stable">稳</span>
+      </div>
+    </div>
+    <div class="hero-school">某双一流理工院校</div>
+    <div class="hero-tags">
+      <span class="tag success">薪资优势</span>
+      <span class="tag success">性价比高</span>
+      <span class="tag warning">该校王牌</span>
+      <span class="tag path">硕士点</span>
+      <span class="tag path">产教融合</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval good">✅ 动态标签 5 个 ≥ 3，静态标签不展示。薪资优势排 rank 3（在风险标签之后），但在该场景仍是她扫描到的第一条正向信号。</div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 B</div>
+  <div class="scenario-major">电气工程及其自动化 · 某省属重点</div>
+  <div class="scenario-school">省属一本 · 标签触发 5/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">电气工程及其自动化</span>
+        <span class="tag fixed">高度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#f59e0b;">72%</span>
+        <span class="tag stable">稳</span>
+      </div>
+    </div>
+    <div class="hero-school">某省属重点大学</div>
+    <div class="hero-tags">
+      <span class="tag success">薪资优势</span>
+      <span class="tag success">性价比高</span>
+      <span class="tag warning">该校王牌</span>
+      <span class="tag path">硕士点</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval good">✅ 动态标签 4 个 ≥ 3，静态标签不展示。薪资+性价比+王牌三个信号组合很好。</div>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+
+<!-- ====== 画像 3 ====== -->
+<h2>画像 3：踩线生 · 王浩</h2>
+<div class="persona">
+  <div class="persona-header">
+    <div class="persona-avatar" style="background:#f9a825;">王</div>
+    <div>
+      <div class="persona-name">王浩 · 求稳上岸型</div>
+      <div class="persona-tags">
+        <span class="persona-tag">480分</span><span class="persona-tag">物生地</span><span class="persona-tag">刚过一本线</span><span class="persona-tag">性价比优先</span>
+      </div>
+    </div>
+  </div>
+  <div class="persona-context">
+    分数在一本线上徘徊，家里经济压力大。选学校小心翼翼，就怕"高不成低不就"。最关心两件事：<strong>录取概率够不够稳？花四年读这个值不值？</strong> 风险标签（高危专业、AI替代）对他来说是刚需——他不像尖子生那样有余地试错。
+  </div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 A</div>
+  <div class="scenario-major">土木工程 · 某地方学院</div>
+  <div class="scenario-school">地方二本 · 标签触发 4/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">土木工程</span>
+        <span class="tag fixed">中度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#2e7d32;">88%</span>
+        <span class="tag success">保</span>
+      </div>
+    </div>
+    <div class="hero-school">某地方学院</div>
+    <div class="hero-tags">
+      <span class="tag danger">高危专业</span>
+      <span class="tag danger">AI替代风险高</span>
+      <span class="tag success">性价比高</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval good">✅ 动态标签 3 个 ≥ 3，静态标签不展示。风险优先——高危+AI替代在第一行，踩线生看到焦虑信号，立即产生「我要看看专业解读怎么说」的付费动机。</div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 B</div>
+  <div class="scenario-major">市场营销 · 某地方学院</div>
+  <div class="scenario-school">地方二本 · 标签触发 4/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">市场营销</span>
+        <span class="tag fixed">一般匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#2e7d32;">95%</span>
+        <span class="tag success">保</span>
+      </div>
+    </div>
+    <div class="hero-school">某地方学院</div>
+    <div class="hero-tags">
+      <span class="tag danger">高危专业</span>
+      <span class="tag danger">AI替代风险高</span>
+      <span class="tag static-tag">四年制</span>
+      <span class="tag static-tag">管理学学士</span>
+      <span class="tag static-tag">不限选科</span>
+    </div>
+  </div>
+  <div class="eval warn">⚠️ 仅 2 个动态标签（都是风险信号），+ 3 个灰色静态标签内联填充。信号偏负面但 Hero 不空，风险信号是转化钩子。</div>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+
+<!-- ====== 画像 4 ====== -->
+<h2>画像 4：文科考公 · 陈雨</h2>
+<div class="persona">
+  <div class="persona-header">
+    <div class="persona-avatar" style="background:#e53935;">陈</div>
+    <div>
+      <div class="persona-name">陈雨 · 考公导向型</div>
+      <div class="persona-tags">
+        <span class="persona-tag">590分</span><span class="persona-tag">史政地</span><span class="persona-tag">目标考公</span><span class="persona-tag">稳定性优先</span>
+      </div>
+    </div>
+  </div>
+  <div class="persona-context">
+    家族里有好几个公务员，她从高一开始就坚定考公。看专业只有一个标准：<strong>这个专业在考公里吃不吃香？</strong> 对她来说，「考公适配度」比「薪资优势」重要得多——她不打算进私企。但目前的排序里，考公适配度（rank 5）在风险标签（rank 1-2）和薪资标签（rank 3-4）之后。
+  </div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 A</div>
+  <div class="scenario-major">法学 · 某 211 综合大学</div>
+  <div class="scenario-school">211 · 标签触发 7/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">法学</span>
+        <span class="tag fixed">高度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#f59e0b;">64%</span>
+        <span class="tag stable">稳</span>
+      </div>
+    </div>
+    <div class="hero-school">某211综合大学</div>
+    <div class="hero-tags">
+      <span class="tag success">薪资优势</span>
+      <span class="tag success">性价比高</span>
+      <span class="tag warning">考公适配度</span>
+      <span class="tag warning">该校王牌</span>
+      <span class="tag warning">国家认证</span>
+      <span class="tag path">硕士点</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval warn">⚠️ 动态标签 6 个 ≥ 3，静态标签不展示。考公适配度排在薪资和性价比之后。对考公导向用户，<strong>考公适配度被两个标签遮挡</strong>——该问题需在画像能力到位后动态调序。</div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 B</div>
+  <div class="scenario-major">汉语言文学 · 某省属师范</div>
+  <div class="scenario-school">省属一本 · 标签触发仅 3/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">汉语言文学</span>
+        <span class="tag fixed">高度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#f59e0b;">78%</span>
+        <span class="tag stable">稳</span>
+      </div>
+    </div>
+    <div class="hero-school">某省属师范大学</div>
+    <div class="hero-tags">
+      <span class="tag warning">考公适配度</span>
+      <span class="tag static-tag">四年制</span>
+      <span class="tag static-tag">文学学士</span>
+      <span class="tag static-tag">不限选科</span>
+    </div>
+  </div>
+  <div class="eval warn">⚠️ 仅 1 个动态标签「考公适配度」+ 3 个灰色静态，信号精准但偏薄。考公大户专业，卡片区「毕业去向·考公」的信息承载是补偿重点。</div>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+
+<!-- ====== 画像 5 ====== -->
+<h2>画像 5：迷茫型 · 刘洋</h2>
+<div class="persona">
+  <div class="persona-header">
+    <div class="persona-avatar" style="background:#9C27B0;">刘</div>
+    <div>
+      <div class="persona-name">刘洋 · 探索迷茫型</div>
+      <div class="persona-tags">
+        <span class="persona-tag">520分</span><span class="persona-tag">物化历</span><span class="persona-tag">不确定方向</span><span class="persona-tag">需要引导</span>
+      </div>
+    </div>
+  </div>
+  <div class="persona-context">
+    不知道自己想学什么——家里给不了建议，学校也没做过生涯规划。志愿填报全靠 App 推荐。打开一个专业页面时，他需要标签帮他快速形成判断：<strong>这个专业是干嘛的？有前途吗？适合我吗？</strong> 「高度匹配」和风险标签对他很重要——他自己判断不了，需要系统替他判断。
+  </div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 A</div>
+  <div class="scenario-major">智能制造工程 · 某新升格理工</div>
+  <div class="scenario-school">新升格院校 · 标签触发 5/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">智能制造工程</span>
+        <span class="tag fixed">中度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#f59e0b;">70%</span>
+        <span class="tag stable">稳</span>
+      </div>
+    </div>
+    <div class="hero-school">某新升格理工院校</div>
+    <div class="hero-tags">
+      <span class="tag success">性价比高</span>
+      <span class="tag success">新质生产力</span>
+      <span class="tag uncertain">新增专业</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval warn">⚠️ 动态标签 3 个 ≥ 3，静态标签不展示。新增专业（rank 13）和新质生产力（rank 11）的信号方向矛盾——新质生产力暗示"有前景"，新增专业暗示"不确定"。</div>
+</div>
+
+<div class="scenario">
+  <div class="scenario-label">场景 B</div>
+  <div class="scenario-major">数据科学与大数据技术 · 某新兴院校</div>
+  <div class="scenario-school">双非新兴 · 标签触发 6/15</div>
+  <div class="hero-sim">
+    <div class="hero-row1">
+      <div class="hero-row1-left">
+        <span style="font-size:16px;font-weight:700;">数据科学与大数据技术</span>
+        <span class="tag fixed">中度匹配</span>
+      </div>
+      <div class="hero-row1-right">
+        <span style="font-size:20px;font-weight:800;color:#c62828;">62%</span>
+        <span class="tag danger">冲</span>
+      </div>
+    </div>
+    <div class="hero-school">某新兴院校</div>
+    <div class="hero-tags">
+      <span class="tag danger">AI替代风险高</span>
+      <span class="tag success">薪资优势</span>
+      <span class="tag success">性价比高</span>
+      <span class="tag success">新质生产力</span>
+      <span class="tag uncertain">新增专业</span>
+    </div>
+    <div class="hero-static" style="display:none;"></div>
+  </div>
+  <div class="eval warn">⚠️ 动态标签 5 个。风险优先——AI替代在前制造焦虑，推动用户点击专业解读或问小马。信号矛盾（新质生产力利好 vs 新增专业不确定）仍存在，需设计层解决（#4）。</div>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+
+<!-- ====== 问题汇总 ====== -->
+<h2>📋 排序问题汇总</h2>
+
+<div class="summary-grid">
+  <div class="summary-card">
+    <div class="num">0</div>
+    <div class="label">需调整排序</div>
+  </div>
+  <div class="summary-card">
+    <div class="num">1</div>
+    <div class="label">待设计层面解决</div>
+  </div>
+</div>
+
+<div class="issue">
+  <span class="issue-type bug">#1 已修复 ✓</span>
+  <div class="issue-text">
+    <strong>学术标签排序偏低 & 硕博合并</strong><br>
+    <strong>修复</strong>：硕士点→rank 8，博士点→rank 9，深造率高→rank 10，新质生产力→rank 11。同时引入合并规则：硕+博均触发时展示「硕博点」（1 pill 省 1 位）。清华场景硕博点在 Hero 内可见，学术深度信号完整。
+  </div>
+</div>
+
+<div class="issue">
+  <span class="issue-type bug">#2 已修复 ✓</span>
+  <div class="issue-text">
+    <strong>标签稀少场景 Hero 饱满度</strong><br>
+    <strong>修复</strong>：静态标签精简为 3 个（学制·学位·选考要求），灰色 pill 形式，动态标签 &lt; 3 个时内联填充，8-pill 总上限防止过度换行。市场营销（2 动态 + 3 静态）和汉语言文学（1 + 3）均稳定不空。
+  </div>
+</div>
+
+<div class="issue">
+  <span class="issue-type note">#3 维持现状</span>
+  <div class="issue-text">
+    <strong>风险优先（rank 1-2）vs 考公适配度（rank 5）</strong><br>
+    风险优先策略下，高位标签是风险信号（高危+AI替代），考公适配度被风险+薪资+性价比三个标签遮挡。该排序服务于商业转化目标（焦虑驱动付费），考公用户通过卡片区「毕业去向·考公」补偿。<br>
+    <strong>结论</strong>：排序不动，未来如有用户画像能力可动态调序。
+  </div>
+</div>
+
+<div class="issue">
+  <span class="issue-type suggest">#4 已确认</span>
+  <div class="issue-text">
+    <strong>不确定类标签排在最后：新增专业（rank 13）</strong><br>
+    画像5·场景B（数据科学）风险优先——AI替代在前制造焦虑，推动付费。「新增专业」作为不确定信号排在最后，因为这类标签的感知因人而异（有人觉得新鲜机会正向，有人觉得不稳定负向），放末尾不抢占高风险/利好信息的主导判断。<br>
+    <strong>原则</strong>：不确定类标签统一末位排列，不与风险/利好/路径标签争位。「信号矛盾」问题通过分层展示在线框图阶段解决。
+  </div>
+</div>
+
+<div class="issue">
+  <span class="issue-type note">#5 策略定位</span>
+  <div class="issue-text">
+    <strong>风险优先 = 商业转化驱动</strong><br>
+    Hero 标签在志愿匹配结果页（免费）露出，用户看到风险标签（高危+AI替代）产生焦虑 → 点击专业解读页（付费）或问小马（付费）获取深度分析。风险信号是转化钩子——免费页制造问题，付费页给解法。利好标签（薪资+性价比）作为风险后的"希望"补充，降低纯负面感知。<br>
+    <strong>结论</strong>：风险优先（rank 1-2）服务于变现目标，是产品策略选择而非纯 UX 决策。
+  </div>
+</div>
+
+<div class="issue">
+  <span class="issue-type note">#6 已确认</span>
+  <div class="issue-text">
+    <strong>8-pill 上限 + 硕博合并效果</strong><br>
+    10 个场景中，9 个场景 Hero 标签组成合理。仅清华场景（12 触发）因上限溢出 3 个标签，但溢出标签在卡片区独立展示，不丢失信息。硕博合并省下的 1 个 pill 位让学术深度信号不被裁掉。<br>
+    <strong>结论</strong>：当前排序体系经 10 场景验证可用，可进入线框图阶段。
+  </div>
+</div>
+
+</body>
+</html>

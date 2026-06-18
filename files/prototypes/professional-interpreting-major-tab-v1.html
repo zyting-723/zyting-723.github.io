@@ -142,10 +142,11 @@
     flex-shrink: 0;
   }
   .hero-prob-num {
-    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1;
+    font-size: 15px; font-weight: 700; color: #f59e0b; line-height: 1;
   }
   .hero-prob-tag {
-    font-size: 10px; color: var(--text-secondary);
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    background: #fef3c7; color: #f59e0b;
   }
 
   /* Row 2: AI 一句话解读 + 追问入口（同行，解读左 + 链接右） */
@@ -180,7 +181,8 @@
   .h-tag.t-unlimited { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
   .h-tag.t-national  { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
   .h-tag.t-neutral   { background: var(--tag-bg); color: var(--text-secondary); border: 1px solid var(--border); }
-  .h-tag.t-ability   { background: var(--accent-light); color: var(--accent-text); border: 1px solid var(--accent); }
+  .h-tag.t-cert      { background: #fff8e1; color: #b8860b; border: 1px solid #ffd54f; }
+  .h-tag.t-uncertain { background: #f5f3ff; color: #6d28d9; border: 1px solid #c4b5fd; }
 
   /* CTA */
   .hero-cta {
@@ -203,8 +205,9 @@
     .h-tag.t-subject   { background: #3a1420; color: #ef9a9a; border-color: #5a2040; }
     .h-tag.t-unlimited { background: #1a3a1a; color: #66bb6a; border-color: #2e5a2e; }
     .h-tag.t-national  { background: #0d2137; color: #64b5f6; border-color: #1a3a5e; }
+    .h-tag.t-cert      { background: #3a3010; color: #ffd54f; border-color: #5a4a1a; }
+    .h-tag.t-uncertain  { background: #2a1840; color: #a78bfa; border-color: #4a3a6e; }
     .hero-fit-badge { background: #1a2840; color: #64b5f6; border-color: #3a5a8e; }
-    .h-tag.t-ability { background: #1a2040; color: #90caf9; border-color: #3a5a8e; }
   }
 
   /* ===== 你有多适合？ ===== */
@@ -381,7 +384,7 @@
     <p class="subtitle" style="text-align:left; max-width:420px; margin:24px auto 0; line-height:1.8;">
       关键设计：<br>
       ① 用户路径——跨页锚点延续→首屏判断→向下展开，答案随滚动递进<br>
-      ② 信息架构——L1结论/L2论据/L3深度分层；判断归AI、事实归标签；个性化前置、客观后置<br>
+      ② 信息架构——L0决策/L1摘要/L2详情三层；判断归AI、事实归标签；个性化前置、客观后置<br>
       ③ 视觉布局——标签化降负担、结论句裸出、一卡一问题、行动不分散
     </p>
   </div>
@@ -425,13 +428,13 @@
 
         <!-- Row 3: 精简客观属性标签（仅保留学科属性，风险信息已收入 AI 解读） -->
         <div class="hero-tags-attrs">
-          <span class="h-tag t-subject">工学</span>
-          <span class="h-tag t-unlimited">选考物理</span>
-          <span class="h-tag t-national">一级学科</span>
+          <span class="h-tag t-neutral">工学</span>
+          <span class="h-tag t-neutral">选考物理</span>
+          <span class="h-tag t-cert">一级学科</span>
           <span class="h-tag t-neutral">四年制</span>
           <span class="h-tag t-neutral">工学学士</span>
-          <span class="h-tag t-ability">数学要求高</span>
-          <span class="h-tag t-ability">物理要求高</span>
+          <span class="h-tag t-uncertain">数学要求高</span>
+          <span class="h-tag t-uncertain">物理要求高</span>
         </div>
 
         <!-- Row 4: 无 Hero CTA（一期不包含对比/加入等功能交叉） -->
