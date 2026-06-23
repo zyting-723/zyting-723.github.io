@@ -265,6 +265,42 @@ body {
 }
 .state-switch-chip:not(.active):active { opacity: 0.6; }
 
+/* ===== 报告按钮三态 ===== */
+.action-btn-secondary.generating {
+  border-color: var(--text-tertiary); color: var(--text-tertiary);
+  cursor: not-allowed; background: var(--tag-bg);
+}
+.action-btn-secondary.generating:active { transform: none; opacity: 1; background: var(--tag-bg); }
+.action-btn-secondary.report-ready {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+.action-btn-secondary.report-ready:active { opacity: 0.85; transform: scale(0.98); }
+
+/* loading spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-dot {
+  display: inline-block; width: 14px; height: 14px; border: 2px solid var(--text-tertiary);
+  border-top-color: transparent; border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle; margin-right: 6px;
+}
+
+/* ===== 报告状态迷你切换器（手机框内，按钮下方） ===== */
+.report-state-mini {
+  display: flex; gap: 6px; justify-content: center; margin-top: 6px;
+  font-size: 11px; color: var(--text-tertiary);
+}
+.report-state-mini .rs-pill {
+  padding: 3px 10px; border-radius: 12px; cursor: pointer;
+  border: 1px solid transparent; font-weight: 500;
+  transition: all 0.15s; white-space: nowrap;
+}
+.report-state-mini .rs-pill.active {
+  background: var(--primary-light); color: var(--primary);
+  border-color: var(--primary-ghost); font-weight: 700;
+}
+.report-state-mini .rs-pill:not(.active):hover { color: var(--text-secondary); }
+
 /* ========== ANNOTATIONS SIDEBAR ========== */
 .annotations {
   width: 340px; flex-shrink: 0; position: sticky; top: 20px;
@@ -415,7 +451,15 @@ body {
     <!-- ===== ACTION BUTTONS ===== -->
     <div class="action-entries">
       <button class="action-btn-primary" onclick="alert('原型提示：进入院校匹配结果列表，基于档案数据实时计算推荐院校。')">直接匹配院校</button>
-      <button class="action-btn-secondary" onclick="alert('原型提示：生成志愿策略报告，含冲-稳-保梯度表 + 专业匹配分析 + MBTI适配建议。')">生成志愿策略报告</button>
+      <button class="action-btn-secondary" id="btnGenerateReport" onclick="handleGenerateReport()">生成志愿策略报告</button>
+    </div>
+
+    <!-- 报告状态迷你切换器 -->
+    <div class="report-state-mini">
+      <span style="margin-right:4px;line-height:22px;">报告状态</span>
+      <span class="rs-pill active" onclick="switchReportState('idle')">未生成</span>
+      <span class="rs-pill" onclick="switchReportState('generating')">生成中</span>
+      <span class="rs-pill" onclick="switchReportState('done')">已生成</span>
     </div>
 
     <div style="height:24px;"></div>
@@ -539,6 +583,36 @@ body {
         <div class="ann-rule-item">专业匹配分析（依据选科 + MBTI + 就业倾向）</div>
         <div class="ann-rule-item">MBTI 性格适配建议</div>
         <div class="ann-rule-item">可导出 PDF / 分享截图</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 报告状态 -->
+  <div class="annotation-card">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">📊</span>
+      <span class="ann-page-title">报告按钮状态</span>
+      <span class="ann-page-sub">三态切换</span>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">未生成</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">文案「生成志愿策略报告」· 蓝色描边 · 可点击</div>
+        <div class="ann-rule-item">点击 → 发起异步生成，按钮切为「生成中」</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">生成中</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">文案「报告生成中…」· 灰色描边 + loading 动画 · 不可点击</div>
+        <div class="ann-rule-item">用户退出后再回来 → 仍看到此状态</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">已生成</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">文案「查看志愿策略报告」· 蓝色实心（变主按钮）· 可点击</div>
+        <div class="ann-rule-item">点击 → 跳转策略报告页</div>
       </div>
     </div>
   </div>
@@ -686,6 +760,41 @@ function toggleTagOverflow(elId) {
       row.scrollLeft = row.scrollWidth;
     }, 50);
   }
+}
+
+// ==================== REPORT STATE ====================
+let currentReportState = 'idle'; // 'idle' | 'generating' | 'done'
+
+function switchReportState(state) {
+  currentReportState = state;
+
+  // Toggle mini pills
+  document.querySelectorAll('.report-state-mini .rs-pill').forEach(pill => {
+    pill.classList.toggle('active', pill.textContent === (state === 'idle' ? '未生成' : state === 'generating' ? '生成中' : '已生成'));
+  });
+
+  // Update button
+  const btn = document.getElementById('btnGenerateReport');
+  btn.className = 'action-btn-secondary'; // reset
+
+  if (state === 'idle') {
+    btn.innerHTML = '生成志愿策略报告';
+    btn.onclick = handleGenerateReport;
+  } else if (state === 'generating') {
+    btn.classList.add('generating');
+    btn.innerHTML = '<span class="loading-dot"></span>报告生成中…';
+    btn.onclick = null;
+  } else if (state === 'done') {
+    btn.classList.add('report-ready');
+    btn.textContent = '查看志愿策略报告';
+    btn.onclick = function() { alert('原型提示：跳转至志愿策略报告页，含冲-稳-保梯度表 + 专业匹配分析 + MBTI适配建议。'); };
+  }
+}
+
+function handleGenerateReport() {
+  alert('原型提示：开始生成志愿策略报告，含冲-稳-保梯度表 + 专业匹配分析 + MBTI适配建议。生成完成后，按钮自动变为「查看报告」。');
+  // Simulate switching to generating state
+  switchReportState('generating');
 }
 
 // ==================== SUBJECT COLLAPSE ====================
