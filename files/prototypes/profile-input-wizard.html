@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>档案信息输入 — 三页交互原型</title>
+<style>
+:root {
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --card-hover: #f9fafb;
+  --primary: #2563eb;
+  --primary-light: #eff6ff;
+  --primary-ghost: #dbeafe;
+  --text: #111827;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --border: #e5e7eb;
+  --border-light: #f3f4f6;
+  --tag-bg: #f9fafb;
+  --tag-selected-bg: #eff6ff;
+  --tag-selected-border: #2563eb;
+  --danger: #ef4444;
+  --success: #059669;
+  --success-light: #ecfdf5;
+  --warning: #f59e0b;
+  --warning-light: #fffbeb;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 8px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f1a;
+    --card: #1a1a2e;
+    --card-hover: #1f1f35;
+    --primary: #60a5fa;
+    --primary-light: #172554;
+    --primary-ghost: #1e3a5f;
+    --text: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-tertiary: #6b7280;
+    --border: #2d2d45;
+    --border-light: #1f1f35;
+    --tag-bg: #1f1f35;
+    --tag-selected-bg: #172554;
+    --success: #34d399;
+    --success-light: #064e3b;
+    --warning: #fbbf24;
+    --warning-light: #451a03;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: #e5e7eb;
+  color: var(--text);
+  min-height: 100vh;
+  padding: 20px 0;
+  -webkit-font-smoothing: antialiased;
+}
+.proto-layout {
+  display: flex; gap: 40px; justify-content: center; align-items: flex-start;
+  max-width: 1100px; margin: 0 auto; padding: 0 20px;
+}
+.phone {
+  width: 390px; max-width: 100vw;
+  min-height: 100vh;
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+  position: relative;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+@media (prefers-color-scheme: dark) {
+  .phone {
+    background: #0f0f1a;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+}
+
+/* ========== WECHAT STATUS BAR ========== */
+.wx-status-bar {
+  height: 44px; background: #fff;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 6px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  position: relative; z-index: 100;
+}
+.wx-nav-capsule {
+  position: absolute; top: 51px; right: 14px; z-index: 101;
+  display: flex; align-items: center;
+  border: 0.5px solid var(--border); border-radius: 16px;
+  height: 30px; padding: 0 4px; gap: 2px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.wx-nav-capsule span {
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .wx-status-bar { background: #0f0f1a; }
+  .wx-nav-capsule { background: rgba(15,15,26,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+}
+
+/* ========== PAGE CONTAINER ========== */
+.page { display: none; flex: 1; flex-direction: column; padding: 4px 16px 88px; }
+.page.visible { display: flex; }
+
+/* ========== PAGE HEADER ========== */
+.page-header {
+  margin: 6px 0 14px;
+  text-align: center;
+}
+.page-header-title {
+  font-size: 20px; font-weight: 700; color: var(--text);
+  letter-spacing: -0.01em;
+}
+.page-header-desc {
+  font-size: 11px; color: var(--text-tertiary); line-height: 1.3;
+  margin-top: 4px;
+}
+.benefit-banner {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--text-secondary);
+  background: #f9fafb;
+  padding: 8px 12px; border-radius: var(--radius-xs);
+  margin-bottom: 12px; font-weight: 400;
+}
+.benefit-banner .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+
+/* ========== FIELD SECTION (轻量字段区，非卡片) ========== */
+.field-section {
+  margin-bottom: 16px;
+}
+.field-section .field-group {
+  margin-bottom: 16px;
+}
+.field-section .field-group:last-child {
+  margin-bottom: 0;
+}
+
+/* ========== CARD ========== */
+.card {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  margin: 0;
+}
+.card:last-child { border-bottom: none; }
+
+.card-divider {
+  height: 1px; background: var(--border);
+  margin: 12px 0;
+}
+
+.card-title {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.card-title .icon { font-size: 16px; line-height: 1; }
+.card-title .optional {
+  font-size: 11px; color: var(--text-tertiary); font-weight: 400;
+  margin-left: auto;
+}
+
+/* ========== SELECT ========== */
+.select-wrap { position: relative; }
+.select-wrap select {
+  width: 100%; padding: 10px 36px 10px 14px; font-size: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  background: #f9fafb; color: var(--text);
+  appearance: none; cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.select-wrap select:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+.select-wrap::after {
+  content: ''; position: absolute; right: 14px; top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px;
+  border-right: 2px solid var(--text-tertiary);
+  border-bottom: 2px solid var(--text-tertiary);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+.select-wrap select:valid:not([value=""]) { border-color: var(--primary-ghost); }
+
+/* ========== SEGMENTED CONTROL ========== */
+.segmented {
+  display: flex; border-radius: var(--radius-xs);
+  background: #f3f4f6; padding: 3px;
+}
+.segmented-option {
+  flex: 1; text-align: center; padding: 8px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  background: transparent; color: var(--text-secondary);
+  border-radius: 6px; transition: all 0.2s;
+  user-select: none;
+}
+.segmented-option.selected {
+  background: #ffffff; color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* ========== SUBJECT TAGS ========== */
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.tag {
+  padding: 7px 16px; border-radius: 20px; font-size: 13px;
+  border: 1.5px solid var(--border); background: var(--tag-bg);
+  color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+  user-select: none; font-weight: 500;
+}
+.tag.selected {
+  background: var(--primary-light); border-color: var(--primary);
+  color: var(--primary);
+}
+.tag:active { transform: scale(0.96); }
+
+/* ========== COMPACT ROW: 省份 / 总分 / 位次 ========== */
+.compact-row {
+  display: flex; align-items: flex-end; gap: 10px;
+  margin-bottom: 12px;
+}
+.compact-row .compact-col:first-child { flex: 1.2; min-width: 0; }
+.compact-row .compact-col:nth-child(2) { flex: 1; }
+.compact-row .compact-col:last-child { flex: 1; min-width: 0; }
+.compact-row label {
+  font-size: 11px; color: var(--text-tertiary); font-weight: 500; margin-bottom: 4px; display: block;
+}
+.compact-row select {
+  width: 100%; height: 40px; padding: 0 28px 0 12px; font-size: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  background: #f9fafb; color: var(--text);
+  appearance: none; cursor: pointer; font-family: inherit;
+}
+.compact-select-wrap { position: relative; }
+.compact-select-wrap::after {
+  content: '▾'; position: absolute; right: 10px; top: 50%;
+  transform: translateY(-50%); font-size: 10px; color: var(--text-tertiary); pointer-events: none;
+}
+.compact-score-input {
+  width: 100%; height: 40px; padding: 0 10px; font-size: 20px; font-weight: 700;
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  background: #f9fafb; color: var(--text); outline: none;
+  font-family: inherit; text-align: center; box-sizing: border-box;
+}
+.compact-score-input:focus { border-color: var(--primary); }
+.compact-score-input::placeholder { color: var(--text-tertiary); font-weight: 400; font-size: 14px; }
+.compact-rank-value {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  white-space: nowrap; height: 40px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  background: #f3f4f6; box-sizing: border-box;
+}
+
+/* legacy score-row kept for backward compat, hidden */
+.score-row, .score-block, .rank-block { display: none; }
+
+.score-note {
+  margin-top: 8px; padding: 8px 12px;
+  border-radius: var(--radius-xs); font-size: 11px; line-height: 1.4;
+  display: none; border: 1px solid;
+}
+.score-note.show { display: block; }
+.score-note-high { background: var(--success-light); border-color: #a7f3d0; color: #065f46; }
+.score-note-mid { background: var(--primary-light); border-color: var(--primary-ghost); color: #1e40af; }
+.score-note-low { background: var(--warning-light); border-color: #fde68a; color: #92400e; }
+
+/* ========== SUBJECT SCORE TOGGLE ========== */
+.expand-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 0 4px; cursor: pointer;
+}
+.expand-toggle-text {
+  font-size: 13px; color: var(--primary); font-weight: 600;
+  display: flex; align-items: center; gap: 4px;
+}
+.expand-toggle-icon {
+  font-size: 12px; color: var(--primary); transition: transform 0.3s;
+  display: inline-flex; align-items: center;
+}
+.expand-toggle-icon.open { transform: rotate(180deg); }
+.subject-scores-panel {
+  display: none; padding: 10px 0 6px;
+}
+.subject-scores-panel.open { display: block; }
+.subscore-hint {
+  font-size: 12px; color: var(--text-tertiary); margin-bottom: 12px;
+}
+.subscore-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.subscore-card {
+  background: #f9fafb; border: 1px solid var(--border);
+  border-radius: var(--radius-xs); padding: 10px 4px;
+  text-align: center; cursor: pointer; transition: all 0.2s;
+  user-select: none; position: relative;
+}
+.subscore-dismiss {
+  position: absolute; top: 3px; right: 3px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,0,0,0.06); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--text-tertiary); line-height: 1;
+  padding: 0; transition: all 0.15s; z-index: 2;
+}
+.subscore-dismiss:active { background: rgba(239,68,68,0.12); color: var(--danger); }
+.subscore-card:hover { border-color: var(--primary-ghost); }
+.subscore-card:active {
+  background: var(--primary-light); border-color: var(--primary);
+  transform: scale(0.97);
+}
+.subscore-card .name {
+  font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;
+  font-weight: 500;
+}
+.subscore-card .val {
+  font-size: 18px; font-weight: 700; color: var(--text);
+}
+.subscore-card.filled {
+  background: var(--primary-light); border-color: var(--primary-ghost);
+}
+.subscore-card.filled .val { color: var(--primary); }
+.subscore-section-hint {
+  font-size: 11px; color: var(--text-tertiary); margin-bottom: 10px;
+}
+.subscore-card.selected-empty {
+  background: var(--primary-light); border-color: var(--primary-ghost);
+}
+.subscore-card.selected-empty .val { color: var(--primary); }
+.subscore-card.available {
+  background: var(--tag-bg); border: 1px dashed var(--border);
+}
+.subscore-card.available .val { color: var(--text-tertiary); font-size: 20px; }
+.subscore-card.available .name { color: var(--text-tertiary); }
+.subscore-card.unavailable {
+  background: var(--tag-bg); opacity: 0.35; cursor: default; pointer-events: none;
+}
+
+/* Inline subscore input (replaces popup) */
+.subscore-inline {
+  width: 100%; border: none; background: transparent;
+  font-size: 16px; font-weight: 700; color: var(--primary);
+  text-align: center; outline: none; font-family: inherit;
+  padding: 2px 0; -moz-appearance: textfield;
+}
+.subscore-inline::-webkit-inner-spin-button,
+.subscore-inline::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.subscore-inline::placeholder { color: var(--text-tertiary); font-weight: 400; font-size: 14px; }
+.subscore-card.filled .subscore-inline { color: var(--primary); }
+.subscore-card.selected-empty .subscore-inline { color: var(--text); }
+.subscore-card .val.plus { font-size: 20px; }
+
+/* ========== SUBSCORE EDIT OVERLAY ========== */
+.subscore-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); z-index: 200;
+  justify-content: center; align-items: center;
+  backdrop-filter: blur(4px);
+}
+.subscore-overlay.show { display: flex; }
+.subscore-panel {
+  background: var(--card); border-radius: 20px; padding: 28px 24px;
+  width: 290px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+.subscore-panel-title { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+.subscore-panel-sub { font-size: 12px; color: var(--text-tertiary); margin-bottom: 20px; }
+.subscore-panel-row {
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+  margin-bottom: 16px;
+}
+.subscore-panel-input {
+  width: 120px; font-size: 32px; font-weight: 700; color: var(--text);
+  text-align: center; border: 2px solid var(--border); border-radius: 12px;
+  padding: 8px 12px; background: #f9fafb; outline: none;
+  font-family: inherit;
+}
+.subscore-panel-input:focus { border-color: var(--primary); }
+.subscore-panel-clear {
+  font-size: 13px; color: var(--text-tertiary);
+  background: none; border: none; cursor: pointer;
+  margin-bottom: 16px; font-weight: 500;
+}
+.subscore-panel-done {
+  width: 100%; padding: 12px; border-radius: var(--radius-xs);
+  font-size: 15px; font-weight: 600; color: #fff;
+  background: var(--primary); border: none; cursor: pointer;
+  transition: all 0.2s;
+}
+.subscore-panel-done:active { transform: scale(0.97); }
+
+/* ========== PAGE 2: ENTRY CARDS ========== */
+.entry-list { display: flex; flex-direction: column; }
+.entry-card {
+  padding: 12px 0; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.entry-card:last-child { border-bottom: none; }
+.entry-card:active {
+  background: #f9fafb; margin: 0 -16px; padding-left: 16px; padding-right: 16px;
+}
+.entry-card-icon {
+  font-size: 30px; flex-shrink: 0; width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  background: #f3f4f6; border-radius: var(--radius-xs);
+}
+.entry-card-body { flex: 1; min-width: 0; }
+.entry-card-title {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin-bottom: 2px;
+}
+.entry-card-desc {
+  font-size: 12px; color: var(--text-tertiary);
+}
+.entry-card-arrow { font-size: 18px; color: var(--text-tertiary); flex-shrink: 0; }
+.entry-card.filled .entry-card-icon { background: #ecfdf5; }
+.entry-card .filled-dot {
+  display: none; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--success); flex-shrink: 0; margin-left: 2px;
+}
+.entry-card.filled .filled-dot { display: block; }
+
+/* ========== PAGE 3: CHIPS / RADIO / PRIORITY ========== */
+.chip-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  padding: 8px 16px; border-radius: 20px; font-size: 13px;
+  border: 1.5px solid var(--border); background: var(--tag-bg);
+  color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+  user-select: none; font-weight: 500;
+}
+.chip.selected {
+  background: var(--primary-light); border-color: var(--primary);
+  color: var(--primary); font-weight: 600;
+}
+.chip:active { transform: scale(0.95); }
+
+.priority-row {
+  display: flex; gap: 10px;
+}
+.priority-card {
+  flex: 1; text-align: center; padding: 12px 8px;
+  border-radius: var(--radius-xs); border: 1px solid var(--border);
+  background: #f9fafb; cursor: pointer; transition: all 0.2s;
+}
+.priority-card.selected {
+  border-color: var(--primary); background: var(--primary-light);
+  box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+}
+.priority-card:active { transform: scale(0.97); }
+.priority-card-icon { font-size: 20px; margin-bottom: 4px; }
+.priority-card-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.priority-card.selected .priority-card-title { color: var(--primary); }
+
+/* ========== RADIO CHIPS ========== */
+.radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.radio-chip {
+  padding: 8px 16px; border-radius: 20px; font-size: 13px;
+  border: 1.5px solid var(--border); background: var(--tag-bg);
+  color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+  user-select: none; font-weight: 500;
+}
+.radio-chip.selected {
+  background: var(--primary-light); border-color: var(--primary);
+  color: var(--primary); font-weight: 600;
+}
+
+/* ========== SLIDER ========== */
+.slider-wrap { padding: 2px 2px 0; }
+.slider-ticks {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--text-tertiary); margin-bottom: 8px;
+  padding: 0 2px; font-weight: 500;
+}
+.range-input {
+  width: 100%; height: 5px; -webkit-appearance: none;
+  background: linear-gradient(to right, var(--primary), var(--border) 50%);
+  border-radius: 10px; outline: none;
+}
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 24px; height: 24px;
+  border-radius: 50%; background: #fff; cursor: pointer;
+  border: 2.5px solid var(--primary);
+  box-shadow: 0 2px 8px rgba(37,99,235,0.2);
+  transition: transform 0.15s;
+}
+.range-input::-webkit-slider-thumb:active { transform: scale(1.15); }
+.slider-value {
+  text-align: center; font-size: 13px; font-weight: 600;
+  color: var(--primary); margin-top: 8px;
+  background: var(--primary-light); display: inline-block;
+  padding: 3px 12px; border-radius: 12px;
+  width: fit-content; margin-left: auto; margin-right: auto;
+}
+
+/* ========== TEXTAREA ========== */
+.textarea {
+  width: 100%; padding: 10px 14px; font-size: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  background: #f9fafb; color: var(--text); resize: none;
+  font-family: inherit; height: 60px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  line-height: 1.5;
+}
+.textarea::placeholder { color: var(--text-tertiary); }
+.textarea:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.06);
+}
+
+/* ========== TAG DISPLAY (Page 3) ========== */
+.tag-display {
+  display: flex; gap: 6px; flex-wrap: nowrap; min-height: 34px;
+  margin-bottom: 8px; overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.tag-display::-webkit-scrollbar { display: none; }
+.tag-display .tag-item {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 10px 6px 12px; border-radius: 16px;
+  background: var(--primary-light); border: 1px solid var(--primary-ghost);
+  font-size: 13px; font-weight: 500; color: var(--primary);
+  flex-shrink: 0; white-space: nowrap;
+}
+.tag-display .tag-item .tag-remove {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(37,99,235,0.15); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--primary); line-height: 1;
+  padding: 0;
+}
+.tag-display .tag-item .tag-remove:active { background: rgba(37,99,235,0.25); }
+.tag-display-empty {
+  font-size: 13px; color: var(--text-tertiary);
+  display: flex; align-items: center;
+}
+
+.adder-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 14px; border-radius: 16px;
+  border: 1.5px dashed var(--border); background: var(--tag-bg);
+  font-size: 13px; color: var(--text-tertiary); cursor: pointer;
+  font-weight: 500; transition: all 0.2s;
+}
+.adder-btn:hover, .adder-btn:active {
+  border-color: var(--primary); color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* ========== HALF PANEL (Page 3) ========== */
+.half-panel-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35); z-index: 200;
+  justify-content: center; align-items: flex-end;
+  backdrop-filter: blur(4px);
+}
+.half-panel-overlay.show { display: flex; }
+.half-panel {
+  background: var(--card); border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 390px; max-height: 75vh;
+  display: flex; flex-direction: column;
+  animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 0 -8px 30px rgba(0,0,0,0.1);
+}
+.half-panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 20px 14px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.half-panel-title { font-size: 18px; font-weight: 700; }
+.half-panel-done {
+  font-size: 15px; font-weight: 600; color: var(--primary);
+  background: none; border: none; cursor: pointer; padding: 4px 8px;
+}
+.half-panel-done:active { opacity: 0.7; }
+.half-panel-body {
+  flex: 1; overflow-y: auto; padding: 12px 16px 30px;
+  -webkit-overflow-scrolling: touch;
+}
+.half-panel-body::-webkit-scrollbar { display: none; }
+
+/* Region section in panel */
+.panel-section {
+  margin-bottom: 16px;
+}
+.panel-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 4px 6px;
+}
+.panel-section-name {
+  font-size: 14px; font-weight: 600; color: var(--text);
+}
+.panel-section-all {
+  font-size: 12px; color: var(--primary); background: none; border: none;
+  cursor: pointer; font-weight: 500; padding: 2px 6px;
+}
+.panel-section-all:active { opacity: 0.7; }
+.panel-checkbox-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.panel-checkbox-grid.cols2 { grid-template-columns: repeat(2, 1fr); }
+
+.checkbox-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px; border-radius: 8px; cursor: pointer;
+  background: var(--tag-bg); border: 1px solid var(--border);
+  transition: all 0.15s; user-select: none;
+  font-size: 13px; color: var(--text-secondary);
+}
+.checkbox-row.selected {
+  background: var(--primary-light); border-color: var(--primary);
+  color: var(--primary); font-weight: 500;
+}
+.checkbox-row:active { transform: scale(0.97); }
+.checkbox-row .check-icon {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.checkbox-row.selected .check-icon {
+  border-color: var(--primary); background: var(--primary);
+}
+.checkbox-row.selected .check-icon::after {
+  content: ''; display: block; width: 6px; height: 4px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+/* ========== BOTTOM BAR ========== */
+.bottom-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  width: 100%;
+  padding: 10px 16px 34px;
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+/* bottom home indicator */
+.bottom-bar::after {
+  content: ''; display: block; width: 120px; height: 5px;
+  background: var(--text); border-radius: 3px;
+  opacity: 0.2; position: absolute; bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Toast */
+.toast {
+  position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: var(--text); color: #fff; font-size: 13px; font-weight: 500;
+  padding: 10px 20px; border-radius: 8px;
+  opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 300;
+  white-space: nowrap; max-width: 300px; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+@media (prefers-color-scheme: dark) {
+  .toast { background: #f3f4f6; color: #0f0f1a; }
+}
+
+/* ===== Completion State (After Submit) ===== */
+.completion-state { display: none; }
+.completion-state.visible { display: block; }
+.completion-header { text-align: center; padding: 20px 0 16px; }
+.completion-icon {
+  font-size: 44px; margin-bottom: 8px; line-height: 1;
+}
+.completion-title {
+  font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px;
+}
+.completion-sub {
+  font-size: 13px; color: var(--text-tertiary);
+}
+.completion-actions {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-top: 20px;
+}
+.btn-match {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  font-size: 16px; font-weight: 700; cursor: pointer; border: none;
+  background: var(--primary); color: #fff;
+  transition: all 0.15s; text-align: center;
+}
+.btn-match:active { opacity: 0.85; transform: scale(0.98); }
+.btn-report {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  background: none; border: 2px solid var(--primary); color: var(--primary);
+  transition: all 0.15s; text-align: center;
+}
+.btn-report:active { background: var(--primary-light); transform: scale(0.98); }
+.form-content { display: block; }
+.form-content.hidden { display: none; }
+
+.btn {
+  width: 100%; padding: 12px; border-radius: var(--radius-xs);
+  font-size: 16px; font-weight: 600; border: none; cursor: pointer;
+  transition: all 0.2s; letter-spacing: 0.01em;
+}
+.btn-primary {
+  background: var(--primary); color: #fff;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+}
+.btn-primary:disabled {
+  background: #94a3b8; box-shadow: none; cursor: not-allowed;
+}
+.btn-primary:active:not(:disabled) { transform: scale(0.97); box-shadow: 0 2px 6px rgba(37,99,235,0.15); }
+.skip-link {
+  font-size: 14px; color: var(--text-tertiary); background: none; border: none;
+  cursor: pointer; padding: 4px; font-weight: 500;
+}
+.skip-link:active { color: var(--text-secondary); }
+.bottom-links {
+  display: flex; justify-content: center; gap: 28px;
+}
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); z-index: 100;
+  justify-content: center; align-items: flex-end;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--card); border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 390px; max-height: 82vh;
+  overflow-y: auto; padding: 22px 20px;
+  animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 0 -8px 30px rgba(0,0,0,0.1);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 18px;
+}
+.modal-title { font-size: 18px; font-weight: 700; }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  font-size: 18px; background: var(--tag-bg); border: none; cursor: pointer;
+  color: var(--text-secondary); display: flex; align-items: center;
+  justify-content: center; transition: all 0.15s;
+}
+.modal-close:active { background: var(--border); }
+.modal-btn {
+  width: 100%; padding: 13px; border-radius: var(--radius-xs);
+  font-size: 15px; font-weight: 600; border: none; cursor: pointer;
+  margin-top: 18px; background: var(--primary); color: #fff;
+  transition: all 0.2s;
+}
+.modal-btn:active { transform: scale(0.97); }
+
+/* ========== MBTI GRID ========== */
+.mbti-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.mbti-item {
+  text-align: center; padding: 12px 4px; border-radius: var(--radius-xs);
+  font-size: 12px; font-weight: 600; border: 1.5px solid var(--border);
+  cursor: pointer; transition: all 0.2s; user-select: none;
+  color: var(--text-secondary);
+}
+.mbti-item:active, .mbti-item.selected {
+  border-color: var(--primary); background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* ========== TEST QUESTIONS ========== */
+.test-q { margin-bottom: 22px; }
+.test-q:last-child { margin-bottom: 12px; }
+.test-q-label {
+  font-size: 14px; font-weight: 600; margin-bottom: 10px;
+  color: var(--text);
+}
+.test-opts { display: flex; flex-direction: column; gap: 6px; }
+.test-opt {
+  padding: 12px 16px; border-radius: var(--radius-xs); font-size: 14px;
+  border: 1px solid var(--border); cursor: pointer;
+  background: #f9fafb; color: var(--text); transition: all 0.2s;
+}
+.test-opt.selected {
+  background: var(--primary-light); border-color: var(--primary);
+  color: var(--primary); font-weight: 500;
+}
+.test-opt:active { transform: scale(0.98); }
+.test-result {
+  text-align: center; padding: 20px; display: none;
+  background: var(--primary-light); border-radius: var(--radius); margin-top: 8px;
+}
+.test-result-type { font-size: 28px; font-weight: 700; color: var(--primary); }
+.test-result-note { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+
+/* ========== FIELD LABEL ========== */
+.field-label {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.field-label .optional-badge {
+  font-size: 10px; color: var(--text-tertiary); font-weight: 400;
+  background: var(--tag-bg); padding: 2px 8px; border-radius: 10px;
+}
+
+/* ========== INLINE ROW ========== */
+.inline-row { display: flex; gap: 10px; }
+.inline-row > * { flex: 1; }
+
+/* ========== PAGE 1 SPECIFIC ========== */
+.field-group { margin-bottom: 16px; }
+.field-group:last-child { margin-bottom: 0; }
+
+@media (prefers-color-scheme: dark) {
+  .phone { background: #0f0f1a; }
+  .bottom-bar { background: #0f0f1a; border-color: #2d2d45; }
+  .bottom-bar::after { background: #f3f4f6; }
+  .card { border-color: #2d2d45; }
+  .card-divider { background: #2d2d45; }
+  .entry-card { border-color: #2d2d45; }
+  .entry-card:active { background: #1a1a2e; }
+  .entry-card-icon { background: #1a1a2e; }
+  .entry-card.filled .entry-card-icon { background: #064e3b; }
+  .segmented { background: #1a1a2e; }
+  .segmented-option.selected { background: #2d2d45; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+  .score-block, .rank-block, .subscore-card, .priority-card,
+  .select-wrap select, .textarea, .test-opt { background: #1a1a2e; }
+  .benefit-banner { background: #1a1a2e; }
+  .tag-display .tag-item .tag-remove { background: rgba(96,165,250,0.2); }
+  .checkbox-row { background: #1a1a2e; border-color: #2d2d45; }
+  .checkbox-row.selected { background: #172554; border-color: #3b82f6; }
+  .checkbox-row .check-icon { border-color: #4b5563; }
+  .half-panel-header { border-color: #2d2d45; }
+  .adder-btn { background: #1a1a2e; border-color: #2d2d45; }
+  .adder-btn:hover, .adder-btn:active { background: #172554; }
+  .subscore-dismiss { background: rgba(255,255,255,0.08); }
+  .subscore-dismiss:active { background: rgba(239,68,68,0.25); }
+}
+
+/* ========== ANNOTATIONS SIDEBAR ========== */
+.annotations {
+  width: 340px; flex-shrink: 0; position: sticky; top: 20px;
+  max-height: calc(100vh - 40px); overflow-y: auto;
+  display: flex; flex-direction: column; gap: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}
+.annotations::-webkit-scrollbar { display: none; }
+
+.annotation-card {
+  background: var(--card); border-radius: 14px;
+  padding: 18px 18px 14px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.ann-card-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.ann-page-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.ann-page-title {
+  font-size: 15px; font-weight: 700; color: var(--text);
+}
+.ann-page-sub {
+  font-size: 11px; color: var(--text-tertiary); margin-left: auto;
+}
+
+.ann-rule-group { margin-bottom: 12px; }
+.ann-rule-group:last-child { margin-bottom: 0; }
+.ann-rule-label {
+  font-size: 12px; font-weight: 600; color: var(--primary);
+  margin-bottom: 4px; letter-spacing: 0.01em;
+}
+.ann-rule-items {
+  display: flex; flex-direction: column; gap: 3px;
+  padding-left: 14px;
+}
+.ann-rule-item {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.55;
+  position: relative;
+}
+.ann-rule-item::before {
+  content: '·'; position: absolute; left: -10px; color: var(--text-tertiary);
+}
+
+.annotations .annotation-card { display: none; }
+.ann-card-visible { display: block !important; }
+
+.ann-divider {
+  height: 1px; background: var(--border);
+  margin: 12px 0 10px;
+}
+
+@media (max-width: 860px) {
+  .proto-layout { flex-direction: column; align-items: center; gap: 24px; padding: 0 12px; }
+  .annotations { width: 100%; max-width: 390px; position: static; max-height: none; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .annotation-card { background: #1a1a2e; border-color: #2d2d45; }
+  .ann-card-header { border-color: #2d2d45; }
+  .ann-divider { background: #2d2d45; }
+}
+</style>
+</head>
+<body>
+
+<div class="proto-layout">
+
+<div class="phone">
+
+  <!-- ==================== WECHAT STATUS BAR + FLOATING CAPSULE ==================== -->
+  <div class="wx-status-bar"><span id="wxTime">9:41</span></div>
+  <div class="wx-nav-capsule">
+    <span>···</span><span style="border-left:0.5px solid var(--border);padding-left:4px;">✕</span>
+  </div>
+
+  <!-- ==================== PAGE 1: 成绩信息 ==================== -->
+  <div class="page visible" id="page1">
+
+    <div class="page-header">
+      <div class="page-header-title">成绩信息</div>
+      <div class="page-header-desc">省份和分数必填，填写后自动推算位次</div>
+    </div>
+
+    <!-- ① 高考省份 -->
+    <div class="field-group" style="margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">高考省份</div>
+      <div class="select-wrap">
+        <select id="selProvince" onchange="onProvinceChange()">
+          <option value="">请选择省份</option>
+          <optgroup label="3+1+2 省份">
+            <option value="广东">广东</option><option value="河北">河北</option><option value="辽宁">辽宁</option>
+            <option value="江苏">江苏</option><option value="福建">福建</option><option value="湖北">湖北</option>
+            <option value="湖南">湖南</option><option value="重庆">重庆</option><option value="黑龙江">黑龙江</option>
+            <option value="甘肃">甘肃</option><option value="吉林">吉林</option><option value="安徽">安徽</option>
+            <option value="江西">江西</option><option value="贵州">贵州</option><option value="广西">广西</option>
+            <option value="山西">山西</option><option value="河南">河南</option><option value="陕西">陕西</option>
+            <option value="内蒙古">内蒙古</option><option value="四川">四川</option><option value="云南">云南</option>
+            <option value="宁夏">宁夏</option><option value="青海">青海</option>
+          </optgroup>
+          <optgroup label="3+3 省份">
+            <option value="北京">北京</option><option value="天津">天津</option><option value="上海">上海</option>
+            <option value="浙江">浙江</option><option value="山东">山东</option><option value="海南">海南</option>
+          </optgroup>
+          <optgroup label="文理分科">
+            <option value="西藏">西藏</option><option value="新疆">新疆</option>
+          </optgroup>
+        </select>
+      </div>
+      <div id="policyBadge" style="display:none;margin-top:6px;font-size:11px;font-weight:500;color:var(--primary);"></div>
+    </div>
+
+    <!-- ② 首选科目（条件展示：3+1+2 和文理分科省） -->
+    <div class="field-group" id="firstChoiceGroup" style="display:none;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">首选科目</div>
+      <div class="segmented" id="firstChoiceSelector">
+        <div class="segmented-option" onclick="selectFirstChoice('物理')">物理</div>
+        <div class="segmented-option" onclick="selectFirstChoice('历史')">历史</div>
+      </div>
+    </div>
+
+    <!-- ③ 分数 / 位次 -->
+    <div class="compact-row" style="margin-bottom:8px;">
+      <div class="compact-col" style="flex:1;">
+        <label>高考总分</label>
+        <input type="number" class="compact-score-input" id="totalScore" value="" placeholder="输入分数" oninput="onScoreInput()" inputmode="numeric">
+      </div>
+      <div class="compact-col" style="flex:1;">
+        <label>位次</label>
+        <div class="compact-rank-value" id="rankValue">—</div>
+      </div>
+    </div>
+    <div class="score-note" id="scoreNote"></div>
+    <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;margin-top:2px;">也可填单科成绩，自动汇总总分</div>
+
+    <!-- ─── 选科与单科成绩 ─── -->
+    <div style="margin:8px 0 10px;border-top:1px dashed var(--border);"></div>
+
+    <div style="margin-bottom:4px;">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">选科与单科成绩</div>
+      <div class="subscore-section-hint">选填，填写后匹配更精准</div>
+
+      <div class="subscore-grid" id="subscoreGrid">
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2: 性格倾向 ==================== -->
+  <div class="page" id="page2">
+
+    <div class="page-header">
+      <div class="page-header-title">性格倾向</div>
+      <div class="page-header-desc">了解性格倾向，帮你匹配更适合的专业方向</div>
+    </div>
+    <div class="benefit-banner"><span class="dot"></span> 填得越完整，推荐越精准</div>
+
+    <div class="entry-list">
+      <div class="entry-card" id="cardMbti" onclick="openMbtiModal()">
+        <div class="entry-card-body">
+          <div class="entry-card-title">我知道自己的性格类型</div>
+          <div class="entry-card-desc">做过 MBTI 或类似测试，直接选择你的类型</div>
+        </div>
+        <div class="filled-dot" id="mbtiDot"></div>
+        <div class="entry-card-arrow">›</div>
+      </div>
+      <div class="entry-card" id="cardTest" onclick="navToMbtiTest()">
+        <div class="entry-card-body">
+          <div class="entry-card-title">帮我简单判断一下</div>
+          <div class="entry-card-desc">没做过评估？进入完整 MBTI 测评，大约 8-10 分钟</div>
+        </div>
+        <div class="filled-dot" id="testDot"></div>
+        <div class="entry-card-arrow">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 3: 个人意愿 ==================== -->
+  <div class="page" id="page3">
+
+    <!-- 表单区 -->
+    <div class="form-content" id="page3Form">
+
+    <div class="page-header">
+      <div class="page-header-title">个人意愿</div>
+      <div class="page-header-desc">你希望在什么样的地方，学什么，未来做什么？</div>
+    </div>
+    <div class="benefit-banner"><span class="dot"></span> 填得越完整，推荐越精准 · 均可选填</div>
+
+    <!-- 地域偏好 -->
+    <div class="card">
+      <div class="card-title">地域偏好 <span class="optional">可多选</span></div>
+      <div class="tag-display" id="regionTagDisplay">
+        <span class="tag-display-empty">未选择</span>
+      </div>
+      <div class="adder-btn" onclick="openRegionPanel()">+ 添加偏好地域</div>
+    </div>
+
+    <!-- 专业偏好 -->
+    <div class="card">
+      <div class="card-title">专业偏好 <span class="optional">可多选</span></div>
+      <div class="tag-display" id="majorTagDisplay">
+        <span class="tag-display-empty">未选择</span>
+      </div>
+      <div class="adder-btn" onclick="openMajorPanel()">+ 添加偏好专业</div>
+    </div>
+
+    <!-- 优先考虑 -->
+    <div class="card">
+      <div class="card-title">优先考虑 <span class="optional">可多选</span></div>
+      <div class="chip-group" id="priorityGroup">
+        <div class="chip" onclick="toggleChip(this,'priority')">院校档次</div>
+        <div class="chip" onclick="toggleChip(this,'priority')">专业实力</div>
+        <div class="chip" onclick="toggleChip(this,'priority')">城市地域</div>
+        <div class="chip" onclick="toggleChip(this,'priority')">就业前景</div>
+        <div class="chip" onclick="toggleChip(this,'priority')">学费性价比</div>
+      </div>
+    </div>
+
+    <!-- 就业规划 -->
+    <div class="card">
+      <div class="card-title">就业规划 <span class="optional">可多选</span></div>
+      <div class="chip-group" id="careerGroup">
+        <div class="chip" onclick="toggleChip(this,'career')">直接就业</div>
+        <div class="chip" onclick="toggleChip(this,'career')">国内读研</div>
+        <div class="chip" onclick="toggleChip(this,'career')">出国留学</div>
+        <div class="chip" onclick="toggleChip(this,'career')">考公考编</div>
+        <div class="chip" onclick="toggleChip(this,'career')">创业</div>
+        <div class="chip" onclick="toggleChip(this,'career')">还没想好</div>
+      </div>
+    </div>
+
+    <!-- 学费预算 -->
+    <div class="card">
+      <div class="card-title">学费预算 <span class="optional">每年</span></div>
+      <div class="slider-wrap">
+        <input type="range" class="range-input" id="tuitionSlider" min="0" max="5" value="2" oninput="updateTuition()">
+        <div class="slider-ticks">
+          <span>不限</span><span>5千</span><span>1万</span><span>2万</span><span>5万</span><span>10万+</span>
+        </div>
+        <div style="text-align:center;">
+          <span class="slider-value" id="tuitionVal">≤ 2万/年</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 补充信息 -->
+    <div class="card">
+      <div class="card-title">补充信息 <span class="optional">选填</span></div>
+      <textarea class="textarea" id="extraNotes" placeholder="有什么其他想说的？比如家庭情况、身体条件、兴趣特长…"></textarea>
+    </div>
+
+    </div><!-- /form-content -->
+
+    <!-- 完成态 -->
+    <div class="completion-state" id="completionState">
+      <div class="completion-header">
+        <div class="completion-icon">📋</div>
+        <div class="completion-title">档案已提交</div>
+        <div class="completion-sub">现在选择下一步操作</div>
+      </div>
+      <div class="completion-actions">
+        <button class="btn-match" onclick="alert('原型提示：进入院校匹配结果列表，基于档案数据实时计算推荐院校。')">直接匹配院校</button>
+        <button class="btn-report" onclick="alert('原型提示：生成志愿策略报告，含冲-稳-保梯度表 + 专业匹配分析 + MBTI适配建议。')">生成志愿策略报告</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 地域选择半弹层 ==================== -->
+  <div class="half-panel-overlay" id="regionPanel">
+    <div class="half-panel">
+      <div class="half-panel-header">
+        <span class="half-panel-title">选择偏好地域</span>
+        <button class="half-panel-done" onclick="closeRegionPanel()">完成</button>
+      </div>
+      <div class="half-panel-body" id="regionPanelBody">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 专业选择半弹层 ==================== -->
+  <div class="half-panel-overlay" id="majorPanel">
+    <div class="half-panel">
+      <div class="half-panel-header">
+        <span class="half-panel-title">选择偏好专业</span>
+        <button class="half-panel-done" onclick="closeMajorPanel()">完成</button>
+      </div>
+      <div class="half-panel-body" id="majorPanelBody">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="bottom-bar">
+    <button class="btn btn-primary" id="btnNext" onclick="nextPage()" disabled>下一步</button>
+    <div class="bottom-links">
+      <button class="skip-link" id="btnPrev" onclick="prevPage()" style="display:none">上一步</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div><!-- /phone -->
+
+<!-- ==================== ANNOTATIONS SIDEBAR ==================== -->
+<div class="annotations">
+
+  <!-- Page 1 -->
+  <div class="annotation-card" id="annPage1">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">1</span>
+      <span class="ann-page-title">成绩信息</span>
+      <span class="ann-page-sub">省份必填 → 驱动选科路由</span>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">省份驱动路由</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">选省 → 自动识别选科政策（3+3 / 3+1+2 / 文理分科）</div>
+        <div class="ann-rule-item">政策标签实时展示（如「广东 · 3+1+2」）</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">首选科目条件展示</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">3+1+2 省：物理/历史 必选</div>
+        <div class="ann-rule-item">文理分科省：文科/理科 必选</div>
+        <div class="ann-rule-item">3+3 省：首选行自动隐藏</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">总分与位次</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">直接输入或通过单科成绩自动汇总</div>
+        <div class="ann-rule-item">位次 = 省份+分数 → 模拟一分一段表区间</div>
+        <div class="ann-rule-item">实际产品需调用一分一段表接口</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">选科卡片四态</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">已填分数：蓝底 + 分数值</div>
+        <div class="ann-rule-item">已选未填：浅蓝底 + 「—」占位</div>
+        <div class="ann-rule-item">可添加：虚线边框 + 「+」</div>
+        <div class="ann-rule-item">不可选：已满限额或不可选的科目灰色 dimmed</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">回退机制</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">右上角 × 按钮取消选中可选科（清除分数+取消勾选）</div>
+        <div class="ann-rule-item">固定科目（语数英+首选）不可取消</div>
+      </div>
+    </div>
+    <div class="ann-divider"></div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">校验规则</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">省份 + 总分 + 首选（如显示）必填 → 下一步启用</div>
+        <div class="ann-rule-item">选科和单科成绩均为选填</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 2 -->
+  <div class="annotation-card" id="annPage2">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">2</span>
+      <span class="ann-page-title">性格倾向</span>
+      <span class="ann-page-sub">选填 · 可跳过</span>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">两个入口</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">我知道自己的 MBTI → 浮层选 16 型</div>
+        <div class="ann-rule-item">帮我简单判断一下 → 跳转外部 MBTI 完整测试页（93题 / 约10分钟）</div>
+        <div class="ann-rule-item">实际产品：wx.navigateTo 打开 /pages/mbti-test/mbti-test</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">填写状态</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">填写后：卡片右上角显示绿点标记</div>
+        <div class="ann-rule-item">下次进入此页绿点保持可见</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">完成态（点击「开始匹配」后）</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">表单隐藏 → 显示完成头（📋 档案已提交 + 副标题）</div>
+        <div class="ann-rule-item">两个操作入口：「直接匹配院校」（蓝实心·主）+ 「生成志愿策略报告」（蓝描边·次）</div>
+        <div class="ann-rule-item">「返回修改」→ 恢复表单，隐藏完成态，可继续编辑</div>
+        <div class="ann-rule-item">两个入口与复访页（档案已填-匹配结果页）完全一致——同一条路径的起点</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 3 -->
+  <div class="annotation-card" id="annPage3">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">3</span>
+      <span class="ann-page-title">个人意愿</span>
+      <span class="ann-page-sub">全部选填 · 默认无偏好</span>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">地域偏好</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">tag-adder 模式：主页面 → 已选标签（可 × 删除）+「+ 添加」按钮</div>
+        <div class="ann-rule-item">点击「+ 添加」→ 半弹层：7 大区（华东/华北/华南/华中/西南/西北/东北）</div>
+        <div class="ann-rule-item">每区支持「全选/取消全选」+ 城市复选框网格</div>
+        <div class="ann-rule-item">标签只显示最小颗粒度（如「上海」，非「华北·上海」）</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">专业偏好</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">同上 tag-adder 模式，12 学科门类→专业类层级</div>
+        <div class="ann-rule-item">半弹层按门类分组（哲学/经济学/法学/教育学/文学/历史学/理学/工学/农学/医学/管理学/艺术学）</div>
+        <div class="ann-rule-item">每门类支持全选</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">优先考虑</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">多选 chips：院校档次 / 专业实力 / 城市地域 / 就业前景 / 学费性价比</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">就业规划</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">多选 chips：直接就业 / 国内读研 / 出国留学 / 考公考编 / 创业 / 还没想好</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">其他</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">学费预算：滑块选择年预算区间（不限 ~ 10万+）</div>
+        <div class="ann-rule-item">补充信息：自由文本输入</div>
+      </div>
+    </div>
+    <div class="ann-divider"></div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">导航</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">「开始匹配」始终可用，不填即默认无偏好</div>
+        <div class="ann-rule-item">提交 → toast「档案已提交，前往匹配结果页...」</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /annotations -->
+
+</div><!-- /proto-layout -->
+
+<!-- ==================== MBTI Modal ==================== -->
+<div class="modal-overlay" id="mbtiModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">选择 MBTI 类型</span>
+      <button class="modal-close" onclick="closeMbtiModal()">✕</button>
+    </div>
+    <div class="mbti-grid">
+      <div class="mbti-item" onclick="selectMbti('INTJ')">INTJ</div>
+      <div class="mbti-item" onclick="selectMbti('INTP')">INTP</div>
+      <div class="mbti-item" onclick="selectMbti('ENTJ')">ENTJ</div>
+      <div class="mbti-item" onclick="selectMbti('ENTP')">ENTP</div>
+      <div class="mbti-item" onclick="selectMbti('INFJ')">INFJ</div>
+      <div class="mbti-item" onclick="selectMbti('INFP')">INFP</div>
+      <div class="mbti-item" onclick="selectMbti('ENFJ')">ENFJ</div>
+      <div class="mbti-item" onclick="selectMbti('ENFP')">ENFP</div>
+      <div class="mbti-item" onclick="selectMbti('ISTJ')">ISTJ</div>
+      <div class="mbti-item" onclick="selectMbti('ISFJ')">ISFJ</div>
+      <div class="mbti-item" onclick="selectMbti('ESTJ')">ESTJ</div>
+      <div class="mbti-item" onclick="selectMbti('ESFJ')">ESFJ</div>
+      <div class="mbti-item" onclick="selectMbti('ISTP')">ISTP</div>
+      <div class="mbti-item" onclick="selectMbti('ISFP')">ISFP</div>
+      <div class="mbti-item" onclick="selectMbti('ESTP')">ESTP</div>
+      <div class="mbti-item" onclick="selectMbti('ESFP')">ESFP</div>
+    </div>
+    <button class="modal-btn" onclick="confirmMbti()">确认选择</button>
+  </div>
+</div>
+
+<!-- ==================== Simple Test Modal ==================== -->
+<div class="modal-overlay" id="testModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">简单测一测</span>
+      <button class="modal-close" onclick="closeTestModal()">✕</button>
+    </div>
+
+    <div class="test-q" id="tq1">
+      <div class="test-q-label">1. 你更喜欢通过什么方式获取能量？</div>
+      <div class="test-opts">
+        <div class="test-opt" onclick="pickTestOpt(this,1,'E')">与人相处、社交交流</div>
+        <div class="test-opt" onclick="pickTestOpt(this,1,'I')">独处安静、自己待着</div>
+      </div>
+    </div>
+    <div class="test-q" id="tq2" style="display:none">
+      <div class="test-q-label">2. 你处理信息更偏向？</div>
+      <div class="test-opts">
+        <div class="test-opt" onclick="pickTestOpt(this,2,'S')">看重实际、细节和事实</div>
+        <div class="test-opt" onclick="pickTestOpt(this,2,'N')">看重直觉、关联和可能性</div>
+      </div>
+    </div>
+    <div class="test-q" id="tq3" style="display:none">
+      <div class="test-q-label">3. 你做决定时更倾向？</div>
+      <div class="test-opts">
+        <div class="test-opt" onclick="pickTestOpt(this,3,'T')">逻辑分析、客观原则</div>
+        <div class="test-opt" onclick="pickTestOpt(this,3,'F')">个人感受、人情考量</div>
+      </div>
+    </div>
+    <div class="test-q" id="tq4" style="display:none">
+      <div class="test-q-label">4. 你更喜欢的生活方式？</div>
+      <div class="test-opts">
+        <div class="test-opt" onclick="pickTestOpt(this,4,'J')">计划有序、确定性强</div>
+        <div class="test-opt" onclick="pickTestOpt(this,4,'P')">灵活随性、保持开放</div>
+      </div>
+    </div>
+    <div class="test-result" id="testResult">
+      <div class="test-result-type" id="testResultType"></div>
+      <div class="test-result-note">简易测评结果，仅供参考</div>
+    </div>
+    <button class="modal-btn" id="testConfirmBtn" onclick="confirmTest()" style="display:none">使用这个类型</button>
+  </div>
+</div>
+
+<!-- ==================== SubScore Edit Overlay ==================== -->
+<div class="subscore-overlay" id="subscoreEdit">
+  <div class="subscore-panel">
+    <div class="subscore-panel-title" id="subscoreEditTitle">语文</div>
+    <div class="subscore-panel-sub">满分 150 分</div>
+    <div class="subscore-panel-row">
+      <input type="number" class="subscore-panel-input" id="subscoreEditInput" value="0" placeholder="0" inputmode="numeric" autofocus>
+    </div>
+    <button class="subscore-panel-clear" onclick="clearSubScore()">清空</button>
+    <button class="subscore-panel-done" onclick="doneSubScore()">完成</button>
+  </div>
+</div>
+
+<script>
+// ==================== STATE ====================
+let currentPage = 1;
+let subjectType = null;
+let firstChoiceSubject = null; // 3+1+2 preferred subject: '物理' or '历史'
+let selectedSubjects = [];
+let subScores = {};
+let editingSubject = null;
+let mbtiSelected = null;
+let mbtiType = null;
+let testAnswers = {};
+let testCompleted = false;
+
+const staticSubjects = ['语文', '数学', '英语'];
+const extraSubjects = ['物理', '历史', '化学', '生物', '政治', '地理'];
+
+// 省份 → 选科政策映射（2025/2026 一致）
+const provincePolicy = {
+  '北京':'3+3','天津':'3+3','上海':'3+3','浙江':'3+3','山东':'3+3','海南':'3+3',
+  '广东':'3+1+2','河北':'3+1+2','辽宁':'3+1+2','江苏':'3+1+2','福建':'3+1+2',
+  '湖北':'3+1+2','湖南':'3+1+2','重庆':'3+1+2','黑龙江':'3+1+2','甘肃':'3+1+2',
+  '吉林':'3+1+2','安徽':'3+1+2','江西':'3+1+2','贵州':'3+1+2','广西':'3+1+2',
+  '山西':'3+1+2','河南':'3+1+2','陕西':'3+1+2','内蒙古':'3+1+2','四川':'3+1+2',
+  '云南':'3+1+2','宁夏':'3+1+2','青海':'3+1+2',
+  '西藏':'文理分科','新疆':'文理分科'
+};
+
+// ==================== NAVIGATION ====================
+function updateUI() {
+  const page1 = document.getElementById('page1');
+  const page2 = document.getElementById('page2');
+  const page3 = document.getElementById('page3');
+  const btnNext = document.getElementById('btnNext');
+  const btnPrev = document.getElementById('btnPrev');
+
+  page1.classList.toggle('visible', currentPage === 1);
+  page2.classList.toggle('visible', currentPage === 2);
+  page3.classList.toggle('visible', currentPage === 3);
+
+  // Sync annotation cards
+  [1, 2, 3].forEach(n => {
+    const card = document.getElementById('annPage' + n);
+    if (card) card.classList.toggle('ann-card-visible', currentPage === n);
+  });
+
+  if (currentPage === 1) {
+    btnPrev.style.display = 'none';
+    btnNext.style.display = 'block';
+    btnNext.textContent = '下一步';
+    validatePage1();
+  } else if (currentPage === 2) {
+    btnPrev.style.display = 'block';
+    btnPrev.textContent = '上一步';
+    btnNext.style.display = 'block';
+    btnNext.textContent = '下一步';
+    btnNext.disabled = false;
+    refreshPage2State();
+  } else {
+    // Page 3: always show form, hide completion
+    document.getElementById('page3Form').classList.remove('hidden');
+    document.getElementById('completionState').classList.remove('visible');
+    btnPrev.style.display = 'block';
+    btnPrev.textContent = '上一步';
+    btnNext.style.display = 'block';
+    btnNext.textContent = '开始匹配';
+    btnNext.disabled = false;
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextPage() {
+  if (currentPage < 3) {
+    currentPage++;
+    updateUI();
+  } else {
+    // Page 3 submit → show completion state
+    document.getElementById('page3Form').classList.add('hidden');
+    document.getElementById('completionState').classList.add('visible');
+    btnNext.style.display = 'none';
+    btnPrev.textContent = '返回修改';
+    btnPrev.style.display = 'block';
+  }
+}
+
+function showToast(msg, duration) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._tid);
+  toast._tid = setTimeout(() => toast.classList.remove('show'), duration || 2000);
+}
+
+function navBack() {
+  if (currentPage > 1) {
+    currentPage--;
+    updateUI();
+  }
+}
+
+function prevPage() {
+  // If completion state is visible, return to form
+  const completionState = document.getElementById('completionState');
+  if (completionState.classList.contains('visible')) {
+    document.getElementById('page3Form').classList.remove('hidden');
+    completionState.classList.remove('visible');
+    btnPrev.textContent = '上一步';
+    btnNext.style.display = 'block';
+    btnNext.textContent = '开始匹配';
+    return;
+  }
+  if (currentPage > 1) {
+    currentPage--;
+    updateUI();
+  }
+}
+
+function getSummary() {
+  let s = '';
+  const prov = document.getElementById('selProvince').value || '未填';
+  const score = document.getElementById('totalScore').value;
+  s += `省份：${prov} / 总分：${score}\n`;
+  s += `选科类型：${subjectType || '未选'} / 首选：${firstChoiceSubject || '—'} / 科目：${selectedSubjects.join(', ') || '未选'}\n`;
+  if (mbtiType) s += `MBTI：${mbtiType}\n`;
+  else s += `性格：未填写\n`;
+
+  const regionCities = getAllSelectedCities();
+  s += `地域偏好：${regionCities.length ? regionCities.join('、') : '未选'}\n`;
+
+  const majorNames = getAllSelectedMajors();
+  s += `专业偏好：${majorNames.length ? majorNames.join('、') : '未选'}\n`;
+
+  const priorities = getSelectedChips('priority');
+  s += `优先考虑：${priorities.length ? priorities.join('、') : '未选'}\n`;
+
+  const careers = getSelectedChips('career');
+  s += `就业规划：${careers.length ? careers.join('、') : '未选'}`;
+  return s;
+}
+
+// ==================== PAGE 1 ====================
+function validatePage1() {
+  const prov = document.getElementById('selProvince').value;
+  const score = parseInt(document.getElementById('totalScore').value) || 0;
+  const firstChoiceGroup = document.getElementById('firstChoiceGroup');
+  
+  let valid = prov && score > 0;
+  
+  // If first choice is visible (3+1+2 or 文理分科), it's required
+  if (firstChoiceGroup.style.display !== 'none' && !firstChoiceSubject) {
+    valid = false;
+  }
+  
+  document.getElementById('btnNext').disabled = !valid;
+}
+
+function onProvinceChange() {
+  const prov = document.getElementById('selProvince').value;
+  const badge = document.getElementById('policyBadge');
+  
+  // Reset all policy-dependent state
+  subjectType = null;
+  firstChoiceSubject = null;
+  selectedSubjects = [];
+  document.querySelectorAll('#firstChoiceSelector .segmented-option').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('#subjectTags .tag').forEach(el => el.classList.remove('selected'));
+  
+  if (prov && provincePolicy[prov]) {
+    subjectType = provincePolicy[prov];
+    badge.style.display = 'block';
+    badge.textContent = prov + ' · ' + subjectType;
+    applyPolicy();
+  } else {
+    badge.style.display = 'none';
+    document.getElementById('firstChoiceGroup').style.display = 'none';
+    // Reset state on province clear
+    subjectType = null;
+    firstChoiceSubject = null;
+    selectedSubjects = [];
+    subScores = {};
+  }
+  
+  rebuildSubscoreGrid();
+  validatePage1();
+}
+
+function applyPolicy() {
+  // Auto-applies the detected province policy
+  const firstChoiceGroup = document.getElementById('firstChoiceGroup');
+  const firstChoiceSelector = document.getElementById('firstChoiceSelector');
+  
+  // Clear previous state
+  firstChoiceSubject = null;
+  selectedSubjects = [];
+  subScores = {};
+  document.querySelectorAll('#firstChoiceSelector .segmented-option').forEach(el => el.classList.remove('selected'));
+
+  if (subjectType === '3+3') {
+    firstChoiceGroup.style.display = 'none';
+  } else if (subjectType === '3+1+2') {
+    firstChoiceGroup.style.display = 'block';
+    firstChoiceSelector.innerHTML = `
+      <div class="segmented-option" onclick="selectFirstChoice('物理')">物理</div>
+      <div class="segmented-option" onclick="selectFirstChoice('历史')">历史</div>
+    `;
+  } else if (subjectType === '文理分科') {
+    firstChoiceGroup.style.display = 'block';
+    firstChoiceSelector.innerHTML = `
+      <div class="segmented-option" onclick="selectFirstChoice('文科')">文科</div>
+      <div class="segmented-option" onclick="selectFirstChoice('理科')">理科</div>
+    `;
+  }
+}
+
+function selectFirstChoice(subject) {
+  firstChoiceSubject = subject;
+  // Clear previous extra selections when switching first choice
+  selectedSubjects = [];
+  Object.keys(subScores).forEach(k => {
+    if (!staticSubjects.includes(k)) delete subScores[k];
+  });
+  // Highlight preferred subject
+  document.querySelectorAll('#firstChoiceSelector .segmented-option').forEach(el => {
+    el.classList.toggle('selected', el.textContent === subject);
+  });
+  rebuildSubscoreGrid();
+  validatePage1();
+}
+
+// ==================== SUBSCORE GRID ====================
+function getAvailableSubjects() {
+  // Returns { fixed: [...], selectable: [...] } for current policy
+  const fixed = [...staticSubjects]; // 语数英
+
+  if (subjectType === '3+3') {
+    return { fixed, selectable: [...extraSubjects] };
+  } else if (subjectType === '3+1+2') {
+    if (firstChoiceSubject) {
+      fixed.push(firstChoiceSubject);
+      const otherFirst = firstChoiceSubject === '物理' ? '历史' : '物理';
+      return { fixed, selectable: extraSubjects.filter(s => s !== firstChoiceSubject && s !== otherFirst) };
+    }
+    return { fixed, selectable: [] };
+  } else if (subjectType === '文理分科') {
+    if (firstChoiceSubject === '文科') {
+      return { fixed: [...staticSubjects, '政治', '历史', '地理'], selectable: [] };
+    } else if (firstChoiceSubject === '理科') {
+      return { fixed: [...staticSubjects, '物理', '化学', '生物'], selectable: [] };
+    }
+    return { fixed, selectable: [] };
+  }
+  return { fixed, selectable: [] };
+}
+
+function rebuildSubscoreGrid() {
+  const grid = document.getElementById('subscoreGrid');
+  const { fixed, selectable } = getAvailableSubjects();
+
+  const maxSelect = subjectType === '3+3' ? 3 : 2;
+  const atLimit = selectedSubjects.length >= maxSelect;
+
+  let html = '';
+
+  // Fixed subjects (always visible, inline input)
+  fixed.forEach(s => {
+    const val = subScores[s];
+    const filled = val !== null && val !== undefined;
+    const max = ['语文','数学','英语'].includes(s) ? 150 : (['文科','理科'].includes(s) ? 300 : 100);
+    html += `<div class="subscore-card${filled ? ' filled' : ' selected-empty'}">
+      <div class="name">${s}</div>
+      <input type="number" class="subscore-inline" data-subject="${s}" max="${max}"
+        value="${filled ? val : ''}" placeholder="—"
+        onchange="onSubscoreChange(this)" onfocus="this.select()" inputmode="numeric">
+    </div>`;
+  });
+
+  // Selectable subjects
+  selectable.forEach(s => {
+    const isSelected = selectedSubjects.includes(s);
+    const val = subScores[s];
+    const filled = val !== null && val !== undefined;
+    const max = ['文科','理科'].includes(s) ? 300 : 100;
+
+    if (filled || isSelected) {
+      html += `<div class="subscore-card${filled ? ' filled' : ' selected-empty'}">`;
+      html += `<button class="subscore-dismiss" onclick="event.stopPropagation();dismissSubject('${s}')">&times;</button>`;
+      html += `<div class="name">${s}</div>
+        <input type="number" class="subscore-inline" data-subject="${s}" max="${max}"
+          value="${filled ? val : ''}" placeholder="—"
+          onchange="onSubscoreChange(this)" onfocus="this.select()" inputmode="numeric">
+      </div>`;
+    } else if (atLimit) {
+      html += `<div class="subscore-card unavailable">
+        <div class="name">${s}</div>
+        <div class="val plus">+</div>
+      </div>`;
+    } else {
+      html += `<div class="subscore-card available" onclick="selectAndEdit('${s}')">
+        <div class="name">${s}</div>
+        <div class="val plus">+</div>
+      </div>`;
+    }
+  });
+
+  grid.innerHTML = html;
+}
+
+function dismissSubject(subject) {
+  selectedSubjects = selectedSubjects.filter(s => s !== subject);
+  delete subScores[subject];
+  rebuildSubscoreGrid();
+  autoSumTotal();
+  validatePage1();
+}
+
+function selectAndEdit(subject) {
+  selectedSubjects.push(subject);
+  rebuildSubscoreGrid();
+  // Auto-focus the new input
+  setTimeout(() => {
+    const input = document.querySelector(`.subscore-inline[data-subject="${subject}"]`);
+    if (input) { input.focus(); input.select(); }
+  }, 50);
+}
+
+function onSubscoreChange(input) {
+  const subject = input.dataset.subject;
+  const max = parseInt(input.max) || 100;
+  let val = parseInt(input.value) || 0;
+  val = Math.max(0, Math.min(max, val));
+  subScores[subject] = val > 0 ? val : null;
+  
+  // Deselect if cleared and selectable
+  if (val === 0 && selectedSubjects.includes(subject)) {
+    selectedSubjects = selectedSubjects.filter(s => s !== subject);
+  }
+  
+  input.value = val > 0 ? val : '';
+  rebuildSubscoreGrid();
+  autoSumTotal();
+  validatePage1();
+}
+
+function editSubScore(subject) {
+  editingSubject = subject;
+  document.getElementById('subscoreEditTitle').textContent = subject;
+  let max;
+  if (['语文', '数学', '英语'].includes(subject)) max = 150;
+  else if (['文科', '理科'].includes(subject)) max = 300;
+  else max = 100;
+  document.querySelector('#subscoreEdit .subscore-panel-sub').textContent = `满分 ${max} 分`;
+  const current = subScores[subject] || 0;
+  const input = document.getElementById('subscoreEditInput');
+  input.value = current;
+  input.max = max;
+  document.getElementById('subscoreEdit').classList.add('show');
+  setTimeout(() => input.focus(), 100);
+}
+
+function clearSubScore() {
+  const input = document.getElementById('subscoreEditInput');
+  input.value = '0';
+  input.focus();
+}
+
+function doneSubScore() {
+  const input = document.getElementById('subscoreEditInput');
+  let max;
+  if (['语文', '数学', '英语'].includes(editingSubject)) max = 150;
+  else if (['文科', '理科'].includes(editingSubject)) max = 300;
+  else max = 100;
+  let val = parseInt(input.value) || 0;
+  val = Math.max(0, Math.min(max, val));
+  subScores[editingSubject] = val > 0 ? val : null;
+  
+  // If score cleared and subject is selectable (not fixed), deselect it
+  if (val === 0 && selectedSubjects.includes(editingSubject)) {
+    selectedSubjects = selectedSubjects.filter(s => s !== editingSubject);
+  }
+  
+  document.getElementById('subscoreEdit').classList.remove('show');
+  rebuildSubscoreGrid();
+  autoSumTotal();
+}
+
+function autoSumTotal() {
+  let sum = 0;
+  const { fixed, selectable } = getAvailableSubjects();
+  const relevantSubjects = new Set([...fixed, ...selectable]);
+
+  for (const [name, score] of Object.entries(subScores)) {
+    if (score !== null && score !== undefined && relevantSubjects.has(name)) {
+      sum += score;
+    }
+  }
+  if (sum > 0) {
+    const input = document.getElementById('totalScore');
+    input.value = sum;
+    onScoreInput();
+  }
+}
+
+function onScoreInput() {
+  const input = document.getElementById('totalScore');
+  let val = parseInt(input.value) || 0;
+  val = Math.max(0, Math.min(750, val));
+  input.value = val || '';
+  updateRankAndMeta(val);
+  validatePage1();
+}
+
+function updateRankAndMeta(score) {
+  const rankEl = document.getElementById('rankValue');
+  const noteEl = document.getElementById('scoreNote');
+  const prov = document.getElementById('selProvince').value || '北京';
+  noteEl.className = 'score-note';
+  
+  if (!score || score <= 0) {
+    rankEl.textContent = '—';
+    noteEl.classList.remove('show');
+    return;
+  }
+  
+  // 模拟精确位次区间（实际产品需调用一分一段表接口）
+  const rankData = mockRankLookup(prov, score);
+  rankEl.textContent = rankData.display;
+  noteEl.innerHTML = `<b>2025年 ${prov} 高考：</b>${score}分 · 排名${rankData.range} · ${rankData.sameScore}人同分`;
+  
+  let cls = 'score-note-high';
+  if (score < 450) cls = 'score-note-low';
+  else if (score < 600) cls = 'score-note-mid';
+  noteEl.classList.add(cls, 'show');
+}
+
+// 确定性模拟一分一段表查询（展示格式用，实际产品需调一分一段表接口）
+function mockRankLookup(province, score) {
+  // 基于典型省份分布规律生成确定性模拟数据
+  const hash = (province.charCodeAt(0) || 1) * 31 + score * 7;
+  const baseRank = Math.floor((750 - score) * 450);
+  const rangeSize = (hash % 131) + 55;
+  const start = Math.max(1, baseRank - Math.floor(rangeSize/2));
+  const end = start + rangeSize;
+  const sameScore = (hash % 371) + 105;
+  
+  return {
+    display: `${start.toLocaleString()}~${end.toLocaleString()}`,
+    range: `${start.toLocaleString()}~${end.toLocaleString()}名`,
+    sameScore: sameScore
+  };
+}
+
+function toggleSubjectScores() {
+  const panel = document.getElementById('subjectScoresPanel');
+  panel.classList.toggle('open');
+  document.getElementById('expandIcon').classList.toggle('open');
+  if (panel.classList.contains('open')) rebuildSubscoreGrid();
+}
+
+// ==================== PAGE 2 ====================
+function refreshPage2State() {
+  document.getElementById('mbtiDot').style.display = mbtiType ? 'block' : 'none';
+  document.getElementById('cardMbti').classList.toggle('filled', !!mbtiType);
+  document.getElementById('testDot').style.display = testCompleted ? 'block' : 'none';
+  document.getElementById('cardTest').classList.toggle('filled', testCompleted);
+}
+
+function openMbtiModal() {
+  mbtiSelected = mbtiType;
+  document.getElementById('mbtiModal').classList.add('show');
+  document.querySelectorAll('#mbtiModal .mbti-item').forEach(el => {
+    el.classList.toggle('selected', el.textContent === mbtiSelected);
+  });
+}
+
+function closeMbtiModal() { document.getElementById('mbtiModal').classList.remove('show'); }
+
+function selectMbti(type) {
+  mbtiSelected = type;
+  document.querySelectorAll('#mbtiModal .mbti-item').forEach(el => {
+    el.classList.toggle('selected', el.textContent === type);
+  });
+}
+
+function confirmMbti() {
+  if (!mbtiSelected) return;
+  mbtiType = mbtiSelected;
+  document.getElementById('mbtiModal').classList.remove('show');
+  refreshPage2State();
+}
+
+function openTestModal() { document.getElementById('testModal').classList.add('show'); }
+
+function navToMbtiTest() {
+  showToast('前往 MBTI 测评页（93题/约10分钟）');
+  // 实际产品：wx.navigateTo({url:'/pages/mbti-test/mbti-test'})
+}
+function closeTestModal() {
+  document.getElementById('testModal').classList.remove('show');
+  if (!testCompleted) resetTest();
+}
+
+// ==================== TEST ====================
+function pickTestOpt(el, qNum, val) {
+  el.parentElement.querySelectorAll('.test-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  testAnswers[qNum] = val;
+
+  if (qNum < 4) {
+    setTimeout(() => {
+      const next = document.getElementById('tq' + (qNum + 1));
+      next.style.display = 'block';
+      next.scrollIntoView({ behavior: 'smooth' });
+    }, 250);
+  }
+
+  if (Object.keys(testAnswers).length === 4) {
+    const result = testAnswers[1] + testAnswers[2] + testAnswers[3] + testAnswers[4];
+    setTimeout(() => {
+      document.getElementById('testResultType').textContent = result;
+      document.getElementById('testResult').style.display = 'block';
+      document.getElementById('testConfirmBtn').style.display = 'block';
+      document.getElementById('testResult').scrollIntoView({ behavior: 'smooth' });
+    }, 400);
+  }
+}
+
+function confirmTest() {
+  const result = testAnswers[1] + testAnswers[2] + testAnswers[3] + testAnswers[4];
+  mbtiType = result;
+  testCompleted = true;
+  document.getElementById('testModal').classList.remove('show');
+  refreshPage2State();
+}
+
+function resetTest() {
+  testAnswers = {};
+  for (let i = 1; i <= 4; i++) document.getElementById('tq' + i).style.display = i === 1 ? 'block' : 'none';
+  document.querySelectorAll('#testModal .test-opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById('testResult').style.display = 'none';
+  document.getElementById('testConfirmBtn').style.display = 'none';
+}
+
+// ==================== PAGE 3 ====================
+
+// ─── Data ───
+const regionData = {
+  '华东': ['上海', '南京', '杭州', '合肥', '济南', '青岛', '厦门', '苏州', '无锡', '宁波', '福州', '南昌'],
+  '华北': ['北京', '天津', '石家庄', '太原', '呼和浩特'],
+  '华南': ['广州', '深圳', '珠海', '佛山', '东莞', '海口', '南宁', '桂林'],
+  '华中': ['武汉', '长沙', '郑州', '洛阳'],
+  '西南': ['成都', '重庆', '昆明', '贵阳', '拉萨'],
+  '西北': ['西安', '兰州', '西宁', '银川', '乌鲁木齐'],
+  '东北': ['哈尔滨', '长春', '沈阳', '大连', '吉林']
+};
+
+const majorData = {
+  '哲学': ['哲学', '逻辑学', '宗教学', '伦理学'],
+  '经济学': ['经济学', '金融学', '国际经济与贸易', '财政学', '保险学', '税收学'],
+  '法学': ['法学', '政治学', '社会学', '民族学', '马克思主义理论', '公安学'],
+  '教育学': ['教育学', '体育学', '心理学（师范）', '学前教育', '小学教育'],
+  '文学': ['汉语言文学', '新闻传播学', '外国语言文学', '广告学', '编辑出版学'],
+  '历史学': ['历史学', '考古学', '文物与博物馆学'],
+  '理学': ['数学', '物理学', '化学', '生物科学', '地理科学', '统计学', '大气科学'],
+  '工学': ['计算机', '软件工程', '电子信息', '机械工程', '土木工程', '建筑学', '电气工程', '自动化', '材料科学', '环境工程', '航空航天', '交通运输'],
+  '农学': ['农学', '园艺', '植物保护', '动物科学', '林学', '水产养殖'],
+  '医学': ['临床医学', '口腔医学', '中医学', '药学', '护理学', '预防医学', '基础医学'],
+  '管理学': ['工商管理', '会计学', '公共管理', '人力资源管理', '市场营销', '物流管理', '电子商务'],
+  '艺术学': ['美术学', '设计学', '音乐与舞蹈学', '戏剧与影视学', '播音主持', '数字媒体艺术']
+};
+
+// ─── State ───
+let selectedRegions = {}; // { '华东': ['上海', '南京'], '华北': ['北京'] }
+let selectedMajors = {};  // { '工学': ['计算机', '软件工程'], ... }
+
+// ─── Helpers ───
+function getAllSelectedCities() {
+  const all = [];
+  for (const [region, cities] of Object.entries(selectedRegions)) {
+    all.push(...cities);
+  }
+  return all;
+}
+
+function getAllSelectedMajors() {
+  const all = [];
+  for (const [cat, majors] of Object.entries(selectedMajors)) {
+    all.push(...majors);
+  }
+  return all;
+}
+
+function getSelectedChips(groupId) {
+  const container = document.getElementById(
+    groupId === 'priority' ? 'priorityGroup' : 'careerGroup'
+  );
+  if (!container) return [];
+  const chips = container.querySelectorAll('.chip.selected');
+  return Array.from(chips).map(c => c.textContent);
+}
+
+// ─── Region Panel ───
+function openRegionPanel() {
+  renderRegionPanel();
+  document.getElementById('regionPanel').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRegionPanel() {
+  document.getElementById('regionPanel').classList.remove('show');
+  document.body.style.overflow = '';
+  renderRegionTags();
+}
+
+function toggleCity(region, city) {
+  if (!selectedRegions[region]) selectedRegions[region] = [];
+  const idx = selectedRegions[region].indexOf(city);
+  if (idx >= 0) {
+    selectedRegions[region].splice(idx, 1);
+    if (selectedRegions[region].length === 0) delete selectedRegions[region];
+  } else {
+    selectedRegions[region].push(city);
+  }
+  renderRegionPanel();
+}
+
+function toggleAllCities(region) {
+  const cities = regionData[region];
+  if (!cities) return;
+  if (selectedRegions[region] && selectedRegions[region].length === cities.length) {
+    delete selectedRegions[region];
+  } else {
+    selectedRegions[region] = [...cities];
+  }
+  renderRegionPanel();
+}
+
+function renderRegionPanel() {
+  const body = document.getElementById('regionPanelBody');
+  let html = '';
+  for (const [region, cities] of Object.entries(regionData)) {
+    const sel = selectedRegions[region] || [];
+    const allSelected = sel.length === cities.length && cities.length > 0;
+    html += `<div class="panel-section">
+      <div class="panel-section-header">
+        <span class="panel-section-name">${region}</span>
+        <button class="panel-section-all" onclick="toggleAllCities('${region}')">
+          ${allSelected ? '取消全选' : '全选'}
+        </button>
+      </div>
+      <div class="panel-checkbox-grid cols2">`;
+    for (const city of cities) {
+      const checked = sel.includes(city);
+      html += `<div class="checkbox-row${checked ? ' selected' : ''}" onclick="toggleCity('${region}','${city}')">
+        <span class="check-icon"></span>${city}
+      </div>`;
+    }
+    html += `</div></div>`;
+  }
+  body.innerHTML = html;
+}
+
+function renderRegionTags() {
+  const container = document.getElementById('regionTagDisplay');
+  if (Object.keys(selectedRegions).length === 0) {
+    container.innerHTML = '<span class="tag-display-empty">未选择</span>';
+    return;
+  }
+  let html = '';
+  for (const [region, cities] of Object.entries(selectedRegions)) {
+    const fullList = regionData[region];
+    if (cities.length === fullList.length) {
+      // 全选 → 折叠为单标签
+      html += `<span class="tag-item">
+        ${region}
+        <button class="tag-remove" onclick="event.stopPropagation();removeRegionGroup('${region}')">&times;</button>
+      </span>`;
+    } else {
+      for (const city of cities) {
+        html += `<span class="tag-item">
+          ${city}
+          <button class="tag-remove" onclick="event.stopPropagation();removeRegionTag('${city}')">&times;</button>
+        </span>`;
+      }
+    }
+  }
+  container.innerHTML = html;
+}
+
+function removeRegionTag(city) {
+  for (const region of Object.keys(selectedRegions)) {
+    const idx = selectedRegions[region].indexOf(city);
+    if (idx >= 0) {
+      selectedRegions[region].splice(idx, 1);
+      if (selectedRegions[region].length === 0) delete selectedRegions[region];
+      break;
+    }
+  }
+  renderRegionTags();
+}
+
+function removeRegionGroup(region) {
+  delete selectedRegions[region];
+  renderRegionTags();
+}
+
+// ─── Major Panel ───
+function openMajorPanel() {
+  renderMajorPanel();
+  document.getElementById('majorPanel').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMajorPanel() {
+  document.getElementById('majorPanel').classList.remove('show');
+  document.body.style.overflow = '';
+  renderMajorTags();
+}
+
+function toggleMajor(category, major) {
+  if (!selectedMajors[category]) selectedMajors[category] = [];
+  const idx = selectedMajors[category].indexOf(major);
+  if (idx >= 0) {
+    selectedMajors[category].splice(idx, 1);
+    if (selectedMajors[category].length === 0) delete selectedMajors[category];
+  } else {
+    selectedMajors[category].push(major);
+  }
+  renderMajorPanel();
+}
+
+function toggleAllMajors(category) {
+  const majors = majorData[category];
+  if (!majors) return;
+  if (selectedMajors[category] && selectedMajors[category].length === majors.length) {
+    delete selectedMajors[category];
+  } else {
+    selectedMajors[category] = [...majors];
+  }
+  renderMajorPanel();
+}
+
+function renderMajorPanel() {
+  const body = document.getElementById('majorPanelBody');
+  let html = '';
+  for (const [cat, majors] of Object.entries(majorData)) {
+    const sel = selectedMajors[cat] || [];
+    const allSelected = sel.length === majors.length && majors.length > 0;
+    html += `<div class="panel-section">
+      <div class="panel-section-header">
+        <span class="panel-section-name">${cat}</span>
+        <button class="panel-section-all" onclick="toggleAllMajors('${cat}')">
+          ${allSelected ? '取消全选' : '全选'}
+        </button>
+      </div>
+      <div class="panel-checkbox-grid">`;
+    for (const major of majors) {
+      const checked = sel.includes(major);
+      html += `<div class="checkbox-row${checked ? ' selected' : ''}" onclick="toggleMajor('${cat}','${major.replace(/'/g, "\\'")}')">
+        <span class="check-icon"></span>${major}
+      </div>`;
+    }
+    html += `</div></div>`;
+  }
+  body.innerHTML = html;
+}
+
+function renderMajorTags() {
+  const container = document.getElementById('majorTagDisplay');
+  if (Object.keys(selectedMajors).length === 0) {
+    container.innerHTML = '<span class="tag-display-empty">未选择</span>';
+    return;
+  }
+  let html = '';
+  for (const [cat, majors] of Object.entries(selectedMajors)) {
+    const fullList = majorData[cat];
+    if (majors.length === fullList.length) {
+      // 全选 → 折叠为单标签
+      html += `<span class="tag-item">
+        ${cat}
+        <button class="tag-remove" onclick="event.stopPropagation();removeMajorGroup('${cat}')">&times;</button>
+      </span>`;
+    } else {
+      for (const m of majors) {
+        html += `<span class="tag-item">
+          ${m}
+          <button class="tag-remove" onclick="event.stopPropagation();removeMajorTag('${m}')">&times;</button>
+        </span>`;
+      }
+    }
+  }
+  container.innerHTML = html;
+}
+
+function removeMajorTag(major) {
+  for (const cat of Object.keys(selectedMajors)) {
+    const idx = selectedMajors[cat].indexOf(major);
+    if (idx >= 0) {
+      selectedMajors[cat].splice(idx, 1);
+      if (selectedMajors[cat].length === 0) delete selectedMajors[cat];
+      break;
+    }
+  }
+  renderMajorTags();
+}
+
+function removeMajorGroup(cat) {
+  delete selectedMajors[cat];
+  renderMajorTags();
+}
+
+// ─── Generic chip toggle (优先考虑 / 就业规划) ───
+function toggleChip(el, group) { el.classList.toggle('selected'); }
+
+// ─── Tuition slider ───
+function updateTuition() {
+  const val = parseInt(document.getElementById('tuitionSlider').value);
+  const labels = ['不限', '≤ 5千/年', '≤ 1万/年', '≤ 2万/年', '≤ 5万/年', '10万+/年'];
+  document.getElementById('tuitionVal').textContent = labels[val];
+
+  const pct = (val / 5) * 100;
+  const slider = document.getElementById('tuitionSlider');
+  slider.style.background = `linear-gradient(to right, var(--primary) ${pct}%, var(--border) ${pct}%)`;
+}
+
+// ==================== INIT ====================
+updateUI();
+rebuildSubscoreGrid();
+updateTuition();
+refreshPage2State();
+</script>
+
+</body>
+</html>

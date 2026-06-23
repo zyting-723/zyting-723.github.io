@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>匹配结果页 — 已填复访原型</title>
+<style>
+:root {
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --primary: #2563eb;
+  --primary-light: #eff6ff;
+  --primary-ghost: #dbeafe;
+  --text: #111827;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-fallback: #9ca3af;
+  --border: #e5e7eb;
+  --border-light: #f3f4f6;
+  --tag-bg: #f3f4f6;
+  --success: #059669;
+  --success-light: #ecfdf5;
+  --warning: #f59e0b;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 8px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --section-gap: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f1a;
+    --card: #1a1a2e;
+    --primary: #60a5fa;
+    --primary-light: #172554;
+    --primary-ghost: #1e3a5f;
+    --text: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-tertiary: #6b7280;
+    --text-fallback: #6b7280;
+    --border: #2d2d45;
+    --border-light: #1f1f35;
+    --tag-bg: #1f1f35;
+    --success: #34d399;
+    --success-light: #064e3b;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: #e5e7eb; color: var(--text);
+  min-height: 100vh; padding: 20px 0;
+  -webkit-font-smoothing: antialiased;
+}
+@media (prefers-color-scheme: dark) { body { background: #0f0f1a; } }
+
+.proto-layout {
+  display: flex; gap: 40px; justify-content: center; align-items: flex-start;
+  max-width: 1100px; margin: 0 auto; padding: 0 20px;
+}
+.phone {
+  width: 390px; max-width: 100vw; min-height: 100vh;
+  background: #ffffff; border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
+}
+@media (prefers-color-scheme: dark) {
+  .phone { background: #0f0f1a; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
+}
+
+/* Status bar */
+.wx-status-bar {
+  height: 44px; background: #fff; display: flex; align-items: flex-end;
+  justify-content: center; padding-bottom: 6px;
+  font-size: 14px; font-weight: 600; color: var(--text); position: relative; z-index: 100;
+}
+.wx-nav-capsule {
+  position: absolute; top: 51px; right: 14px; z-index: 101;
+  display: flex; align-items: center; border: 0.5px solid var(--border);
+  border-radius: 16px; height: 30px; padding: 0 4px; gap: 2px;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.wx-nav-capsule span {
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--text-secondary);
+}
+@media (prefers-color-scheme: dark) {
+  .wx-status-bar, .wx-nav-capsule { background: rgba(15,15,26,0.92); }
+}
+
+/* Page content */
+.page-content {
+  flex: 1; overflow-y: auto; padding: 0 16px 24px;
+  -webkit-overflow-scrolling: touch;
+}
+.page-content::-webkit-scrollbar { display: none; }
+
+/* ===== HEADER ===== */
+.profile-header {
+  padding: 16px 50px 10px 0;
+  position: sticky; top: 0; z-index: 10;
+  background: #ffffff;
+}
+@media (prefers-color-scheme: dark) { .profile-header { background: #0f0f1a; } }
+.profile-header-row {
+  display: flex; align-items: center; gap: 10px;
+}
+.profile-header-title {
+  font-size: 20px; font-weight: 800; color: var(--text);
+  letter-spacing: 0.01em;
+}
+.profile-header-sub {
+  font-size: 12px; color: var(--text-tertiary); margin-top: 4px;
+}
+.edit-btn {
+  flex-shrink: 0; padding: 5px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  background: none; border: 1px solid var(--primary); color: var(--primary);
+  transition: all 0.15s;
+}
+.edit-btn:active { background: var(--primary-light); }
+
+/* ===== SECTION ===== */
+.section {
+  background: var(--card); border-radius: var(--radius-sm);
+  padding: 16px; margin-bottom: var(--section-gap);
+  border: 1px solid var(--border);
+}
+.section-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.section-title::before {
+  content: ''; width: 3px; height: 14px; border-radius: 2px;
+  background: var(--primary); flex-shrink: 0;
+}
+
+/* Data rows */
+.data-row {
+  display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
+}
+.data-row:last-child { margin-bottom: 0; }
+.data-label {
+  font-size: 13px; color: var(--text-secondary); width: 56px; flex-shrink: 0;
+  text-align: right; padding-top: 2px; line-height: 1.4;
+}
+.data-value {
+  font-size: 13px; color: var(--text); flex: 1; min-width: 0;
+  line-height: 1.5;
+}
+
+/* Fallback state */
+.data-fallback {
+  font-size: 13px; color: var(--text-fallback);
+  font-style: italic; padding: 2px 0;
+}
+
+/* Tags */
+.tag-row {
+  display: flex; flex-wrap: nowrap; gap: 6px;
+  align-items: center; overflow: hidden;
+  position: relative;
+}
+.tag-row.expanded {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* Right fade edge */
+  mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+}
+.tag-row::-webkit-scrollbar { display: none; }
+
+.tag-chip {
+  display: inline-flex; align-items: center; flex-shrink: 0;
+  padding: 4px 10px; border-radius: 12px;
+  background: var(--tag-bg); color: var(--text);
+  font-size: 12px; font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+}
+.tag-hidden { display: none; }
+.tag-row.expanded .tag-hidden { display: inline-flex; }
+
+.tag-overflow {
+  display: none; align-items: center; flex-shrink: 0;
+  padding: 4px 10px; border-radius: 12px;
+  background: var(--primary-light); color: var(--primary);
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid var(--primary-ghost);
+  transition: all 0.15s;
+}
+.tag-overflow.show { display: inline-flex; }
+.tag-overflow:active { opacity: 0.7; }
+
+/* Primary tag (priority/employment) */
+.tag-text {
+  font-size: 13px; color: var(--text); display: flex; gap: 8px; flex-wrap: wrap;
+}
+.tag-text-item {
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.tag-text-sep { color: var(--text-tertiary); }
+
+/* ===== 单科成绩 COLLAPSIBLE ===== */
+.subject-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+  padding: 0; margin-bottom: 0;
+}
+.subject-expand-icon {
+  font-size: 12px; color: var(--text-tertiary);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+.subject-expand-icon.open { transform: rotate(180deg); }
+
+.subject-body { display: none; margin-top: 12px; }
+.subject-body.open { display: block; }
+
+.subject-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;
+}
+.subject-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 10px; border-radius: 8px;
+  background: var(--tag-bg); font-size: 13px;
+  border: 1px solid var(--border);
+}
+.subject-name { color: var(--text-secondary); }
+.subject-score { font-weight: 700; color: var(--text); }
+
+/* ===== ACTION BUTTONS ===== */
+.action-entries { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.action-btn-primary {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  font-size: 16px; font-weight: 700; cursor: pointer; border: none;
+  background: var(--primary); color: #fff;
+  transition: all 0.15s; text-align: center;
+}
+.action-btn-primary:active { opacity: 0.85; transform: scale(0.98); }
+.action-btn-secondary {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  background: none; border: 2px solid var(--primary); color: var(--primary);
+  transition: all 0.15s; text-align: center;
+}
+.action-btn-secondary:active { background: var(--primary-light); transform: scale(0.98); }
+
+/* ===== DATA STATE SWITCH ===== */
+.state-switch-bar {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.state-switch-chip {
+  flex: 1; text-align: center; padding: 8px 0; border-radius: 20px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  color: var(--text-secondary); background: var(--card);
+  border: 1px solid var(--border); transition: all 0.15s;
+}
+.state-switch-chip.active {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+.state-switch-chip:not(.active):active { opacity: 0.6; }
+
+/* ========== ANNOTATIONS SIDEBAR ========== */
+.annotations {
+  width: 340px; flex-shrink: 0; position: sticky; top: 20px;
+  max-height: calc(100vh - 40px); overflow-y: auto;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.annotations::-webkit-scrollbar { display: none; }
+
+.annotation-card {
+  background: var(--card); border-radius: 14px;
+  padding: 18px 18px 14px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.ann-card-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.ann-page-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.ann-page-title {
+  font-size: 15px; font-weight: 700; color: var(--text);
+}
+.ann-page-sub {
+  font-size: 11px; color: var(--text-tertiary); margin-left: auto;
+}
+
+.ann-rule-group { margin-bottom: 12px; }
+.ann-rule-group:last-child { margin-bottom: 0; }
+.ann-rule-label {
+  font-size: 12px; font-weight: 600; color: var(--primary);
+  margin-bottom: 4px; letter-spacing: 0.01em;
+}
+.ann-rule-items {
+  display: flex; flex-direction: column; gap: 3px; padding-left: 14px;
+}
+.ann-rule-item {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.55;
+  position: relative;
+}
+.ann-rule-item::before {
+  content: '·'; position: absolute; left: -10px; color: var(--text-tertiary);
+}
+.ann-divider { height: 1px; background: var(--border); margin: 12px 0 10px; }
+
+@media (max-width: 860px) {
+  .proto-layout { flex-direction: column; align-items: center; gap: 24px; padding: 0 12px; }
+  .annotations { width: 100%; max-width: 390px; position: static; max-height: none; }
+}
+@media (prefers-color-scheme: dark) {
+  .annotation-card { background: #1a1a2e; border-color: #2d2d45; }
+  .ann-card-header { border-color: #2d2d45; }
+  .ann-divider { background: #2d2d45; }
+}
+</style>
+</head>
+<body>
+
+<div class="proto-layout">
+
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="wx-status-bar"><span>9:41</span></div>
+  <div class="wx-nav-capsule">
+    <span>···</span><span style="border-left:0.5px solid var(--border);padding-left:4px;">✕</span>
+  </div>
+
+  <!-- Page content -->
+  <div class="page-content">
+
+    <!-- ===== HEADER ===== -->
+    <div class="profile-header">
+      <div class="profile-header-row">
+        <div class="profile-header-title">考生信息</div>
+        <button class="edit-btn" onclick="alert('原型提示：跳转至档案填写页，各字段预填已有数据。')">编辑</button>
+      </div>
+      <div class="profile-header-sub">2小时前已更新</div>
+    </div>
+
+    <!-- ===== ① 高考信息 ===== -->
+    <div class="section" id="secExam">
+      <div class="section-title">高考信息</div>
+      <div class="data-row">
+        <span class="data-label">省份·选科</span>
+        <span class="data-value" id="examProvince">广东 · 物理+化学+生物</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">总分</span>
+        <span class="data-value" id="examScore">612 分</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">位次</span>
+        <span class="data-value" id="examRank">14,780 ~ 14,911</span>
+      </div>
+    </div>
+
+    <!-- ===== ② 单科成绩 (default collapsed) ===== -->
+    <div class="section" id="secSubjects">
+      <div class="section-title subject-header" onclick="toggleSubjects()">
+        <span>单科成绩</span>
+        <span class="subject-expand-icon" id="subjectIcon">▼</span>
+      </div>
+      <div class="subject-body" id="subjectBody">
+        <div class="subject-grid" id="subjectGrid">
+          <!-- dynamically filled -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ③ 个人特征 ===== -->
+    <div class="section" id="secTraits">
+      <div class="section-title">个人特征</div>
+      <div class="data-row">
+        <span class="data-label">性格类型</span>
+        <span class="data-value" id="traitMbti">INFJ</span>
+      </div>
+    </div>
+
+    <!-- ===== ④ 偏好意愿 ===== -->
+    <div class="section" id="secPrefs">
+      <div class="section-title">偏好意愿</div>
+      <div class="data-row">
+        <span class="data-label">地域偏好</span>
+        <div class="data-value" id="prefRegion"><!-- tags --></div>
+      </div>
+      <div class="data-row">
+        <span class="data-label">专业偏好</span>
+        <div class="data-value" id="prefMajor"><!-- tags --></div>
+      </div>
+      <div class="data-row">
+        <span class="data-label">优先考虑</span>
+        <div class="data-value" id="prefPriority"><!-- tags --></div>
+      </div>
+      <div class="data-row">
+        <span class="data-label">就业规划</span>
+        <div class="data-value" id="prefCareer"><!-- tags --></div>
+      </div>
+      <div class="data-row">
+        <span class="data-label">学费预算</span>
+        <span class="data-value" id="prefTuition"><!-- text --></span>
+      </div>
+    </div>
+
+    <!-- ===== ACTION BUTTONS ===== -->
+    <div class="action-entries">
+      <button class="action-btn-primary" onclick="alert('原型提示：进入院校匹配结果列表，基于档案数据实时计算推荐院校。')">直接匹配院校</button>
+      <button class="action-btn-secondary" onclick="alert('原型提示：生成志愿策略报告，含冲-稳-保梯度表 + 专业匹配分析 + MBTI适配建议。')">生成志愿策略报告</button>
+    </div>
+
+    <div style="height:24px;"></div>
+  </div>
+</div><!-- /phone -->
+
+<!-- ==================== ANNOTATIONS SIDEBAR ==================== -->
+<div class="annotations">
+
+  <!-- 数据状态切换 -->
+  <div class="annotation-card">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">🔀</span>
+      <span class="ann-page-title">数据状态</span>
+      <span class="ann-page-sub">切换预览</span>
+    </div>
+    <div class="state-switch-bar">
+      <button class="state-switch-chip active" onclick="switchDataState('full')">全部填写</button>
+      <button class="state-switch-chip" onclick="switchDataState('minimal')">最少填写</button>
+    </div>
+  </div>
+
+  <!-- 入口路由 -->
+  <div class="annotation-card">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">⇢</span>
+      <span class="ann-page-title">复访入口路由</span>
+      <span class="ann-page-sub">状态判断</span>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">路由逻辑</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">志愿 Tab 打开 → 检查本地是否有已提交的档案数据</div>
+        <div class="ann-rule-item"><b>有档案</b>（已填）→ 进入本页——匹配结果页</div>
+        <div class="ann-rule-item"><b>无档案</b>（未填）→ 进入三页填写向导</div>
+        <div class="ann-rule-item">判断依据：本地缓存 JSON 存在 + 省份+总分必填字段非空</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">首次填写后</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">填写向导提交 → 写本地缓存 + 调匹配接口 → 跳转本页</div>
+        <div class="ann-rule-item">此后每次打开志愿 Tab 直接进本页</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页面信息架构 -->
+  <div class="annotation-card">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">📐</span>
+      <span class="ann-page-title">档案分区布局</span>
+      <span class="ann-page-sub">四分区 + 兜底态</span>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">Header</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">标题「考生信息」+「编辑」按钮同行左对齐，避开右上角胶囊区</div>
+        <div class="ann-rule-item">编辑 → 跳转三页向导，各字段预填已有数据</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">① 高考信息</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">省份·选科 / 总分 / 位次 — 三个字段始终有值</div>
+        <div class="ann-rule-item">位次由后台自动推算，无兜底态</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">② 单科成绩（默认折叠）</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">点击展开 → 显示各科成绩 grid 或「待完善」兜底</div>
+        <div class="ann-rule-item">有数据时：科目+分数（2列 grid）</div>
+        <div class="ann-rule-item">无数据时：展开后显示「待完善」灰字</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">③ 个人特征</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">MBTI 已填 → 显示类型；未填 → 灰色斜体「待完善」</div>
+        <div class="ann-rule-item">不提供 MBTI 完整测试入口（与本页定位不符）</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">④ 偏好意愿</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">地域/专业/优先/就业 → 标签展示，最多可见 3 个，超出显示 +N</div>
+        <div class="ann-rule-item">点击 +N → 展开全部标签 + 横滑滚动（不换行）</div>
+        <div class="ann-rule-item">学费 → 文本展示；全部未填均显示「待完善」</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">数据状态切换</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">「全部填写」→ 所有字段有值（含 6 科单科 + 多个标签 + MBTI）</div>
+        <div class="ann-rule-item">「最少填写」→ 仅省份+总分+位次有值，其余全部「待完善」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下游页面 -->
+  <div class="annotation-card">
+    <div class="ann-card-header">
+      <span class="ann-page-badge">⇢</span>
+      <span class="ann-page-title">点击后去向</span>
+      <span class="ann-page-sub">两个下游页面</span>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">「直接匹配院校」→ 匹配结果列表</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">学校卡片列表：校名 / 匹配度标签 / 属性标签 / 推荐专业 / 录取概率</div>
+        <div class="ann-rule-item">筛选栏：院校档次 / 地域 / 专业方向（横向 chips，多选OR逻辑）</div>
+        <div class="ann-rule-item">支持排序切换（匹配度 / 录取概率 / 院校档次），滚动加载</div>
+        <div class="ann-rule-item">匹配算法：位次 → 历年数据 → 偏好加权 + MBTI 适配度</div>
+      </div>
+    </div>
+    <div class="ann-rule-group">
+      <div class="ann-rule-label">「生成志愿策略报告」→ 策略报告页</div>
+      <div class="ann-rule-items">
+        <div class="ann-rule-item">冲-稳-保梯度表 + 录取概率区间</div>
+        <div class="ann-rule-item">专业匹配分析（依据选科 + MBTI + 就业倾向）</div>
+        <div class="ann-rule-item">MBTI 性格适配建议</div>
+        <div class="ann-rule-item">可导出 PDF / 分享截图</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /annotations -->
+
+</div><!-- /proto-layout -->
+
+<script>
+// ==================== DATA STATE ====================
+let currentState = 'full';
+
+// Full dataset
+const fullData = {
+  provinceSubject: '广东 · 物理+化学+生物',
+  score: '612 分',
+  rank: '14,780 ~ 14,911',
+  subjects: [
+    { name: '语文', score: '118' },
+    { name: '数学', score: '132' },
+    { name: '英语', score: '125' },
+    { name: '物理', score: '91' },
+    { name: '化学', score: '82' },
+    { name: '生物', score: '64' },
+  ],
+  mbti: 'INFJ',
+  regions: ['华东', '北京', '广州', '深圳', '杭州', '南京'],
+  majors: ['工学', '医学', '金融学', '计算机', '法学', '管理学'],
+  priority: ['院校档次', '专业实力', '就业前景'],
+  career: ['国内读研', '考公考编'],
+  tuition: '≤ 2万/年',
+};
+
+// Minimal dataset — only 省份+总分+位次
+const minimalData = {
+  provinceSubject: '广东 · 物理+化学+生物',
+  score: '612 分',
+  rank: '14,780 ~ 14,911',
+  subjects: null,
+  mbti: null,
+  regions: null,
+  majors: null,
+  priority: null,
+  career: null,
+  tuition: null,
+};
+
+function switchDataState(state) {
+  currentState = state;
+  // Toggle active chip
+  document.querySelectorAll('.state-switch-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.textContent.includes(state === 'full' ? '全部' : '最少'));
+  });
+  renderData(state === 'full' ? fullData : minimalData);
+}
+
+function renderData(d) {
+  // Exam info
+  document.getElementById('examProvince').textContent = d.provinceSubject;
+  document.getElementById('examScore').textContent = d.score;
+  document.getElementById('examRank').textContent = d.rank;
+
+  // Subjects
+  renderSubjectGrid(d.subjects);
+
+  // MBTI
+  const mbtiEl = document.getElementById('traitMbti');
+  if (d.mbti) {
+    mbtiEl.className = 'data-value';
+    mbtiEl.textContent = d.mbti;
+  } else {
+    mbtiEl.className = 'data-fallback';
+    mbtiEl.textContent = '待完善';
+  }
+
+  // Preferences
+  renderTagsOrFallback('prefRegion', d.regions);
+  renderTagsOrFallback('prefMajor', d.majors);
+  renderTagsOrFallback('prefPriority', d.priority);
+  renderTagsOrFallback('prefCareer', d.career);
+  renderTextOrFallback('prefTuition', d.tuition);
+
+  // Reset subject section
+  document.getElementById('subjectBody').classList.remove('open');
+  document.getElementById('subjectIcon').classList.remove('open');
+}
+
+function renderSubjectGrid(subjects) {
+  const grid = document.getElementById('subjectGrid');
+  if (!subjects) {
+    grid.innerHTML = '<div style="font-size:13px;color:var(--text-fallback);font-style:italic;padding:4px 0;grid-column:1/-1;">待完善</div>';
+    return;
+  }
+  grid.innerHTML = subjects.map(s =>
+    `<div class="subject-item"><span class="subject-name">${s.name}</span><span class="subject-score">${s.score}</span></div>`
+  ).join('');
+}
+
+function renderTagsOrFallback(elId, tags) {
+  const el = document.getElementById(elId);
+  if (!tags || tags.length === 0) {
+    el.innerHTML = '<span class="data-fallback">待完善</span>';
+    return;
+  }
+  const hasOverflow = tags.length > 3;
+  const visible = tags.slice(0, 3);
+  const hidden = tags.slice(3);
+  let html = '<div class="tag-row" id="tagRow_' + elId + '">';
+  visible.forEach(t => { html += `<span class="tag-chip">${t}</span>`; });
+  if (hasOverflow) {
+    hidden.forEach(t => { html += `<span class="tag-chip tag-hidden">${t}</span>`; });
+    html += `<span class="tag-overflow show" id="tagOverflow_${elId}" onclick="toggleTagOverflow('${elId}')">+${hidden.length}</span>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderTextOrFallback(elId, text) {
+  const el = document.getElementById(elId);
+  if (!text) {
+    el.innerHTML = '<span class="data-fallback">待完善</span>';
+    return;
+  }
+  el.textContent = text;
+  el.className = 'data-value';
+}
+
+// ==================== TAG OVERFLOW ====================
+function toggleTagOverflow(elId) {
+  const row = document.getElementById('tagRow_' + elId);
+  const overflow = document.getElementById('tagOverflow_' + elId);
+  if (!row || !overflow) return;
+
+  if (row.classList.contains('expanded')) {
+    // Collapse
+    row.classList.remove('expanded');
+    overflow.textContent = '+' + row.querySelectorAll('.tag-hidden').length;
+  } else {
+    // Expand
+    row.classList.add('expanded');
+    const totalTags = row.querySelectorAll('.tag-chip').length;
+    overflow.textContent = '收起';
+    // Scroll to show hidden tags
+    setTimeout(() => {
+      row.scrollLeft = row.scrollWidth;
+    }, 50);
+  }
+}
+
+// ==================== SUBJECT COLLAPSE ====================
+function toggleSubjects() {
+  const body = document.getElementById('subjectBody');
+  const icon = document.getElementById('subjectIcon');
+  body.classList.toggle('open');
+  icon.classList.toggle('open');
+}
+
+// ==================== INIT ====================
+renderData(fullData);
+
+</script>
+
+</body>
+</html>
