@@ -368,6 +368,44 @@
     display: flex; flex-direction: column; gap: 8px;
   }
   .bottom-cta .btn-primary { padding: 14px 0; font-size: 16px; border-radius: 12px; }
+
+/* ===== MODE SWITCHER ===== */
+.mode-switcher {
+  display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center;
+}
+.mode-btn {
+  padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--card-bg); cursor: pointer; font-size: 13px; color: var(--text-secondary);
+  transition: all .2s;
+}
+.mode-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ===== GUIDE CARDS ===== */
+.guide-card {
+  background: var(--accent-light); border: 1px dashed var(--accent);
+  border-radius: 10px; padding: 14px 14px 12px;
+  margin-top: 10px; display: flex; align-items: center; gap: 10px;
+}
+.guide-card:first-child { margin-top: 0; }
+.guide-card-icon {
+  font-size: 22px; flex-shrink: 0; width: 36px; text-align: center;
+}
+.guide-card-body { flex: 1; min-width: 0; }
+.guide-card-text {
+  font-size: 12px; color: var(--accent-text); line-height: 1.5;
+  font-weight: 500; margin-bottom: 4px;
+}
+.guide-card-hint {
+  font-size: 11px; color: var(--text-hint);
+}
+.guide-card-btn {
+  flex-shrink: 0; padding: 6px 14px; border-radius: 16px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  background: var(--accent); color: #fff; border: none;
+  white-space: nowrap; transition: all .15s;
+}
+.guide-card-btn:active { opacity: 0.8; }
+
 </style>
 </head>
 <body>
@@ -387,6 +425,11 @@
       ② 信息架构——L0决策/L1摘要/L2详情三层；判断归AI、事实归标签；个性化前置、客观后置<br>
       ③ 视觉布局——标签化降负担、结论句裸出、一卡一问题、行动不分散
     </p>
+  </div>
+
+  <div class="mode-switcher">
+    <button class="mode-btn active" onclick="switchDataState('full')">全部填写</button>
+    <button class="mode-btn" onclick="switchDataState('minimal')">最小输入（仅总分+省份）</button>
   </div>
 
   <div class="phone-frame">
@@ -599,56 +642,95 @@
       <div class="card">
         <div class="card-header">你有多适合？</div>
 
-        <!-- 学科匹配 -->
-        <div class="fit-subsection">
-          <div class="fit-subsection-title">学科匹配</div>
-          <div class="fit-bars">
-            <div class="fit-row">
-              <span class="fit-label">数学</span>
-              <div class="fit-bar-wrap"><div class="fit-bar-fill high" style="width:88%"></div></div>
-              <span class="fit-score">88%</span>
-              <span class="fit-your">你:132</span>
+        <!-- 全部填写：正常内容 -->
+        <div id="fitFull">
+          <!-- 学科匹配 -->
+          <div class="fit-subsection">
+            <div class="fit-subsection-title">学科匹配</div>
+            <div class="fit-bars">
+              <div class="fit-row">
+                <span class="fit-label">数学</span>
+                <div class="fit-bar-wrap"><div class="fit-bar-fill high" style="width:88%"></div></div>
+                <span class="fit-score">88%</span>
+                <span class="fit-your">你:132</span>
+              </div>
+              <div class="fit-row">
+                <span class="fit-label">物理</span>
+                <div class="fit-bar-wrap"><div class="fit-bar-fill high" style="width:75%"></div></div>
+                <span class="fit-score">75%</span>
+                <span class="fit-your">你:85</span>
+              </div>
+              <div class="fit-row">
+                <span class="fit-label">英语</span>
+                <div class="fit-bar-wrap"><div class="fit-bar-fill mid" style="width:62%"></div></div>
+                <span class="fit-score">62%</span>
+                <span class="fit-your">你:118</span>
+              </div>
+              <div class="fit-row">
+                <span class="fit-label">语文</span>
+                <div class="fit-bar-wrap"><div class="fit-bar-fill low" style="width:38%"></div></div>
+                <span class="fit-score">38%</span>
+                <span class="fit-your">你:96</span>
+              </div>
+              <div class="fit-row">
+                <span class="fit-label">化学</span>
+                <div class="fit-bar-wrap"><div class="fit-bar-fill low" style="width:25%"></div></div>
+                <span class="fit-score">—</span>
+                <span class="fit-your">未选</span>
+              </div>
             </div>
-            <div class="fit-row">
-              <span class="fit-label">物理</span>
-              <div class="fit-bar-wrap"><div class="fit-bar-fill high" style="width:75%"></div></div>
-              <span class="fit-score">75%</span>
-              <span class="fit-your">你:85</span>
-            </div>
-            <div class="fit-row">
-              <span class="fit-label">英语</span>
-              <div class="fit-bar-wrap"><div class="fit-bar-fill mid" style="width:62%"></div></div>
-              <span class="fit-score">62%</span>
-              <span class="fit-your">你:118</span>
-            </div>
-            <div class="fit-row">
-              <span class="fit-label">语文</span>
-              <div class="fit-bar-wrap"><div class="fit-bar-fill low" style="width:38%"></div></div>
-              <span class="fit-score">38%</span>
-              <span class="fit-your">你:96</span>
-            </div>
-            <div class="fit-row">
-              <span class="fit-label">化学</span>
-              <div class="fit-bar-wrap"><div class="fit-bar-fill low" style="width:25%"></div></div>
-              <span class="fit-score">—</span>
-              <span class="fit-your">未选</span>
+            <div style="margin-top:8px;font-size:11px;color:var(--text-secondary);">
+              该专业对<strong>数学</strong>和<strong>物理</strong>要求较高，你的成绩匹配良好。
+              <span style="color:var(--orange);">化学未选考</span>，不影响（多数院校不限化学）。
             </div>
           </div>
-          <div style="margin-top:8px;font-size:11px;color:var(--text-secondary);">
-            该专业对<strong>数学</strong>和<strong>物理</strong>要求较高，你的成绩匹配良好。
-            <span style="color:var(--orange);">化学未选考</span>，不影响（多数院校不限化学）。
+
+          <!-- 性格匹配 -->
+          <div class="fit-subsection">
+            <div class="fit-subsection-title">性格匹配</div>
+            <div class="mbti-row">
+              <span class="mbti-type">INTJ</span>
+              <span>
+                <span class="mbti-stars">★★★★☆</span>
+                <div class="mbti-desc">高匹配 · 理性分析型人格与计算机专业环境高度适配</div>
+              </span>
+            </div>
           </div>
         </div>
 
-        <!-- 性格匹配 -->
-        <div class="fit-subsection">
-          <div class="fit-subsection-title">性格匹配</div>
-          <div class="mbti-row">
-            <span class="mbti-type">INTJ</span>
-            <span>
-              <span class="mbti-stars">★★★★☆</span>
-              <div class="mbti-desc">高匹配 · 理性分析型人格与计算机专业环境高度适配</div>
-            </span>
+        <!-- 最小输入：引导卡片 -->
+        <div id="fitEmpty" style="display:none; padding: 4px 0;">
+          <!-- 学科匹配空白：两个引导卡片 -->
+          <div class="fit-subsection-title" style="margin-bottom:8px;">学科匹配</div>
+
+          <div class="guide-card">
+            <div class="guide-card-icon">📋</div>
+            <div class="guide-card-body">
+              <div class="guide-card-text">基于你的选考科目，筛选可选专业</div>
+              <div class="guide-card-hint">填写选科后可查看专业适配度</div>
+            </div>
+            <button class="guide-card-btn" onclick="alert('原型提示：跳转至选科填写页')">去填写</button>
+          </div>
+
+          <div class="guide-card" style="margin-top:8px;">
+            <div class="guide-card-icon">📊</div>
+            <div class="guide-card-body">
+              <div class="guide-card-text">补充各科成绩，看看你的优势学科能报哪些</div>
+              <div class="guide-card-hint">填写单科成绩后可对比学科匹配度</div>
+            </div>
+            <button class="guide-card-btn" onclick="alert('原型提示：跳转至成绩填写页')">去完善</button>
+          </div>
+
+          <!-- 性格匹配空白 -->
+          <div class="fit-subsection-title" style="margin-top:16px; margin-bottom:8px;">性格匹配</div>
+
+          <div class="guide-card">
+            <div class="guide-card-icon">🧠</div>
+            <div class="guide-card-body">
+              <div class="guide-card-text">了解你的性格最适合哪些专业</div>
+              <div class="guide-card-hint">MBTI测评约 4 分钟，完成后可查看性格与专业匹配度</div>
+            </div>
+            <button class="guide-card-btn" onclick="alert('原型提示：跳转至 MBTI 测评页')">去测评</button>
           </div>
         </div>
       </div>
@@ -714,6 +796,20 @@
     activateTab(btn.dataset.tab);
   });
 })();
+
+// ==================== DATA STATE SWITCH ====================
+function switchDataState(state) {
+  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+  if (state === 'full') {
+    document.querySelector('.mode-btn:nth-child(1)').classList.add('active');
+    document.getElementById('fitFull').style.display = 'block';
+    document.getElementById('fitEmpty').style.display = 'none';
+  } else {
+    document.querySelector('.mode-btn:nth-child(2)').classList.add('active');
+    document.getElementById('fitFull').style.display = 'none';
+    document.getElementById('fitEmpty').style.display = 'block';
+  }
+}
 </script>
 
 </body>
