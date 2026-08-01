@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>第二轮问卷</title>
 <style>
 :root {
@@ -28,7 +28,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
   background: var(--bg); color: var(--text); line-height: 1.65;
   -webkit-font-smoothing: antialiased; padding-bottom: 80px;
-  padding-top: 48px;
+  padding-top: calc(52px + env(safe-area-inset-top, 0px));
 }
 
 .container { max-width: 600px; margin: 0 auto; padding: 16px; }
@@ -173,6 +173,7 @@ body {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   background: var(--card); border-bottom: 1px solid var(--divider);
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding-top: env(safe-area-inset-top, 0px);
 }
 .progress-bar { height: 3px; background: var(--divider); }
 .progress-fill { height: 100%; background: var(--accent); transition: width 0.3s ease; width: 0; }
