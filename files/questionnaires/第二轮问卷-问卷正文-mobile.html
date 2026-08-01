@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>第二轮问卷</title>
+<style>
+:root {
+  --bg: #f8f8f6; --card: #fff; --text: #1a1a1a; --text-secondary: #666;
+  --border: #e8e8e4; --accent: #2c2c2c; --accent-light: #f0f0ee;
+  --tag-bg: #f4f4f0; --tag-text: #555; --divider: #eee;
+  --option-hover: #f6f6f4; --input-bg: #f9f9f7; --input-border: #ddd;
+  --section-label: #888; --gain: #4a7c59; --loss: #c47a5a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a; --card: #242424; --text: #e8e8e4; --text-secondary: #999;
+    --border: #333; --accent: #e8e8e4; --accent-light: #2a2a2a;
+    --tag-bg: #2a2a2a; --tag-text: #aaa; --divider: #2e2e2e;
+    --option-hover: #2a2a2a; --input-bg: #2a2a2a; --input-border: #444;
+    --section-label: #888;
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.65;
+  -webkit-font-smoothing: antialiased; padding-bottom: 80px;
+}
+
+.container { max-width: 600px; margin: 0 auto; padding: 16px; }
+
+.section-label {
+  font-size: 12px; font-weight: 600; color: var(--section-label);
+  letter-spacing: 0.08em; padding: 8px 0; margin: 24px 0 8px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.q-card {
+  background: var(--card); border-radius: 14px; padding: 20px 18px;
+  margin-bottom: 14px; border: 1px solid var(--border);
+}
+
+.q-num { font-size: 12px; font-weight: 600; color: var(--section-label); letter-spacing: 0.06em; margin-bottom: 6px; }
+.q-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.35; }
+.q-ask { font-size: 15px; font-weight: 600; color: var(--text); margin: 14px 0 10px; }
+.scene-intro { font-size: 14px; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.55; }
+
+.persona {
+  background: var(--accent-light); border-radius: 10px; padding: 14px;
+  margin-bottom: 12px; border: 1px solid var(--border);
+  font-size: 13.5px; line-height: 1.6;
+}
+.persona-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.persona-summary { margin-top: 8px; color: var(--text-secondary); font-style: italic; }
+
+.list-label { font-size: 14px; font-weight: 700; margin: 14px 0 6px; }
+.list-item { font-size: 14px; padding: 4px 0 4px 16px; position: relative; line-height: 1.5; }
+.list-item::before { content: ""; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--text-secondary); }
+.list-item.gain::before { background: var(--gain); }
+.list-item.loss::before { background: var(--loss); }
+
+.contrast {
+  font-size: 13.5px; color: var(--text-secondary); font-weight: 500;
+  margin: 12px 0 16px; padding: 10px 14px;
+  background: var(--accent-light); border-radius: 8px; line-height: 1.5;
+}
+
+.options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+
+.option {
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+  background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;
+  cursor: pointer; transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.option:active { background: var(--option-hover); border-color: var(--text-secondary); }
+.option.selected { background: var(--accent); border-color: var(--accent); }
+.option.selected .option-text { color: var(--bg); }
+.option.selected .radio { border-color: var(--bg); }
+.option.selected .radio::after { background: var(--bg); }
+
+.radio {
+  width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border);
+  flex-shrink: 0; position: relative; transition: border-color 0.15s;
+}
+.radio::after { content: ""; position: absolute; top: 3px; left: 3px; width: 10px; height: 10px; border-radius: 50%; background: transparent; transition: background 0.15s; }
+.option-text { font-size: 14px; color: var(--text); font-weight: 500; transition: color 0.15s; }
+
+.conditional { margin-top: 10px; display: none; }
+.conditional.show { display: block; animation: fadeSlide 0.25s ease; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+.conditional-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+.conditional-input {
+  width: 100%; padding: 12px 14px; font-size: 14px; font-family: inherit;
+  border: 1.5px solid var(--input-border); border-radius: 10px;
+  background: var(--input-bg); color: var(--text); outline: none; transition: border-color 0.15s;
+}
+.conditional-input:focus { border-color: var(--accent); }
+
+.likert { display: flex; gap: 6px; margin-top: 14px; }
+.likert-btn {
+  flex: 1; text-align: center; padding: 10px 4px; font-size: 12px;
+  border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg);
+  color: var(--text); cursor: pointer; transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent; user-select: none; line-height: 1.3;
+}
+.likert-btn:active { background: var(--option-hover); }
+.likert-btn.selected { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+.text-input {
+  width: 100%; margin-top: 12px; padding: 12px 14px; font-size: 14px; font-family: inherit;
+  border: 1.5px solid var(--input-border); border-radius: 10px;
+  background: var(--input-bg); color: var(--text); outline: none; resize: vertical; min-height: 60px;
+}
+.text-input:focus { border-color: var(--accent); }
+
+.city-card { background: var(--card); border-radius: 14px; padding: 18px; margin-bottom: 14px; border: 1px solid var(--border); }
+.city-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.city-tagline { font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
+.rank-hint { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; text-align: center; }
+.city-img {
+  width: 100%; aspect-ratio: 16/10; background: var(--accent-light);
+  border-radius: 10px; margin-bottom: 14px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 13px;
+}
+.city-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.city-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.city-table th { text-align: left; padding: 8px 10px; font-weight: 600; color: var(--tag-text); background: var(--tag-bg); border-radius: 6px 6px 0 0; font-size: 12px; width: 25%; }
+.city-table td { padding: 8px 10px; line-height: 1.45; vertical-align: top; border-top: 1px solid var(--divider); }
+
+.rank-inputs { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+.rank-row { display: flex; align-items: center; gap: 10px; }
+.rank-label { font-size: 14px; font-weight: 600; width: 70px; flex-shrink: 0; }
+.rank-select {
+  flex: 1; padding: 10px 32px 10px 12px; font-size: 14px; font-family: inherit;
+  border: 1.5px solid var(--input-border); border-radius: 10px;
+  background: var(--input-bg); color: var(--text); outline: none;
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23999' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+
+.progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--divider); z-index: 100; }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.3s ease; }
+
+@media (max-width: 380px) {
+  .container { padding: 12px; }
+  .q-card { padding: 16px 14px; }
+  .likert { gap: 4px; }
+  .likert-btn { font-size: 11px; padding: 8px 2px; }
+  .option { padding: 10px 12px; } .option-text { font-size: 13px; }
+  .rank-label { font-size: 13px; width: 60px; }
+}
+
+</style>
+</head>
+<body>
+<div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+<div class="container">
+
+<div class="section-label">两个前辈的生活，选你更向往谁</div>
+
+<!-- Q1 -->
+<div class="q-card" data-q="1">
+  <div class="q-num">Q1 · 自由支配资金</div>
+  <div class="q-title">月薪低但存得多 vs 月薪高但存不住</div>
+  <div class="scene-intro">两个前辈，刚毕业，做差不多的技术活，去了不同的城市。</div>
+  <div class="persona">
+    <div class="persona-name">前辈 A：在不够出名的城市</div>
+    <div>房租 1800（整租一居）、吃饭 1200（外卖 15–25 一顿，自己做饭更省）、通勤 200（单车十分钟）、水电日用 500</div>
+    <div class="persona-summary">月薪 8500，每月存 <strong>4800</strong></div>
+  </div>
+  <div class="persona">
+    <div class="persona-name">前辈 B：在知名大城市</div>
+    <div>房租 4500 只够合租次卧，吃饭 2400（外卖 40 起、奶茶 25 起），通勤 500（地铁 40 分钟），水电日用 700</div>
+    <div class="persona-summary">月薪 12000，每月存 <strong>3900</strong></div>
+  </div>
+  <div class="contrast">月薪多 3500，存下来的反而少 900。</div>
+  <div class="q-ask">你更向往谁的生活？</div>
+  <div class="options" data-type="single">
+    <div class="option" data-value="A"><div class="radio"></div><span class="option-text">前辈 A（不够出名的城市，手里有存款）</span></div>
+    <div class="option" data-value="B"><div class="radio"></div><span class="option-text">前辈 B（知名大城市，机会更多）</span></div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card" data-q="2">
+  <div class="q-num">Q2 · 五年后的生活</div>
+  <div class="q-title">不够出名的城市 vs 知名大城市</div>
+  <div class="scene-intro">两个前辈，毕业去了不同的城市。五年后——</div>
+  <div class="persona">
+    <div class="persona-name">前辈 A：在不够出名的城市安了家</div>
+    <div>月薪 9000，住公司宿舍，三年买了两居室，周末去爸妈家半小时车程，五年攒下一笔不小的底子。但商场只有三层，没有 livehouse、没有展览，职业天花板是部门主管，同龄人少、圈子窄。</div>
+  </div>
+  <div class="persona">
+    <div class="persona-name">前辈 B：在知名大城市漂着</div>
+    <div>月薪 12000、地铁通全城、周末有展有歌听，三年收入翻一倍，朋友多、活动多，想学什么都有。但租房 4500，不是自己的家，买房遥遥无期，五年没攒下什么资产，总觉得飘着。</div>
+  </div>
+  <div class="contrast">安稳但有天花板，还是自由但一直漂着？</div>
+  <div class="q-ask">你更向往谁的生活？</div>
+  <div class="options" data-type="single">
+    <div class="option" data-value="A"><div class="radio"></div><span class="option-text">前辈 A（安稳有底）</span></div>
+    <div class="option" data-value="B"><div class="radio"></div><span class="option-text">前辈 B（机会更多）</span></div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card" data-q="3">
+  <div class="q-num">Q3 · 成长与生活</div>
+  <div class="q-title">拼命往上走 vs 按时下班过日子</div>
+  <div class="scene-intro">两个前辈，同一届毕业，去了同一座城市。五年后，选择了完全不同的节奏——</div>
+  <div class="persona">
+    <div class="persona-name">前辈 A：拼命积累</div>
+    <div>做专业里最有挑战的方向，带他的前辈很厉害，半年学到的东西比大学四年多，三年后简历就是硬通货。但经常加班到八九点，周末有时也要处理工作，谈恋爱的时间是挤出来的。</div>
+  </div>
+  <div class="persona">
+    <div class="persona-name">前辈 B：平衡生活</div>
+    <div>五点半准时走人，周末从不加班，学了爱好、谈了恋爱、健身打游戏，不用带着压力睡觉。但工作跟专业核心方向有差距，五年后简历上写的是"稳定可靠"，不是"主导过某个重要项目"。</div>
+  </div>
+  <div class="contrast">履历值钱但生活压缩，还是生活充实但专业留在外围？</div>
+  <div class="q-ask">你更向往谁的生活？</div>
+  <div class="options" data-type="single">
+    <div class="option" data-value="A"><div class="radio"></div><span class="option-text">前辈 A（拼命积累）</span></div>
+    <div class="option" data-value="B"><div class="radio"></div><span class="option-text">前辈 B（平衡生活）</span></div>
+  </div>
+</div>
+
+<div class="section-label">你对"优秀"的看法</div>
+
+<!-- Q4 -->
+<div class="q-card" data-q="4">
+  <div class="q-num">Q4 · 成功定义</div>
+  <div class="q-title">测你对"优秀"的尺子</div>
+  <div class="scene-intro">有一种常见的标准：好学校、好公司、职位在同龄人里升得快，说出来家人有面子。</div>
+  <div class="contrast">这套标准，你认同吗？</div>
+  <div class="likert">
+    <div class="likert-btn" data-value="1">非常<br>不认同</div>
+    <div class="likert-btn" data-value="2">不太<br>认同</div>
+    <div class="likert-btn" data-value="3">中立</div>
+    <div class="likert-btn" data-value="4">比较<br>认同</div>
+    <div class="likert-btn" data-value="5">非常<br>认同</div>
+  </div>
+  <textarea class="text-input" placeholder="你心里的优秀标准，是什么样的？（选填）" rows="2"></textarea>
+</div>
+
+<div class="section-label">一种生活摆出来，问你愿不愿意</div>
+
+<!-- Q5 -->
+<div class="q-card" data-q="5">
+  <div class="q-num">Q5 · 生活方式</div>
+  <div class="q-title">沿海城市的生活半径</div>
+  <div class="scene-intro">有一个机会，去一个没有地铁、没那么出名的沿海城市工作。</div>
+  <div class="list-label">你会得到：</div>
+  <div class="list-item gain">物价不高，海鲜和本地美食管够</div>
+  <div class="list-item gain">周末开车半小时就到海边</div>
+  <div class="list-item gain">空气好、不堵车，通勤十五分钟</div>
+  <div class="list-label">你会失去：</div>
+  <div class="list-item loss">外卖种类少，晚上九点后就没什么店开着了</div>
+  <div class="list-item loss">来了才发现，这里更适合度假而不是生活</div>
+  <div class="list-item loss">想学个新东西，线下培训班基本没有，只能靠自己摸索</div>
+  <div class="q-ask">这样的生活，你愿意过吗？</div>
+  <div class="options" data-type="conditional">
+    <div class="option" data-value="愿意"><div class="radio"></div><span class="option-text">愿意</span></div>
+    <div class="option" data-value="不太愿意"><div class="radio"></div><span class="option-text">不太愿意</span></div>
+  </div>
+  <div class="conditional"><div class="conditional-label">如果满足 ______，我可以接受：</div><input class="conditional-input" placeholder="写下你的条件..."></div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card" data-q="6">
+  <div class="q-num">Q6 · 工作节奏</div>
+  <div class="q-title">稳定岗位的朝九晚五</div>
+  <div class="scene-intro">有一份工作，需要文字功底和规范梳理能力，朝九晚五，五点半准时走人。</div>
+  <div class="list-label">你会得到：</div>
+  <div class="list-item gain">不用跨部门扯皮，手上的活自己能从头做到尾</div>
+  <div class="list-item gain">不用把工作带回家，压力比一线业务小得多</div>
+  <div class="list-item gain">做的事有长期沉淀——规范体系和标准文档是组织的骨架，不会因为业务调整就被扔掉</div>
+  <div class="list-label">你会失去：</div>
+  <div class="list-item loss">大学学的专业课基本用不上，四年啃的东西在抽屉里落灰</div>
+  <div class="list-item loss">你是后面做支撑的人，事情做成了，功劳记在前面冲的人头上</div>
+  <div class="list-item loss">你的价值绑在这家公司里，SOP、合规框架、流程体系都是内部的，换一家全部重来</div>
+  <div class="q-ask">这样的生活，你愿意过吗？</div>
+  <div class="options" data-type="conditional">
+    <div class="option" data-value="愿意"><div class="radio"></div><span class="option-text">愿意</span></div>
+    <div class="option" data-value="不太愿意"><div class="radio"></div><span class="option-text">不太愿意</span></div>
+  </div>
+  <div class="conditional"><div class="conditional-label">如果满足 ______，我可以接受：</div><input class="conditional-input" placeholder="写下你的条件..."></div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card" data-q="7">
+  <div class="q-num">Q7 · 职业认同</div>
+  <div class="q-title">做的事有价值，但别人不太懂</div>
+  <div class="scene-intro">有一份工作，需要外语能力、沟通谈判和市场洞察，面向海外市场。</div>
+  <div class="list-label">你会得到：</div>
+  <div class="list-item gain">学的东西没浪费，专业和语言都在用</div>
+  <div class="list-item gain">公费看世界，去别人旅游才去的地方，但你是去工作</div>
+  <div class="list-item gain">你的视野和同龄人拉开差距，别人还在刷国内热搜，你在看全球市场怎么转</div>
+  <div class="list-label">你会失去：</div>
+  <div class="list-item loss">紧急任务多，你经常加班，家里人知道了难免心疼</div>
+  <div class="list-item loss">收入看业绩，旺季拿到手软，淡季只能吃老本</div>
+  <div class="list-item loss">海外市场有时差，客户的晚上是你的早上，工作和生活搅在一起</div>
+  <div class="q-ask">这样的生活，你愿意过吗？</div>
+  <div class="options" data-type="conditional">
+    <div class="option" data-value="愿意"><div class="radio"></div><span class="option-text">愿意</span></div>
+    <div class="option" data-value="不太愿意"><div class="radio"></div><span class="option-text">不太愿意</span></div>
+  </div>
+  <div class="conditional"><div class="conditional-label">如果满足 ______，我可以接受：</div><input class="conditional-input" placeholder="写下你的条件..."></div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card" data-q="8">
+  <div class="q-num">Q8 · 同事环境</div>
+  <div class="q-title">团队里资历最浅的那个</div>
+  <div class="scene-intro">有一个机会，进入一个团队，同事个个学历和履历都压你一头。</div>
+  <div class="list-label">你会得到：</div>
+  <div class="list-item gain">在这里一年碰到的东西，普通团队三年未必遇得到</div>
+  <div class="list-item gain">主管觉得你做事踏实靠谱，愿意带你</div>
+  <div class="list-item gain">半年后你的视野和专业判断力明显比在普通团队的同学强</div>
+  <div class="list-label">你会失去：</div>
+  <div class="list-item loss">别人正常上下班，你得额外花时间补功课才能不掉队</div>
+  <div class="list-item loss">晋升可能比别人慢——资历在那里摆着</div>
+  <div class="list-item loss">偶尔需要硬撑——明明没完全听懂，也装出跟得上的样子</div>
+  <div class="q-ask">这样的生活，你愿意过吗？</div>
+  <div class="options" data-type="conditional">
+    <div class="option" data-value="愿意"><div class="radio"></div><span class="option-text">愿意</span></div>
+    <div class="option" data-value="不太愿意"><div class="radio"></div><span class="option-text">不太愿意</span></div>
+  </div>
+  <div class="conditional"><div class="conditional-label">如果满足 ______，我可以接受：</div><input class="conditional-input" placeholder="写下你的条件..."></div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card" data-q="9">
+  <div class="q-num">Q9 · 家人羁绊</div>
+  <div class="q-title">一线城市工作，周末能回家</div>
+  <div class="scene-intro">有一个机会，在一线城市工作，离爸妈的城市不远——周末想回就回。</div>
+  <div class="list-label">你会得到：</div>
+  <div class="list-item gain">工作日在一线打拼，周末还能回家吃口热饭</div>
+  <div class="list-item gain">不用在"留在大城市"和"回老家"之间二选一——你两边都有了</div>
+  <div class="list-item gain">进可攻退可守——一线的机会是你的，累了也有地方退</div>
+  <div class="list-label">你会失去：</div>
+  <div class="list-item loss">周末要不要回，忙起来的时候想这个问题会心累</div>
+  <div class="list-item loss">偶尔周末回去，错过一次约，同事下次就可能不叫你了</div>
+  <div class="list-item loss">父母的意见总在不远的地方，做自己的决定没那么痛快</div>
+  <div class="q-ask">这样的生活，你愿意过吗？</div>
+  <div class="options" data-type="conditional">
+    <div class="option" data-value="愿意"><div class="radio"></div><span class="option-text">愿意</span></div>
+    <div class="option" data-value="不太愿意"><div class="radio"></div><span class="option-text">不太愿意</span></div>
+  </div>
+  <div class="conditional"><div class="conditional-label">如果满足 ______，我可以接受：</div><input class="conditional-input" placeholder="写下你的条件..."></div>
+</div>
+
+<div class="section-label">城市画像排序</div>
+
+<div class="q-card">
+  <div class="scene-intro">假设下面三座城市都向你发来了条件合适的 offer。请按你想去的程度排序。</div>
+  <div class="rank-hint">最想去 → 第二想去 → 第三想去</div>
+
+  <div class="city-card">
+    <div class="city-name">城市 A</div>
+    <div class="city-tagline">机会密度高，文化选择丰富，与世界连接紧密</div>
+    <div class="city-img"><img src="城市画像图片/城市画像-A-搏上限-v6.1-国际交通强化.png" alt="城市A" onerror="this.style.display='none';this.parentElement.textContent='城市A · 画像（图片待加载）';this.parentElement.style.color='var(--text-secondary)';this.parentElement.style.padding='40px 0';this.parentElement.style.textAlign='center'"></div>
+    <table class="city-table"><tr><th>事业</th><td>头部企业和前沿岗位集中，成长快、竞争也强</td></tr><tr><th>居住</th><td>收入较高，但住房空间较小、生活成本较高</td></tr><tr><th>生活</th><td>展览、演出和多元餐饮丰富，工作节奏偏快</td></tr><tr><th>交通</th><td>国际航线和跨城交通选择多，出行便利</td></tr></table>
+  </div>
+
+  <div class="city-card">
+    <div class="city-name">城市 B</div>
+    <div class="city-tagline">产业基础扎实，发展路径稳定，工作与生活较为均衡</div>
+    <div class="city-img"><img src="城市画像图片/城市画像-B-稳中求进-v6-人文交通强化.png" alt="城市B" onerror="this.style.display='none';this.parentElement.textContent='城市B · 画像（图片待加载）';this.parentElement.style.color='var(--text-secondary)';this.parentElement.style.padding='40px 0';this.parentElement.style.textAlign='center'"></div>
+    <table class="city-table"><tr><th>事业</th><td>制造、医药和实体产业岗位扎实，发展路径清晰</td></tr><tr><th>居住</th><td>收入中等，住房空间和日常结余相对充足</td></tr><tr><th>生活</th><td>公共休闲设施够用，工作节奏较为可控</td></tr><tr><th>交通</th><td>高铁连接主要城市，跨城出行较方便</td></tr></table>
+  </div>
+
+  <div class="city-card">
+    <div class="city-name">城市 C</div>
+    <div class="city-tagline">生活空间宽松，地方特色鲜明，日常节奏更加从容</div>
+    <div class="city-img"><img src="城市画像图片/城市画像-C-生活本位-v6-人文交通强化.png" alt="城市C" onerror="this.style.display='none';this.parentElement.textContent='城市C · 画像（图片待加载）';this.parentElement.style.color='var(--text-secondary)';this.parentElement.style.padding='40px 0';this.parentElement.style.textAlign='center'"></div>
+    <table class="city-table"><tr><th>事业</th><td>本地消费、文旅和服务类岗位较多，职业选择相对有限</td></tr><tr><th>居住</th><td>收入不高，但住房空间较大、日常成本较低</td></tr><tr><th>生活</th><td>地方美食和邻里生活丰富，下班后的时间更充足</td></tr><tr><th>交通</th><td>可通过区域铁路或客运出行，远途选择相对较少</td></tr></table>
+  </div>
+
+  <div class="rank-inputs">
+    <div class="rank-row"><div class="rank-label">第一名</div><select class="rank-select" id="rank1"><option value="">请选择</option><option value="A">城市 A</option><option value="B">城市 B</option><option value="C">城市 C</option></select></div>
+    <div class="rank-row"><div class="rank-label">第二名</div><select class="rank-select" id="rank2"><option value="">请选择</option><option value="A">城市 A</option><option value="B">城市 B</option><option value="C">城市 C</option></select></div>
+    <div class="rank-row"><div class="rank-label">第三名</div><select class="rank-select" id="rank3"><option value="">请选择</option><option value="A">城市 A</option><option value="B">城市 B</option><option value="C">城市 C</option></select></div>
+  </div>
+</div>
+
+</div>
+<script>
+// 选项选择
+document.querySelectorAll('.options').forEach(group => {
+  group.addEventListener('click', e => {
+    const opt = e.target.closest('.option');
+    if (!opt) return;
+    const type = group.dataset.type;
+    // 单选：取消同组其他选中
+    if (type === 'single') {
+      group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    } else if (type === 'conditional') {
+      group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      // 条件输入
+      const cond = group.parentElement.querySelector('.conditional');
+      if (cond) cond.classList.toggle('show', opt.dataset.value === '不太愿意');
+    }
+    updateProgress();
+  });
+});
+
+// Likert
+document.querySelectorAll('.likert').forEach(l => {
+  l.addEventListener('click', e => {
+    const btn = e.target.closest('.likert-btn');
+    if (!btn) return;
+    l.querySelectorAll('.likert-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateProgress();
+  });
+});
+
+// 排序互斥
+const r1 = document.getElementById('rank1'), r2 = document.getElementById('rank2'), r3 = document.getElementById('rank3');
+if (r1 && r2 && r3) {
+  [r1, r2, r3].forEach(sel => {
+    sel.addEventListener('change', () => {
+      const vals = [r1.value, r2.value, r3.value];
+      [r1, r2, r3].forEach(s => {
+        const opts = s.querySelectorAll('option');
+        opts.forEach(o => {
+          if (o.value === '') return;
+          o.disabled = vals.filter(v => v === o.value).length >= 1 && s.value !== o.value;
+        });
+      });
+    });
+  });
+}
+
+// 进度
+function updateProgress() {
+  const total = document.querySelectorAll('.q-card').length;
+  let answered = 0;
+  document.querySelectorAll('.q-card').forEach(card => {
+    const opts = card.querySelectorAll('.option.selected, .likert-btn.selected');
+    if (opts.length > 0) answered++;
+  });
+  document.getElementById('progress').style.width = ((answered / total) * 100) + '%';
+}
+
+</script>
+</body>
+</html>
