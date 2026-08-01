@@ -175,8 +175,12 @@ body {
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   padding-top: env(safe-area-inset-top, 0px);
 }
-.progress-bar { height: 3px; background: var(--divider); }
+.progress-row {
+  display: flex; align-items: center; gap: 10px; padding: 4px 12px;
+}
+.progress-bar { flex: 1; height: 3px; background: var(--divider); border-radius: 2px; overflow: hidden; }
 .progress-fill { height: 100%; background: var(--accent); transition: width 0.3s ease; width: 0; }
+.progress-num { font-size: 11px; font-weight: 600; color: var(--section-label); white-space: nowrap; min-width: 32px; text-align: right; }
 .toc-bar {
   display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px;
   -webkit-overflow-scrolling: touch; scrollbar-width: none;
@@ -205,7 +209,10 @@ body {
 </head>
 <body>
 <div class="top-bar">
-  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="progress-row">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <span class="progress-num" id="progressNum">0/<span id="totalQ"></span></span>
+  </div>
   <div class="toc-bar">
     <div class="toc-item active" data-target="sec1">前辈生活</div>
     <div class="toc-item" data-target="sec2">优秀标准</div>
@@ -500,6 +507,9 @@ function updateScrollProgress() {
 window.addEventListener('scroll', updateScrollProgress, { passive: true });
 updateScrollProgress();
 
+// 初始化题目总数
+document.getElementById('totalQ').textContent = qCards.length;
+
 // 进度条：纯答题驱动，不参滚动
 function updateAnswerProgress() {
   const total = qCards.length;
@@ -509,6 +519,7 @@ function updateAnswerProgress() {
     if (opts.length > 0) answered++;
   });
   progressFill.style.width = ((answered / total) * 100) + '%';
+  document.getElementById('progressNum').innerHTML = answered + '/<span id="totalQ">' + total + '</span>';
 }
 
 // 选项选择
