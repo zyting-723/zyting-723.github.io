@@ -478,7 +478,7 @@ document.querySelectorAll('.toc-item').forEach(item => {
   });
 });
 
-// 滚动驱动：目录高亮 + 进度条
+// 滚动驱动：目录高亮
 const tocItems = document.querySelectorAll('.toc-item');
 const sections = document.querySelectorAll('.section-label[id]');
 const qCards = document.querySelectorAll('.q-card');
@@ -487,8 +487,6 @@ const topBarH = document.querySelector('.top-bar').offsetHeight;
 
 function updateScrollProgress() {
   const scrollY = window.scrollY + topBarH + 40;
-  
-  // 目录高亮
   let activeId = 'sec1';
   sections.forEach(sec => {
     if (sec.offsetTop <= scrollY) activeId = sec.id;
@@ -496,17 +494,21 @@ function updateScrollProgress() {
   tocItems.forEach(item => {
     item.classList.toggle('active', item.dataset.target === activeId);
   });
-  
-  // 进度条 = 已经看到第几个 q-card / 总数
-  let lastVisible = 0;
-  qCards.forEach((card, i) => {
-    if (card.offsetTop <= scrollY) lastVisible = i + 1;
-  });
-  progressFill.style.width = ((lastVisible / qCards.length) * 100) + '%';
 }
 
 window.addEventListener('scroll', updateScrollProgress, { passive: true });
 updateScrollProgress();
+
+// 进度条：纯答题驱动，不参滚动
+function updateAnswerProgress() {
+  const total = qCards.length;
+  let answered = 0;
+  qCards.forEach(card => {
+    const opts = card.querySelectorAll('.option.selected, .likert-btn.selected');
+    if (opts.length > 0) answered++;
+  });
+  progressFill.style.width = ((answered / total) * 100) + '%';
+}
 
 // 选项选择
 document.querySelectorAll('.options').forEach(group => {
@@ -523,7 +525,7 @@ document.querySelectorAll('.options').forEach(group => {
       const cond = group.parentElement.querySelector('.conditional');
       if (cond) cond.classList.toggle('show', opt.dataset.value === '不太愿意');
     }
-    scoreByScroll();
+    updateAnswerProgress();
   });
 });
 
@@ -534,26 +536,9 @@ document.querySelectorAll('.likert').forEach(l => {
     if (!btn) return;
     l.querySelectorAll('.likert-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    scoreByScroll();
+    updateAnswerProgress();
   });
 });
-
-// 混合进度：填答+滚动各占50%
-function scoreByScroll() {
-  const total = qCards.length;
-  let answered = 0;
-  qCards.forEach(card => {
-    const opts = card.querySelectorAll('.option.selected, .likert-btn.selected');
-    if (opts.length > 0) answered++;
-  });
-  const scrollY = window.scrollY + topBarH + 40;
-  let lastVisible = 0;
-  qCards.forEach((card, i) => {
-    if (card.offsetTop <= scrollY) lastVisible = i + 1;
-  });
-  const pct = Math.round(((answered / total) * 0.5 + (lastVisible / total) * 0.5) * 100);
-  progressFill.style.width = Math.max(pct, (lastVisible / total) * 50) + '%';
-}
 
 // 排序互斥
 const r1 = document.getElementById('rank1'), r2 = document.getElementById('rank2'), r3 = document.getElementById('rank3');
