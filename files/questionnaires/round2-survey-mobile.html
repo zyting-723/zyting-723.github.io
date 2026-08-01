@@ -28,6 +28,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
   background: var(--bg); color: var(--text); line-height: 1.65;
   -webkit-font-smoothing: antialiased; padding-bottom: 80px;
+  padding-top: 48px;
 }
 
 .container { max-width: 600px; margin: 0 auto; padding: 16px; }
@@ -167,8 +168,28 @@ body {
   background-repeat: no-repeat; background-position: right 12px center;
 }
 
-.progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--divider); z-index: 100; }
-.progress-fill { height: 100%; background: var(--accent); transition: width 0.3s ease; }
+/* 顶部导航 */
+.top-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: var(--card); border-bottom: 1px solid var(--divider);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.progress-bar { height: 3px; background: var(--divider); }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.3s ease; width: 0; }
+.toc-bar {
+  display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.toc-bar::-webkit-scrollbar { display: none; }
+.toc-item {
+  flex-shrink: 0; padding: 6px 14px; font-size: 13px; font-weight: 500;
+  color: var(--text-secondary); border-radius: 20px; white-space: nowrap;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s; background: var(--tag-bg);
+}
+.toc-item.active {
+  background: var(--accent); color: var(--bg); font-weight: 600;
+}
 
 @media (max-width: 380px) {
   .container { padding: 12px; }
@@ -182,10 +203,18 @@ body {
 </style>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+<div class="top-bar">
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="toc-bar">
+    <div class="toc-item active" data-target="sec1">前辈生活</div>
+    <div class="toc-item" data-target="sec2">优秀标准</div>
+    <div class="toc-item" data-target="sec3">生活选择</div>
+    <div class="toc-item" data-target="sec4">城市画像</div>
+  </div>
+</div>
 <div class="container">
 
-<div class="section-label">两个前辈的生活，选你更向往谁</div>
+<div class="section-label" id="sec1">两个前辈的生活，选你更向往谁</div>
 
 <!-- Q1 -->
 <div class="q-card" data-q="1">
@@ -252,7 +281,7 @@ body {
   </div>
 </div>
 
-<div class="section-label">你对"优秀"的看法</div>
+<div class="section-label" id="sec2">你对"优秀"的看法</div>
 
 <!-- Q4 -->
 <div class="q-card" data-q="4">
@@ -270,7 +299,7 @@ body {
   <textarea class="text-input" placeholder="你心里的优秀标准，是什么样的？（选填）" rows="2"></textarea>
 </div>
 
-<div class="section-label">一种生活摆出来，问你愿不愿意</div>
+<div class="section-label" id="sec3">一种生活摆出来，问你愿不愿意</div>
 
 <!-- Q5 -->
 <div class="q-card" data-q="5">
@@ -377,7 +406,7 @@ body {
   <div class="conditional"><div class="conditional-label">如果满足 ______，我可以接受：</div><input class="conditional-input" placeholder="写下你的条件..."></div>
 </div>
 
-<div class="section-label">城市画像排序</div>
+<div class="section-label" id="sec4">城市画像排序</div>
 
 <div class="q-card">
   <div class="scene-intro">假设下面三座城市都向你发来了条件合适的 offer。请按你想去的程度排序。</div>
@@ -439,24 +468,62 @@ document.querySelectorAll('.city-img').forEach(container => {
   });
 });
 
+// 目录点击跳转
+document.querySelectorAll('.toc-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const target = document.getElementById(item.dataset.target);
+    if (!target) return;
+    const topBarH = document.querySelector('.top-bar').offsetHeight;
+    window.scrollTo({ top: target.offsetTop - topBarH - 8, behavior: 'smooth' });
+  });
+});
+
+// 滚动驱动：目录高亮 + 进度条
+const tocItems = document.querySelectorAll('.toc-item');
+const sections = document.querySelectorAll('.section-label[id]');
+const qCards = document.querySelectorAll('.q-card');
+const progressFill = document.getElementById('progress');
+const topBarH = document.querySelector('.top-bar').offsetHeight;
+
+function updateScrollProgress() {
+  const scrollY = window.scrollY + topBarH + 40;
+  
+  // 目录高亮
+  let activeId = 'sec1';
+  sections.forEach(sec => {
+    if (sec.offsetTop <= scrollY) activeId = sec.id;
+  });
+  tocItems.forEach(item => {
+    item.classList.toggle('active', item.dataset.target === activeId);
+  });
+  
+  // 进度条 = 已经看到第几个 q-card / 总数
+  let lastVisible = 0;
+  qCards.forEach((card, i) => {
+    if (card.offsetTop <= scrollY) lastVisible = i + 1;
+  });
+  progressFill.style.width = ((lastVisible / qCards.length) * 100) + '%';
+}
+
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+updateScrollProgress();
+
 // 选项选择
 document.querySelectorAll('.options').forEach(group => {
   group.addEventListener('click', e => {
     const opt = e.target.closest('.option');
     if (!opt) return;
     const type = group.dataset.type;
-    // 单选：取消同组其他选中
     if (type === 'single') {
       group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
       opt.classList.add('selected');
     } else if (type === 'conditional') {
       group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
       opt.classList.add('selected');
-      // 条件输入
       const cond = group.parentElement.querySelector('.conditional');
       if (cond) cond.classList.toggle('show', opt.dataset.value === '不太愿意');
     }
-    updateProgress();
+    scoreByScroll();
   });
 });
 
@@ -467,9 +534,26 @@ document.querySelectorAll('.likert').forEach(l => {
     if (!btn) return;
     l.querySelectorAll('.likert-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    updateProgress();
+    scoreByScroll();
   });
 });
+
+// 混合进度：填答+滚动各占50%
+function scoreByScroll() {
+  const total = qCards.length;
+  let answered = 0;
+  qCards.forEach(card => {
+    const opts = card.querySelectorAll('.option.selected, .likert-btn.selected');
+    if (opts.length > 0) answered++;
+  });
+  const scrollY = window.scrollY + topBarH + 40;
+  let lastVisible = 0;
+  qCards.forEach((card, i) => {
+    if (card.offsetTop <= scrollY) lastVisible = i + 1;
+  });
+  const pct = Math.round(((answered / total) * 0.5 + (lastVisible / total) * 0.5) * 100);
+  progressFill.style.width = Math.max(pct, (lastVisible / total) * 50) + '%';
+}
 
 // 排序互斥
 const r1 = document.getElementById('rank1'), r2 = document.getElementById('rank2'), r3 = document.getElementById('rank3');
@@ -486,17 +570,6 @@ if (r1 && r2 && r3) {
       });
     });
   });
-}
-
-// 进度
-function updateProgress() {
-  const total = document.querySelectorAll('.q-card').length;
-  let answered = 0;
-  document.querySelectorAll('.q-card').forEach(card => {
-    const opts = card.querySelectorAll('.option.selected, .likert-btn.selected');
-    if (opts.length > 0) answered++;
-  });
-  document.getElementById('progress').style.width = ((answered / total) * 100) + '%';
 }
 
 </script>
