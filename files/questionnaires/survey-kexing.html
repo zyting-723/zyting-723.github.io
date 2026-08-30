@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>先算算你自己的账</title>
+<style>
+:root{--bg:#f8f8f6;--card:#fff;--text:#1a1a1a;--text-secondary:#666;--border:#e8e8e4;--accent:#2c2c2c;--tag-bg:#f4f4f0;--divider:#eee;--option-hover:#f6f6f4;--input-border:#ddd;--section-label:#888;--gain:#3f7a58;--gain-bg:#eef5f0;--eat:#c97b5a;--other:#b8b8b0}
+@media (prefers-color-scheme: dark){:root{--bg:#1a1a1a;--card:#242424;--text:#e8e8e4;--text-secondary:#999;--border:#333;--accent:#e8e8e4;--tag-bg:#2a2a2a;--divider:#2e2e2e;--option-hover:#2a2a2a;--input-border:#444;--section-label:#888;--gain:#7ab894;--gain-bg:#26332b;--eat:#d99a78;--other:#8a8a84}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.top-bar{flex-shrink:0;padding-top:env(safe-area-inset-top,0px);background:var(--card);border-bottom:1px solid var(--divider)}
+.progress-row{display:flex;align-items:center;gap:10px;padding:10px 16px 12px}
+.progress-bar{flex:1;height:4px;background:var(--divider);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease;width:0}
+.progress-num{font-size:12px;font-weight:600;color:var(--section-label);white-space:nowrap;min-width:36px;text-align:right}
+.stage{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.wrap{max-width:600px;width:100%;margin:0 auto;padding:20px 20px 24px}
+.step{display:none}
+.step.active{display:block;animation:stepIn .28s ease}
+@keyframes stepIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.q-num{font-size:12px;font-weight:600;color:var(--section-label);letter-spacing:.08em;margin-bottom:10px}
+.q-title{font-size:21px;font-weight:700;margin-bottom:8px;line-height:1.35}
+.q-title-2{margin-top:30px}
+#q2wrap{display:none}
+#q2wrap.show{display:block;animation:fbIn .35s ease}
+#q3wrap{display:none}
+#q3wrap.show{display:block;animation:fbIn .35s ease}
+#reason-wrap{display:none}
+#reason-wrap.show{display:block;animation:fbIn .35s ease}
+.q-sub{font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.55}
+.q-sub b{color:var(--gain);font-weight:700}
+.options{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.option{display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;user-select:none}
+.option:active{background:var(--option-hover);border-color:var(--text-secondary)}
+.option.selected{background:var(--accent);border-color:var(--accent)}
+.option.selected .option-text{color:var(--bg)}
+.option.selected .radio{border-color:var(--bg)}
+.option.selected .radio::after{background:var(--bg)}
+.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;position:relative}
+.radio::after{content:"";position:absolute;top:3px;left:3px;width:10px;height:10px;border-radius:50%;background:transparent}
+.option-text{font-size:15px;font-weight:500;line-height:1.45}
+.feedback{display:none;margin-top:16px;padding:14px 16px;background:var(--gain-bg);border:1px solid var(--gain);border-radius:12px;font-size:14.5px;line-height:1.6}
+.feedback.show{display:block;animation:fbIn .3s ease}
+@keyframes fbIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.feedback b{color:var(--gain);font-weight:700}
+.fb-cost{font-size:13.5px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px}
+.fb-cost b{color:var(--text);font-weight:600}
+.fb-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin-bottom:8px}
+.fb-bar .seg{height:100%}
+.seg-eat{background:var(--eat)}
+.seg-other{background:var(--other)}
+.seg-save{background:var(--gain)}
+.fb-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-bottom:12px}
+.fb-legend span{display:inline-flex;align-items:center;gap:5px}
+.fb-legend i{width:8px;height:8px;border-radius:2px;display:inline-block;flex-shrink:0}
+.fb-concl{font-size:15px;line-height:1.55;font-weight:600;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--divider)}
+.fb-concl b{color:var(--gain);font-weight:800;font-size:20px}
+.fb-concl b.assume{font-size:16px;font-weight:700}
+.fb-gap{font-size:13.5px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px;padding:10px 12px;background:var(--tag-bg);border-radius:8px}
+.fb-gap b{color:var(--text);font-weight:600}
+.fb-tip{font-size:13.5px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px}
+.fb-tip b{color:var(--gain);font-weight:600}
+.field{margin-bottom:16px}
+.field-label{font-size:13px;font-weight:600;margin-bottom:6px}
+.field-label .opt{font-weight:400;color:var(--section-label);font-size:12px}
+.field-input{width:100%;padding:14px 16px;font-size:15px;font-family:inherit;border:1.5px solid var(--input-border);border-radius:12px;background:var(--card);color:var(--text);outline:none;transition:border-color .15s}
+.field-input:focus{border-color:var(--accent)}
+.field-input::placeholder{color:var(--section-label)}
+.footer{flex-shrink:0;padding:12px 20px calc(14px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--divider)}
+.footer-inner{max-width:600px;margin:0 auto;display:flex;gap:12px}
+.btn{flex:1;padding:15px 16px;font-size:16px;font-weight:600;font-family:inherit;border-radius:12px;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;text-align:center}
+.btn-primary{background:var(--accent);color:var(--bg)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--text-secondary);border:1.5px solid var(--border)}
+.done{text-align:center;padding-top:40px}
+.done-mark{width:72px;height:72px;border-radius:50%;margin:0 auto 20px;background:var(--gain-bg);border:2px solid var(--gain);display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--gain);font-weight:700}
+.done-title{font-size:22px;font-weight:700;margin-bottom:12px}
+.done-text{font-size:15px;color:var(--text-secondary);line-height:1.7;max-width:400px;margin:0 auto}
+@media (max-width:380px){.wrap{padding:16px 16px 20px}.q-title{font-size:19px}.option{padding:13px 14px}.option-text{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="progress-row">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <span class="progress-num" id="progressNum">1/2</span>
+  </div>
+</div>
+<div class="stage"><div class="wrap">
+
+  <div class="step active" data-step="1">
+    <div class="q-num">第 1 题 / 共 2 题</div>
+    <div class="q-title">你预估毕业后，每月房租 + 吃饭，大概要花多少？</div>
+    <div class="q-sub">先算一笔你自己最清楚的小账。</div>
+    <div class="options">
+      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">2000 以下</span></div>
+      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">2000 ~ 3500</span></div>
+      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">3500 ~ 5000</span></div>
+      <div class="option" data-value="d"><div class="radio"></div><span class="option-text">5000 以上</span></div>
+    </div>
+    <div class="feedback" id="fb1"></div>
+
+    <div id="q2wrap">
+      <div class="q-title q-title-2">毕业后，你更想去哪里工作？</div>
+      <div class="q-sub">城市决定你的吃住开销，也决定你要多少薪水才存得下钱。</div>
+      <div class="options">
+        <div class="option" data-value="a"><div class="radio"></div><span class="option-text">一线大城市（北京、上海、广州、深圳）</span></div>
+        <div class="option" data-value="b"><div class="radio"></div><span class="option-text">新一线 / 省会（成都、杭州、武汉、西安等）</span></div>
+        <div class="option" data-value="c"><div class="radio"></div><span class="option-text">三四线 / 小城市</span></div>
+        <div class="option" data-value="d"><div class="radio"></div><span class="option-text">没想过，去哪都行</span></div>
+      </div>
+      <div class="feedback" id="fb2"></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="2">
+    <div class="q-num">第 2 题 / 共 2 题</div>
+    <div class="q-title">科兴制药，想开一场直播</div>
+    <div class="q-sub">你刚算的房租、日常消费，是每月最大的一笔。科兴<b>包住、包工作餐</b>，这两块直接省掉。直播里，再聊聊药学生毕业后的真实出路。</div>
+    <div class="options">
+      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">愿意，一定来</span></div>
+      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">感兴趣，看时间</span></div>
+      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">不太想来</span></div>
+    </div>
+    <div id="q3wrap">
+      <div class="q-title q-title-2" id="contact-title">留个联系方式，开播提醒你</div>
+      <div class="q-sub" id="contact-sub">开播前会把提醒发给你，不会骚扰。</div>
+      <div class="field"><div class="field-label">微信 / 手机号</div><input class="field-input" id="contact" type="text" placeholder="留下一个能联系到你的方式"></div>
+      <div class="q-title q-title-2">留一下你的学校</div>
+      <div class="q-sub">方便我们确认这场直播，是不是讲到了你真正关心的东西。</div>
+      <div class="field"><div class="field-label">学校 <span class="opt">（专业选填）</span></div><input class="field-input" id="school" type="text" placeholder="例如：兰州大学 · 药学"></div>
+      <div id="reason-wrap">
+        <div class="q-title q-title-2">方便说说，哪里不太合适吗？</div>
+        <div class="q-sub">你的想法，会帮我们把这场直播做得更实在。</div>
+        <div class="options" id="reason-options">
+          <div class="option" data-value="不感兴趣"><div class="radio"></div><span class="option-text">不感兴趣</span></div>
+          <div class="option" data-value="专业不对口"><div class="radio"></div><span class="option-text">专业不对口</span></div>
+          <div class="option" data-value="没时间"><div class="radio"></div><span class="option-text">没时间</span></div>
+          <div class="option" data-value="其他"><div class="radio"></div><span class="option-text">其他</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" data-step="done">
+    <div class="done">
+      <div class="done-mark">✓</div>
+      <div class="done-title" id="done-title">已收到你的预约</div>
+      <div class="done-text" id="done-text">科兴制药开播前，我们会把提醒发到你的微信 / 手机。直播里，会把「包吃住到底能存下多少」这笔账，算清楚给你看。</div>
+    </div>
+  </div>
+
+</div></div>
+<div class="footer">
+  <div class="footer-inner">
+    <button class="btn btn-ghost" id="prevBtn" style="display:none;">上一题</button>
+    <button class="btn btn-primary" id="nextBtn" disabled>下一题</button>
+  </div>
+</div>
+<script>
+(function(){
+  var TOTAL=2, steps=document.querySelectorAll('.step[data-step]'), cur=0;
+  var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  var progressFill=document.getElementById('progress'), progressNum=document.getElementById('progressNum');
+  var q1Value=null; // 花多少档位（a/b/c/d）
+  var q2Value=null; // 城市选择（a/b/c/d）
+  var q3Value=null; // 科兴直播意愿（a/b/c）
+
+  var cityData={a:{name:'一线城市',rent:'3000-4500',rentMid:3750,living:'2500-3000',livingMid:2750,save:'2000',rentPct:44,livingPct:32,savePct:24},b:{name:'新一线',rent:'2000-3000',rentMid:2500,living:'2000-2300',livingMid:2150,save:'2000',rentPct:38,livingPct:32,savePct:30},c:{name:'三四线城市',rent:'1000-1500',rentMid:1250,living:'1400-1800',livingMid:1600,save:'2000',rentPct:26,livingPct:33,savePct:41},d:{text:'还没想过去哪也没关系。房租和日常开销这笔钱，不管去哪，都是固定要从薪水里出的。<br>你也可以点一下上面某个城市试试，算出要多少薪水才存得下钱，心里会更有数。'}};
+  var q1Label={a:'2000 以下',b:'2000 ~ 3500',c:'3500 ~ 5000',d:'5000 以上'};
+  var savePic={a:'够你攒出一趟说走就走的远门',b:'够你换台新手机，还能给家里添点东西',c:'在三四线，够顶大半年房租和日常零花'};
+  var q1Bound={a:{lo:0,hi:2000},b:{lo:2000,hi:3500},c:{lo:3500,hi:5000},d:{lo:5000,hi:99999}};
+  var amountMap={a:'不到 2.4 万',b:'2.4 到 4.2 万',c:'4.2 到 6 万',d:'6 万以上'};
+  var fb1=document.getElementById('fb1');
+  var fb2=document.getElementById('fb2');
+
+  function isAnswered(i){
+    var st=steps[i].dataset.step;
+    if(st==='done') return true;
+    if(st==='1') return !!q1Value && !!q2Value; // 第1页：花多少 + 城市 都选
+    if(st==='2') return !!q3Value && document.getElementById('school').value.trim()!=='' && document.getElementById('contact').value.trim()!==''; // 第2页：科兴 + 学校 + 联系方式
+    return false;
+  }
+
+  function countAnswered(){
+    var c=0;
+    for(var i=0;i<steps.length;i++){
+      if(steps[i].dataset.step==='done') continue;
+      if(isAnswered(i)) c++;
+    }
+    return c;
+  }
+
+  function render(i){
+    updateQ2Visibility();
+    updateQ3Visibility();
+    steps.forEach(function(s,idx){s.classList.toggle('active',idx===i);});
+    var st=steps[i].dataset.step;
+    if(st==='done'){ prevBtn.style.display='none'; nextBtn.style.display='none'; }
+    else{
+      prevBtn.style.display = i===0 ? 'none':'block';
+      nextBtn.style.display='block';
+      nextBtn.textContent = (i===TOTAL-1)?'提交':'下一题';
+      nextBtn.disabled = !isAnswered(i);
+    }
+    var c=countAnswered();
+    progressFill.style.width=(c/TOTAL*100)+'%';
+    progressNum.textContent=(st==='done'?TOTAL:i+1)+'/'+TOTAL;
+  }
+
+  // 题2 城市反馈：结合题1 动态算账（结论前置）
+  function renderFb2(){
+    if(!q2Value){ fb2.classList.remove('show'); return; }
+    var d=cityData[q2Value]||{};
+    if(!d.rent){
+      fb2.innerHTML='<div class="fb-gap">'+d.text+'</div>';
+      fb2.classList.add('show');
+      return;
+    }
+    var total=d.rentMid+d.livingMid;   // 城市真实总开销（中值）
+    var salary=total+2000;             // 月薪门槛
+    var gap='';
+    if(q1Value && q1Label[q1Value]){
+      var label=q1Label[q1Value];
+      var bd=q1Bound[q1Value];
+      if(total < bd.lo){
+        var less=bd.lo-total;
+        var year=less*12;
+        var yearTxt = year>=10000 ? (year/10000).toFixed(1)+' 万' : Math.round(year)+' 元';
+        gap='<div class="fb-gap">你的预估是 <b>'+label+'</b>/月，这里实际要 <b>约 '+total+'</b>/月，比你预估的最少还要<b style="color:var(--gain)">少 '+less+'</b>。</div>';
+        if(less>=1500){
+          gap+='<div class="fb-tip">这笔钱一年就是 <b>'+yearTxt+'</b>，够你毕业第一年换台新手机，再出去旅趟游。</div>';
+        }else if(less>=500){
+          gap+='<div class="fb-tip">这笔钱一年就是 <b>'+yearTxt+'</b>，够你换一部新手机，或者每月多吃几顿好的。</div>';
+        }else{
+          gap+='<div class="fb-tip">这笔钱一年就是 <b>'+yearTxt+'</b>，够你一年里多来几场说走就走的周边游。</div>';
+        }
+      }else if(total > bd.hi){
+        var more=total-bd.hi;
+        var year=more*12;
+        var yearTxt = year>=10000 ? (year/10000).toFixed(1)+' 万' : Math.round(year)+' 元';
+        gap='<div class="fb-gap">你的预估是 <b>'+label+'</b>/月，这里实际要 <b>约 '+total+'</b>/月，比你预估的最多还要<b style="color:var(--eat)">多 '+more+'</b>。</div>';
+        if(more>=3000){
+          gap+='<div class="fb-tip">这是选城市时最容易漏算的一笔，一年下来就是 <b style="color:var(--eat)">'+yearTxt+'</b>，拿去做理财，也能生点零花钱，直播里会帮你把它算清。</div>';
+        }else if(more>=1500){
+          gap+='<div class="fb-tip">一年下来就是 <b style="color:var(--eat)">'+yearTxt+'</b>，差不多一部新手机再加一次出境游的钱。</div>';
+        }else{
+          gap+='<div class="fb-tip">一年下来就是 <b style="color:var(--eat)">'+yearTxt+'</b>，差不多一次出境游的钱。</div>';
+        }
+      }else{
+        if(q1Value==='d'){
+          var moreD=total-bd.lo;
+          var yearD=moreD*12;
+          var yearDtxt = yearD>=10000 ? (yearD/10000).toFixed(1)+' 万' : Math.round(yearD)+' 元';
+          gap='<div class="fb-gap">你的预估是 <b>'+label+'</b>/月，这里实际 <b>约 '+total+'</b>/月，比你预估的下限还要<b style="color:var(--eat)">多 '+moreD+'</b>。</div>';
+          gap+='<div class="fb-tip">这笔钱一年就是 <b style="color:var(--eat)">'+yearDtxt+'</b>，差不多一部新手机再加一次出境游的钱，做预算时把这块留出来。</div>';
+        }else{
+          gap='<div class="fb-gap">你的预估是 <b>'+label+'</b>/月，这里实际 <b>约 '+total+'</b>/月，正好在你预估的范围内。</div>';
+        }
+      }
+    }
+    fb2.innerHTML=
+      '<div class="fb-concl">每月存下 <b class="assume">2000</b>，一年就是 2.4 万——在'+d.name+'，'+savePic[q2Value]+'。想做到，月薪至少要 <b>约 '+salary+'</b>。</div>'+
+      '<div class="fb-cost">'+d.name+' · 合租单间 <b>'+d.rent+'</b> /月，日常消费（含吃饭）<b>'+d.living+'</b> /月</div>'+
+      '<div class="fb-bar"><div class="seg seg-eat" style="width:'+d.rentPct+'%"></div><div class="seg seg-other" style="width:'+d.livingPct+'%"></div><div class="seg seg-save" style="width:'+d.savePct+'%"></div></div>'+
+      '<div class="fb-legend"><span><i style="background:var(--eat)"></i>房租 '+d.rent+'</span><span><i style="background:var(--other)"></i>日常消费 '+d.living+'</span><span><i style="background:var(--gain)"></i>能存 '+d.save+'</span></div>'+
+      gap;
+    fb2.classList.add('show');
+  }
+
+  // 选完「花多少」后，城市题目才出现
+  function updateQ2Visibility(){
+    var wrap=document.getElementById('q2wrap');
+    if(q1Value){ wrap.classList.add('show'); } else { wrap.classList.remove('show'); }
+  }
+
+  // 选完「科兴直播」后，学校 + 联系方式才出现
+  function updateQ3Visibility(){
+    var wrap=document.getElementById('q3wrap');
+    if(q3Value){ wrap.classList.add('show'); } else { wrap.classList.remove('show'); }
+  }
+
+  // 「不太想来」分支：换联系方式的说法 + 多问一句原因
+  function updateQ3Content(){
+    var reasonWrap=document.getElementById('reason-wrap');
+    var ct=document.getElementById('contact-title');
+    var cs=document.getElementById('contact-sub');
+    var dt=document.getElementById('done-title');
+    var dx=document.getElementById('done-text');
+    if(q3Value==='c'){
+      reasonWrap.classList.add('show');
+      ct.textContent='留个联系方式';
+      cs.textContent='这次不合适也没关系，以后有合适的再找你。';
+      dt.textContent='已收到你的反馈';
+      dx.textContent='谢谢你的建议，我们会把这场直播做得更实在。之后有合适的，再联系你。';
+    }else{
+      reasonWrap.classList.remove('show');
+      ct.textContent='留个联系方式，开播提醒你';
+      cs.textContent='开播前会把提醒发给你，不会骚扰。';
+      dt.textContent='已收到你的预约';
+      dx.textContent='科兴制药开播前，我们会把提醒发到你的微信 / 手机。直播里，会把「包吃住到底能存下多少」这笔账，算清楚给你看。';
+    }
+  }
+
+  // 选项点击
+  document.querySelectorAll('.options').forEach(function(group,gi){
+    group.addEventListener('click',function(e){
+      var opt=e.target.closest('.option'); if(!opt) return;
+      group.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');});
+      opt.classList.add('selected');
+      if(gi===0){  // 花多少
+        q1Value=opt.dataset.value;
+        var a=amountMap[opt.dataset.value]||'';
+        fb1.innerHTML='按你的选择，一年大概 <b>'+a+'</b> 花在吃住上。';
+        fb1.classList.add('show');
+        updateQ2Visibility();  // 选完花多少，城市题目出现
+        renderFb2();  // 城市已选则刷新差额联动
+      }else if(gi===1){  // 城市
+        q2Value=opt.dataset.value;
+        renderFb2();
+      }else if(gi===2){  // 科兴
+        q3Value=opt.dataset.value;
+        updateQ3Visibility();
+        updateQ3Content();
+      }
+      render(cur);
+    });
+  });
+
+  // 输入框
+  ['school','contact'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',function(){ render(cur); });
+  });
+
+  nextBtn.addEventListener('click',function(){
+    if(nextBtn.disabled) return;
+    if(cur===TOTAL-1){ render(TOTAL); return; } // 最后一题提交 -> 完成页
+    cur++; render(cur);
+  });
+  prevBtn.addEventListener('click',function(){ if(cur>0){ cur--; render(cur); } });
+
+  render(0);
+})();
+</script>
+</body>
+</html>
