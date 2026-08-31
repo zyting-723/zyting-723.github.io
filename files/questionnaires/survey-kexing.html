@@ -109,12 +109,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
       <div class="option" data-value="d"><div class="radio"></div><span class="option-text">稳得住的心：不折腾、离家近</span></div>
     </div>
 
-    <div class="q-title q-title-2">想象你第一个「上班的地方」</div>
-    <div class="q-sub">凭第一感觉选，不用想太深。</div>
+    <div class="q-title q-title-2">想象你上班的场景</div>
+    <div class="q-sub">哪种更像你想要的？凭第一感觉选，不用想太深。</div>
     <div class="options">
-      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">干净整洁的车间，机器运转、穿工装</span></div>
-      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">明亮工位、落地窗的办公室</span></div>
-      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">没有固定地点，到处跑</span></div>
+      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">在洁净的实验室做实验、盯数据</span></div>
+      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">在明亮的办公楼里办公</span></div>
+      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">经常在外面跑、见不同的人</span></div>
       <div class="option" data-value="d"><div class="radio"></div><span class="option-text">还没想过，先去了再说</span></div>
     </div>
   </div>
@@ -198,7 +198,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   var q3Value=null; // 科兴直播意愿（a/b/c）
   var q4Value=null; // 夸夸本事（a/b/c/d）
   var q5Value=null; // 挑工作看重什么（a/b/c/d）
-  var q6Value=null; // 想象上班的地方（a/b/c/d）
+  var q6Value=null; // 想象上班的场景（a/b/c/d）
 
   var cityData={a:{name:'一线城市',rent:'3000-4500',rentMid:3750,living:'2500-3000',livingMid:2750,save:'2000',rentPct:44,livingPct:32,savePct:24},b:{name:'新一线',rent:'2000-3000',rentMid:2500,living:'2000-2300',livingMid:2150,save:'2000',rentPct:38,livingPct:32,savePct:30},c:{name:'三四线城市',rent:'1000-1500',rentMid:1250,living:'1400-1800',livingMid:1600,save:'2000',rentPct:26,livingPct:33,savePct:41},d:{text:'还没想过去哪也没关系。房租和日常开销这笔钱，不管去哪，都是固定要从薪水里出的。<br>你也可以点一下上面某个城市试试，算出要多少薪水才存得下钱，心里会更有数。'}};
   var q1Label={a:'2000 以下',b:'2000 ~ 3500',c:'3500 ~ 5000',d:'5000 以上'};
@@ -347,7 +347,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
         q4Value=opt.dataset.value;
       }else if(gi===1){  // 挑工作看重什么
         q5Value=opt.dataset.value;
-      }else if(gi===2){  // 想象上班的地方
+      }else if(gi===2){  // 想象上班的场景
         q6Value=opt.dataset.value;
       }else if(gi===3){  // 花多少
         q1Value=opt.dataset.value;
