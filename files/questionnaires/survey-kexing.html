@@ -39,6 +39,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .option.selected .radio::after{background:var(--bg)}
 .radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;position:relative}
 .radio::after{content:"";position:absolute;top:3px;left:3px;width:10px;height:10px;border-radius:50%;background:transparent}
+.option.multi .radio{border-radius:6px}
+.option.multi .radio::after{border-radius:3px}
 .option-text{font-size:15px;font-weight:500;line-height:1.45}
 .feedback{display:none;margin-top:16px;padding:14px 16px;background:var(--gain-bg);border:1px solid var(--gain);border-radius:12px;font-size:14.5px;line-height:1.6}
 .feedback.show{display:block;animation:fbIn .3s ease}
@@ -92,12 +94,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   <div class="step active" data-step="1">
     <div class="q-num">第 1 步 / 共 3 步</div>
     <div class="q-title">先夸夸你自己</div>
-    <div class="q-sub">下面这些「本事」，哪一项你最得意？</div>
+    <div class="q-sub">选最像你的，可多选（最多 3 个）</div>
     <div class="options">
-      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">手巧：装东西、修东西、做实验，都难不倒我</span></div>
-      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">心细：数字、流程、细节，很少出错</span></div>
-      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">能扛：压力再大也不慌，说做完就做完</span></div>
-      <div class="option" data-value="d"><div class="radio"></div><span class="option-text">学得快：新东西上手快，琢磨琢磨就会</span></div>
+      <div class="option multi" data-value="a"><div class="radio"></div><span class="option-text">手巧：装东西、修东西、做实验，都难不倒我</span></div>
+      <div class="option multi" data-value="b"><div class="radio"></div><span class="option-text">心细：数字、流程、细节，很少出错</span></div>
+      <div class="option multi" data-value="c"><div class="radio"></div><span class="option-text">能扛：压力再大也不慌，说做完就做完</span></div>
+      <div class="option multi" data-value="d"><div class="radio"></div><span class="option-text">学得快：新东西上手快，琢磨琢磨就会</span></div>
+      <div class="option multi" data-value="e"><div class="radio"></div><span class="option-text">善沟通：跟人聊得来，能把事说清楚</span></div>
+      <div class="option multi" data-value="f"><div class="radio"></div><span class="option-text">有主见：遇事能自己拿主意</span></div>
+      <div class="option multi" data-value="g"><div class="radio"></div><span class="option-text">坐得住：一件事能钻进去，做很久不烦</span></div>
+      <div class="option multi" data-value="h"><div class="radio"></div><span class="option-text">靠谱：答应的事，一定给你办成</span></div>
     </div>
 
     <div class="q-title q-title-2">挑第一份工作，你最看重哪一点？</div>
@@ -196,7 +202,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   var q1Value=null; // 花多少档位（a/b/c/d）
   var q2Value=null; // 城市选择（a/b/c/d）
   var q3Value=null; // 科兴直播意愿（a/b/c）
-  var q4Value=null; // 夸夸本事（a/b/c/d）
+  var q4Value=[]; // 夸夸本事（多选，最多3个，a-h）
   var q5Value=null; // 挑工作看重什么（a/b/c/d）
   var q6Value=null; // 想象上班的场景（a/b/c/d）
 
@@ -211,7 +217,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   function isAnswered(i){
     var st=steps[i].dataset.step;
     if(st==='done') return true;
-    if(st==='1') return !!q4Value && !!q5Value && !!q6Value; // 第1步：夸夸本事 + 挑工作看重 + 想象上班地方
+    if(st==='1') return q4Value.length>0 && !!q5Value && !!q6Value; // 第1步：夸夸本事(多选) + 挑工作看重 + 想象上班地方
     if(st==='2') return !!q1Value && !!q2Value; // 第2步：花多少 + 城市 都选
     if(st==='3') return !!q3Value && document.getElementById('school').value.trim()!=='' && document.getElementById('contact').value.trim()!==''; // 第3步：科兴 + 学校 + 联系方式
     return false;
@@ -341,28 +347,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   document.querySelectorAll('.options').forEach(function(group,gi){
     group.addEventListener('click',function(e){
       var opt=e.target.closest('.option'); if(!opt) return;
-      group.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');});
-      opt.classList.add('selected');
-      if(gi===0){  // 夸夸本事
-        q4Value=opt.dataset.value;
-      }else if(gi===1){  // 挑工作看重什么
-        q5Value=opt.dataset.value;
-      }else if(gi===2){  // 想象上班的场景
-        q6Value=opt.dataset.value;
-      }else if(gi===3){  // 花多少
-        q1Value=opt.dataset.value;
-        var a=amountMap[opt.dataset.value]||'';
-        fb1.innerHTML='按你的选择，一年大概 <b>'+a+'</b> 花在吃住上。';
-        fb1.classList.add('show');
-        updateQ2Visibility();  // 选完花多少，城市题目出现
-        renderFb2();  // 城市已选则刷新差额联动
-      }else if(gi===4){  // 城市
-        q2Value=opt.dataset.value;
-        renderFb2();
-      }else if(gi===5){  // 科兴
-        q3Value=opt.dataset.value;
-        updateQ3Visibility();
-        updateQ3Content();
+      if(gi===0){  // 夸夸本事（多选，最多3个）
+        var v=opt.dataset.value;
+        var idx=q4Value.indexOf(v);
+        if(idx>=0){ q4Value.splice(idx,1); opt.classList.remove('selected'); }
+        else if(q4Value.length<3){ q4Value.push(v); opt.classList.add('selected'); }
+      }else{
+        group.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');});
+        opt.classList.add('selected');
+        if(gi===1){  // 挑工作看重什么
+          q5Value=opt.dataset.value;
+        }else if(gi===2){  // 想象上班的场景
+          q6Value=opt.dataset.value;
+        }else if(gi===3){  // 花多少
+          q1Value=opt.dataset.value;
+          var a=amountMap[opt.dataset.value]||'';
+          fb1.innerHTML='按你的选择，一年大概 <b>'+a+'</b> 花在吃住上。';
+          fb1.classList.add('show');
+          updateQ2Visibility();  // 选完花多少，城市题目出现
+          renderFb2();  // 城市已选则刷新差额联动
+        }else if(gi===4){  // 城市
+          q2Value=opt.dataset.value;
+          renderFb2();
+        }else if(gi===5){  // 科兴
+          q3Value=opt.dataset.value;
+          updateQ3Visibility();
+          updateQ3Content();
+        }
       }
       render(cur);
     });
