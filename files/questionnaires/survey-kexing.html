@@ -91,6 +91,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
   <div class="step active" data-step="1">
     <div class="q-num">第 1 步 / 共 3 步</div>
+    <div class="q-title">先夸夸你自己</div>
+    <div class="q-sub">下面这些「本事」，哪一项你最得意？</div>
+    <div class="options">
+      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">手巧：装东西、修东西、做实验，都难不倒我</span></div>
+      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">心细：数字、流程、细节，很少出错</span></div>
+      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">能扛：压力再大也不慌，说做完就做完</span></div>
+      <div class="option" data-value="d"><div class="radio"></div><span class="option-text">学得快：新东西上手快，琢磨琢磨就会</span></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="2">
+    <div class="q-num">第 2 步 / 共 3 步</div>
     <div class="q-title">你预估毕业后，每月房租 + 吃饭，大概要花多少？</div>
     <div class="q-sub">先算一笔你自己最清楚的小账。</div>
     <div class="options">
@@ -114,9 +126,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
     </div>
   </div>
 
-
-  <div class="step" data-step="2">
-    <div class="q-num">第 2 步 / 共 3 步</div>
+  <div class="step" data-step="3">
+    <div class="q-num">第 3 步 / 共 3 步</div>
     <div class="q-title">科兴制药，想开一场直播</div>
     <div class="q-sub">你刚算的房租、日常消费，是每月最大的一笔。科兴<b>包住、包工作餐</b>，这两块直接省掉。直播里，再聊聊药学生毕业后的真实出路。</div>
     <div class="options">
@@ -144,36 +155,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
     </div>
   </div>
 
-  <div class="step" data-step="3">
-    <div class="q-num">第 3 步 / 共 3 步</div>
-    <div class="q-title">最后，再夸夸你自己</div>
-    <div class="q-sub">马上就好。这几题没有标准答案，你的答案，会让我们把直播内容做得更对你的胃口。</div>
-    <div class="q-title q-title-2">夸夸我的本事</div>
-    <div class="q-sub">下面这些「本事」，哪一项你最得意？</div>
-    <div class="options">
-      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">手巧：装东西、修东西、做实验，都难不倒我</span></div>
-      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">心细：数字、流程、细节，很少出错</span></div>
-      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">能扛：压力再大也不慌，说做完就做完</span></div>
-      <div class="option" data-value="d"><div class="radio"></div><span class="option-text">学得快：新东西上手快，琢磨琢磨就会</span></div>
-    </div>
-    <div class="q-title q-title-2">夸夸我的眼光</div>
-    <div class="q-sub">挑第一份工作，你最看重哪一点？</div>
-    <div class="options">
-      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">算得清的账：包住包吃、到手能存钱</span></div>
-      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">看得见的路：能学东西、有晋升</span></div>
-      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">过得好生活：城市、通勤、生活丰富</span></div>
-      <div class="option" data-value="d"><div class="radio"></div><span class="option-text">稳得住的心：不折腾、离家近</span></div>
-    </div>
-    <div class="q-title q-title-2">想象你第一个「上班的地方」</div>
-    <div class="q-sub">凭第一感觉选，不用想太深。</div>
-    <div class="options">
-      <div class="option" data-value="a"><div class="radio"></div><span class="option-text">干净整洁的车间，机器运转、穿工装</span></div>
-      <div class="option" data-value="b"><div class="radio"></div><span class="option-text">明亮工位、落地窗的办公室</span></div>
-      <div class="option" data-value="c"><div class="radio"></div><span class="option-text">没有固定地点，到处跑</span></div>
-      <div class="option" data-value="d"><div class="radio"></div><span class="option-text">还没想过，先去了再说</span></div>
-    </div>
-  </div>
-
   <div class="step" data-step="done">
     <div class="done">
       <div class="done-mark">✓</div>
@@ -198,8 +179,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   var q2Value=null; // 城市选择（a/b/c/d）
   var q3Value=null; // 科兴直播意愿（a/b/c）
   var q4Value=null; // 夸夸本事（a/b/c/d）
-  var q5Value=null; // 夸夸眼光（a/b/c/d）
-  var q6Value=null; // 上班画面（a/b/c/d）
 
   var cityData={a:{name:'一线城市',rent:'3000-4500',rentMid:3750,living:'2500-3000',livingMid:2750,save:'2000',rentPct:44,livingPct:32,savePct:24},b:{name:'新一线',rent:'2000-3000',rentMid:2500,living:'2000-2300',livingMid:2150,save:'2000',rentPct:38,livingPct:32,savePct:30},c:{name:'三四线城市',rent:'1000-1500',rentMid:1250,living:'1400-1800',livingMid:1600,save:'2000',rentPct:26,livingPct:33,savePct:41},d:{text:'还没想过去哪也没关系。房租和日常开销这笔钱，不管去哪，都是固定要从薪水里出的。<br>你也可以点一下上面某个城市试试，算出要多少薪水才存得下钱，心里会更有数。'}};
   var q1Label={a:'2000 以下',b:'2000 ~ 3500',c:'3500 ~ 5000',d:'5000 以上'};
@@ -212,9 +191,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   function isAnswered(i){
     var st=steps[i].dataset.step;
     if(st==='done') return true;
-    if(st==='1') return !!q1Value && !!q2Value; // 第1步：花多少 + 城市 都选
-    if(st==='2') return !!q3Value && document.getElementById('school').value.trim()!=='' && document.getElementById('contact').value.trim()!==''; // 第2步：科兴 + 学校 + 联系方式
-    if(st==='3') return !!q4Value && !!q5Value && !!q6Value; // 第3步：夸夸三连都要答
+    if(st==='1') return !!q4Value; // 第1步：夸夸本事
+    if(st==='2') return !!q1Value && !!q2Value; // 第2步：花多少 + 城市 都选
+    if(st==='3') return !!q3Value && document.getElementById('school').value.trim()!=='' && document.getElementById('contact').value.trim()!==''; // 第3步：科兴 + 学校 + 联系方式
     return false;
   }
 
@@ -344,26 +323,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
       var opt=e.target.closest('.option'); if(!opt) return;
       group.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');});
       opt.classList.add('selected');
-      if(gi===0){  // 花多少
+      if(gi===0){  // 夸夸本事
+        q4Value=opt.dataset.value;
+      }else if(gi===1){  // 花多少
         q1Value=opt.dataset.value;
         var a=amountMap[opt.dataset.value]||'';
         fb1.innerHTML='按你的选择，一年大概 <b>'+a+'</b> 花在吃住上。';
         fb1.classList.add('show');
         updateQ2Visibility();  // 选完花多少，城市题目出现
         renderFb2();  // 城市已选则刷新差额联动
-      }else if(gi===1){  // 城市
+      }else if(gi===2){  // 城市
         q2Value=opt.dataset.value;
         renderFb2();
-      }else if(gi===2){  // 科兴
+      }else if(gi===3){  // 科兴
         q3Value=opt.dataset.value;
         updateQ3Visibility();
         updateQ3Content();
-      }else if(gi===4){  // 夸夸本事
-        q4Value=opt.dataset.value;
-      }else if(gi===5){  // 夸夸眼光
-        q5Value=opt.dataset.value;
-      }else if(gi===6){  // 上班画面
-        q6Value=opt.dataset.value;
       }
       render(cur);
     });
