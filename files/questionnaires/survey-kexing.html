@@ -184,8 +184,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 </div></div>
 <div class="footer">
   <div class="footer-inner">
-    <button class="btn btn-ghost" id="prevBtn" style="display:none;">上一题</button>
-    <button class="btn btn-primary" id="nextBtn" disabled>下一题</button>
+    <button class="btn btn-ghost" id="prevBtn" style="display:none;">上一页</button>
+    <button class="btn btn-primary" id="nextBtn" disabled>下一页</button>
   </div>
 </div>
 <script>
@@ -235,7 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
     else{
       prevBtn.style.display = i===0 ? 'none':'block';
       nextBtn.style.display='block';
-      nextBtn.textContent = (i===TOTAL-1)?'提交':'下一题';
+      nextBtn.textContent = (i===TOTAL-1)?'提交':'下一页';
       nextBtn.disabled = !isAnswered(i);
     }
     var c=countAnswered();
