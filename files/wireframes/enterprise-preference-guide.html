@@ -1,0 +1,442 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>关于我的理解｜主路径与内容盘点</title>
+<style>
+:root{--bg:#eef0ef;--paper:#fff;--ink:#171b1d;--muted:#657075;--line:#c8cdcf;--soft:#e8ebea;--green:#176957;--green-soft:#dfede8}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.55}button{font:inherit}button:focus-visible,a:focus-visible{outline:3px solid #85b7aa;outline-offset:3px}::selection{background:#bcd9d1}.page{width:min(1180px,calc(100% - 32px));margin:auto;padding:32px 0 80px}.hero{display:flex;justify-content:space-between;gap:36px;align-items:end;padding-bottom:20px;border-bottom:1px solid var(--line)}h1{max-width:690px;margin:0;font-size:clamp(32px,5vw,56px);line-height:1.05;letter-spacing:-.04em}.hero p{max-width:400px;margin:0;color:var(--muted);font-size:13px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);margin:24px 0 34px;border-bottom:1px solid var(--line)}.tab{padding:13px 10px;border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);cursor:pointer;text-align:center}.tab b{display:block;font-size:14px}.tab span{font-size:10px}.tab[aria-selected=true]{border-color:var(--green);color:var(--ink)}.panel,.screen-view{display:none}.panel.active,.screen-view.active{display:block}.panel-head{max-width:780px;margin:0 auto 18px;text-align:center}.panel-head h2{margin:0;font-size:clamp(24px,4vw,38px);letter-spacing:-.03em}.panel-head p{margin:7px 0 0;color:var(--muted);font-size:13px}.flow{display:flex;justify-content:center;gap:10px;margin:0 auto 22px;color:var(--muted);font-size:11px}.flow b{color:var(--ink)}.stage{display:grid;place-items:center}.phone{position:relative;width:390px;min-height:790px;overflow:hidden;border:1.5px solid var(--ink);border-radius:30px;background:var(--paper)}.phone:before{content:"";position:absolute;z-index:4;top:9px;left:50%;width:70px;height:18px;transform:translateX(-50%);border-radius:99px;background:var(--ink)}.status{display:flex;justify-content:space-between;padding:12px 20px 8px;font-size:10px;font-weight:750}.nav{display:grid;grid-template-columns:48px 1fr 48px;height:50px;align-items:center;border-bottom:1px solid var(--line)}.nav strong{text-align:center;font-size:14px}.icon-btn{display:grid;width:44px;height:44px;place-items:center;border:0;background:none;cursor:pointer}.icon-btn svg,.next-link svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.8}.screen{padding:16px 15px 34px}.turn{display:flex;gap:8px;margin-bottom:14px}.avatar{display:grid;flex:0 0 32px;width:32px;height:32px;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--soft);font-size:9px;font-weight:800}.message{min-width:0;flex:1}.message p{margin:0 0 10px;font-size:12px}.result-card{width:100%;padding:14px;border:1px solid var(--ink);background:var(--paper);cursor:pointer;text-align:left}.result-card:hover{background:#fbfcfb}.result-card h3{margin:0 0 3px;font-size:15px}.result-card>p{margin:0 0 12px;color:var(--muted);font-size:10px}.chart-bars{display:grid;gap:7px}.bar{display:grid;grid-template-columns:84px 1fr 34px;gap:8px;align-items:center;font-size:9px}.track{height:8px;background:var(--soft)}.fill{height:100%;background:var(--green)}.detail-bars{gap:10px;padding:14px;background:var(--soft)}.detail-bars .bar{grid-template-columns:96px 1fr 34px;font-size:10px}.detail-bars .track{height:10px;background:#d5dada}.card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:13px;padding-top:10px;border-top:1px solid var(--line);font-size:9px}.card-foot b{color:var(--green)}.mentor-note{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:11px}.next-link{display:flex;width:100%;min-height:44px;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding:9px 0;border:0;border-top:1px solid var(--line);background:none;color:var(--green);font-size:11px;font-weight:750;text-align:left;cursor:pointer}.next-link:hover{color:var(--ink)}.next-link svg{flex:0 0 18px;width:18px;height:18px}.detail-title{margin:4px 0 2px;font-size:21px}.detail-sub{margin:0 0 16px;color:var(--muted);font-size:10px}.insight{padding:14px 0;border-bottom:1px solid var(--line)}.insight h4{margin:0 0 6px;font-size:12px}.insight p{margin:0;color:#323a3e;font-size:11px}.quote{padding:12px;background:var(--green-soft);color:#24463e;font-size:11px}.rank{display:grid;gap:7px}.rank div{display:grid;grid-template-columns:25px 1fr auto;gap:8px;align-items:center;padding:9px;background:var(--soft);font-size:9px}.rank strong{display:grid;width:25px;height:25px;place-items:center;border-radius:50%;background:var(--paper)}.gallery{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{padding:0;border:1px solid var(--line);border-radius:13px;background:var(--paper);overflow:hidden;cursor:pointer;text-align:left}.cover{display:grid;height:104px;place-items:center;background:var(--soft);color:var(--muted);font-size:9px}.tile-copy{padding:9px}.tile-head{display:flex;justify-content:space-between;gap:5px;font-size:9px}.tile-copy p{margin:4px 0 0;color:var(--muted);font-size:8px}.decision{margin:20px auto 0;padding:11px 14px;background:var(--green-soft);color:#24463e;font-size:11px;max-width:650px;text-align:center}.inventory{display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px}.inventory-nav{position:sticky;top:16px;align-self:start}.inventory-nav a{display:block;padding:10px 0;border-top:1px solid var(--line);color:var(--ink);font-size:11px;text-decoration:none}.summary{padding:12px;background:var(--green-soft);font-size:11px}.inventory section{scroll-margin-top:16px;margin-bottom:36px}.inventory h3{margin:0 0 6px;font-size:24px}.inventory section>p{margin:0 0 14px;color:var(--muted);font-size:12px}.table-wrap{overflow:auto;border-top:1px solid var(--ink)}table{width:100%;min-width:760px;border-collapse:collapse;background:var(--paper);font-size:11px}th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--soft);font-size:10px}.type{white-space:nowrap;font-weight:750}.source{color:var(--muted);font-size:9px}details{border-top:1px solid var(--line)}summary{padding:13px 0;font-size:12px;font-weight:750;cursor:pointer}.absence{margin:0;padding:0;list-style:none}.absence li{display:grid;grid-template-columns:125px 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:11px}.code-list{padding:13px;background:var(--paper);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;overflow-wrap:anywhere}.code-list div+div{margin-top:6px}@media(max-width:760px){.page{width:min(100% - 20px,430px);padding-top:20px}.hero{display:block}.hero p{margin-top:10px}.tabs{grid-template-columns:1fr 1fr}.flow{overflow:auto;justify-content:flex-start;white-space:nowrap}.phone{width:min(390px,100%)}.inventory{display:block}.inventory-nav{position:static;margin-bottom:25px}.inventory-nav a{display:inline-block;margin-right:13px}.absence li{grid-template-columns:1fr;gap:3px}}
+</style><style>.back-gallery,.mentor-head{display:none}.turn{display:block}.message{width:100%}.mentor-nav{height:112px;align-items:center}.mentor-identity{display:grid;justify-items:center;gap:4px}.mentor-identity strong{font-size:12px}.top-avatar{display:grid;width:52px;height:52px;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--green-soft);font-size:10px;font-weight:800}.nav-tools{display:flex;width:42px;height:30px;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:99px}.nav-tools svg{width:20px;height:20px;fill:currentColor}.mentor-nav.detail-mode{height:50px}.mentor-nav.detail-mode .top-avatar{display:none}.mentor-nav.detail-mode .mentor-identity{display:block}.mentor-nav.detail-mode .mentor-identity strong{font-size:14px}.mentor-nav.detail-mode .nav-tools{visibility:hidden}.static-card{cursor:default}.static-card:hover{background:var(--paper)}.chat-section{padding:13px 0;border-bottom:1px solid var(--line)}.chat-section:first-of-type{padding-top:0}.chat-section h4{margin:0 0 6px;font-size:11px}.chat-section p{margin:0;font-size:11px}</style></head><body><main class="page">
+<header class="hero"><h1>关于我的理解</h1><p>当前版本只打磨主路径：导师解释本轮结果、查看详情、继续企业偏好测试，并沉淀到「关于你」。</p></header>
+<nav class="tabs" role="tablist"><button class="tab" aria-selected="true" data-target="a"><b>方案 A</b><span>完整理解后进入详情</span></button><button class="tab" aria-selected="false" data-target="b"><b>方案 B</b><span>对话内逐步披露</span></button><button class="tab" aria-selected="false" data-target="about"><b>关于你</b><span>历次结果沉淀</span></button><button class="tab" aria-selected="false" data-target="inventory"><b>研发原表达</b><span>全部内容资产</span></button></nav>
+<section class="panel active" id="a"><header class="panel-head"><h2>A｜导师先给出完整理解</h2><p>对话里完成解释和结果预览，卡片进入详情；用户不需要在主路径中进行额外确认。</p></header><div class="flow"><b>测试完成</b><span>→</span><b>导师解释</b><span>→</span><b>结果详情</b><span>→</span><b>企业偏好测试</b></div><div class="stage"><div class="phone"><div class="status"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div><div class="nav mentor-nav"><button class="icon-btn" aria-label="菜单"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="mentor-identity"><div class="top-avatar">导师头像</div><strong class="phone-title">派派</strong></div><div class="nav-tools" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18" cy="12" r="1.8"/></svg></div></div><div class="screen">
+<div class="screen-view active chat-view"><div class="turn"><div class="mentor-head"><div class="avatar">派派</div><b>派派导师</b></div><div class="message"><p>从刚才的选择里，我看到你最看重这五件事。</p><button class="result-card open-detail"><h3>我理解的你</h3><p>你最看重的五件事</p><div class="chart-bars"><div class="bar"><span>一直在成长</span><div class="track"><div class="fill" style="width:100%"></div></div><b>24%</b></div><div class="bar"><span>未来有余地</span><div class="track"><div class="fill" style="width:83%"></div></div><b>20%</b></div><div class="bar"><span>自己能做主</span><div class="track"><div class="fill" style="width:67%"></div></div><b>16%</b></div><div class="bar"><span>大树好乘凉</span><div class="track"><div class="fill" style="width:58%"></div></div><b>14%</b></div><div class="bar"><span>付出被看见</span><div class="track"><div class="fill" style="width:50%"></div></div><b>12%</b></div></div><div class="card-foot"><span>这些选择说明了什么</span><b>展开看看</b></div></button><button class="next-link"><span>接下来，看看什么样的企业更适合你</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div></div></div>
+<div class="screen-view detail-view"><h3 class="detail-title">我理解的你</h3><p class="detail-sub">本轮生活场景选择 · 2026.08.31</p><div class="chart-bars detail-bars"><div class="bar"><span>一直在成长</span><div class="track"><div class="fill" style="width:100%"></div></div><b>24%</b></div><div class="bar"><span>未来有余地</span><div class="track"><div class="fill" style="width:83%"></div></div><b>20%</b></div><div class="bar"><span>自己能做主</span><div class="track"><div class="fill" style="width:67%"></div></div><b>16%</b></div><div class="bar"><span>大树好乘凉</span><div class="track"><div class="fill" style="width:58%"></div></div><b>14%</b></div><div class="bar"><span>付出被看见</span><div class="track"><div class="fill" style="width:50%"></div></div><b>12%</b></div></div><div class="insight"><h4>你的选择里，我看见了什么</h4><p>你不太会只看一个机会眼前好不好。你更在意的是：这一步能不能让自己继续积累，能不能为下一步留下空间，投入的时间和努力又能不能得到回应。</p></div><div class="insight"><h4>你正在权衡什么</h4><p>你愿意为了更长远的成长，接受眼前没那么完美的条件；但你也不想把成长交给一条被安排好的路。你期待平台提供资源和支撑，同时把方向与节奏留在自己手里。</p></div><div class="insight"><h4>这种选择，让我想到一个人</h4><p>如果借一个人的选择方式来照见你，我会想到诸葛亮。他在真正走入局势之前，先花时间观察和判断，没有急着回应眼前的每一次机会。你们相近的，不是经历，而是习惯先看清更远的路，再决定当下这一步。</p></div><div class="insight"><h4>也有一句话，很像你此刻的状态</h4><div class="quote">“运筹帷幄之中，决胜千里之外。”<br><br>对你来说，规划不是控制所有变化，而是让今天的选择不堵住明天的路。</div></div><div class="insight"><h4>这些理解，会怎样帮到你</h4><p>之后帮你看机会时，我会重点留意成长路径、学习密度、平台资源和内部流动空间，也会和你一起分辨：它是真的让你不断积累，还是只是用忙碌制造成长的感觉。</p></div><button class="next-link"><span>接下来，看看什么样的企业更适合你</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
+</div></div></div><p class="decision">A 的重点：导师在对话中已经给出主要理解，详情负责完整呈现，不承担新的问答任务。</p></section>
+<section class="panel" id="b"><header class="panel-head"><h2>B｜完整理解在对话中逐步披露</h2><p>没有详情页，也不增加选择分支。数值卡是静态内容，导师在同一次回复里继续完成解释。</p></header><div class="flow"><b>测试完成</b><span>→</span><b>核心结论</b><span>→</span><b>逐段解释</b><span>→</span><b>企业偏好测试</b></div><div class="stage"><div class="phone"><div class="status"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div><div class="nav mentor-nav"><button class="icon-btn" aria-label="菜单"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="mentor-identity"><div class="top-avatar">导师头像</div><strong class="phone-title">派派</strong></div><div class="nav-tools" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18" cy="12" r="1.8"/></svg></div></div><div class="screen"><div class="screen-view active chat-view"><div class="turn"><div class="mentor-head"><div class="avatar">派派</div><b>派派导师</b></div><div class="message">
+<div class="chat-section"><p>从刚才的选择里，我看到你最看重这五件事。</p><article class="result-card static-card"><h3>我理解的你</h3><p>你最看重的五件事</p><div class="chart-bars"><div class="bar"><span>一直在成长</span><div class="track"><div class="fill" style="width:100%"></div></div><b>24%</b></div><div class="bar"><span>未来有余地</span><div class="track"><div class="fill" style="width:83%"></div></div><b>20%</b></div><div class="bar"><span>自己能做主</span><div class="track"><div class="fill" style="width:67%"></div></div><b>16%</b></div><div class="bar"><span>大树好乘凉</span><div class="track"><div class="fill" style="width:58%"></div></div><b>14%</b></div><div class="bar"><span>付出被看见</span><div class="track"><div class="fill" style="width:50%"></div></div><b>12%</b></div></div></article></div>
+<div class="chat-section"><h4>你不是只在选眼前</h4><p>比起一个机会现在看起来好不好，你更在意它会把自己带向哪里：能不能继续积累，能不能为下一步留下空间，投入的时间和努力又能不能得到回应。</p></div>
+<div class="chat-section"><h4>但你也不想走一条被安排好的路</h4><p>你愿意为了更长远的成长，接受眼前没那么完美的条件；同时，你期待平台提供资源和支撑，却仍想把方向与节奏留在自己手里。</p></div>
+<div class="chat-section"><h4>这让我想到诸葛亮</h4><p>他在真正走入局势之前，先花时间观察和判断，没有急着回应眼前的每一次机会。你们相近的，不是经历，而是习惯先看清更远的路，再决定当下这一步。</p></div>
+<div class="chat-section"><div class="quote">“运筹帷幄之中，决胜千里之外。”<br><br>对你来说，规划不是控制所有变化，而是让今天的选择不堵住明天的路。</div></div>
+<div class="chat-section"><h4>所以，之后帮你看机会时</h4><p>我会重点留意成长路径、学习密度、平台资源和内部流动空间，也会和你一起分辨：它是真的让你不断积累，还是只是用忙碌制造成长的感觉。</p></div><button class="next-link"><span>接下来，看看什么样的企业更适合你</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+</div></div></div></div></div></div><p class="decision">B 的重点：头像只出现一次，数值卡不响应点击；全文在同一次导师回复中按顺序展开。</p></section>
+<section class="panel" id="about"><header class="panel-head"><h2>关于你｜保存每一次测试结果</h2><p>新结果不会覆盖旧结果，任意记录都可以回看当时的完整详情。</p></header><div class="flow"><b>侧栏进入</b><span>→</span><b>浏览历次结果</b><span>→</span><b>回看单次详情</b></div><div class="stage"><div class="phone"><div class="status"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div><div class="nav"><button class="icon-btn" aria-label="返回"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><strong class="phone-title">关于你</strong><span></span></div><div class="screen"><div class="screen-view active gallery-view"><div class="gallery"><button class="tile open-about-detail"><div class="cover">本轮五项结果</div><div class="tile-copy"><div class="tile-head"><b>执棋者</b><time>8.31</time></div><p>把下一步放进长线里看</p></div></button><button class="tile open-about-detail"><div class="cover">本轮五项结果</div><div class="tile-copy"><div class="tile-head"><b>长期建设者</b><time>8.16</time></div><p>把时间留给长期值得的事</p></div></button><button class="tile open-about-detail"><div class="cover">本轮五项结果</div><div class="tile-copy"><div class="tile-head"><b>安稳探索者</b><time>8.08</time></div><p>先安顿好生活，慢慢向前</p></div></button><button class="tile open-about-detail"><div class="cover">本轮五项结果</div><div class="tile-copy"><div class="tile-head"><b>筑巢者</b><time>7.21</time></div><p>先站稳，再向往</p></div></button></div></div><div class="screen-view about-detail"><h3 class="detail-title">我理解的你</h3><p class="detail-sub">本轮生活场景选择 · 2026.08.31</p><div class="chart-bars detail-bars"><div class="bar"><span>一直在成长</span><div class="track"><div class="fill" style="width:100%"></div></div><b>24%</b></div><div class="bar"><span>未来有余地</span><div class="track"><div class="fill" style="width:83%"></div></div><b>20%</b></div><div class="bar"><span>自己能做主</span><div class="track"><div class="fill" style="width:67%"></div></div><b>16%</b></div><div class="bar"><span>大树好乘凉</span><div class="track"><div class="fill" style="width:58%"></div></div><b>14%</b></div><div class="bar"><span>付出被看见</span><div class="track"><div class="fill" style="width:50%"></div></div><b>12%</b></div></div><div class="insight"><h4>你的选择里，我看见了什么</h4><p>你不太会只看一个机会眼前好不好。你更在意的是：这一步能不能让自己继续积累，能不能为下一步留下空间，投入的时间和努力又能不能得到回应。</p></div><div class="insight"><h4>你正在权衡什么</h4><p>你愿意为了更长远的成长，接受眼前没那么完美的条件；但你也不想把成长交给一条被安排好的路。你期待平台提供资源和支撑，同时把方向与节奏留在自己手里。</p></div><div class="insight"><h4>这种选择，让我想到一个人</h4><p>如果借一个人的选择方式来照见你，我会想到诸葛亮。他在真正走入局势之前，先花时间观察和判断，没有急着回应眼前的每一次机会。你们相近的，不是经历，而是习惯先看清更远的路，再决定当下这一步。</p></div><div class="insight"><h4>也有一句话，很像你此刻的状态</h4><div class="quote">“运筹帷幄之中，决胜千里之外。”<br><br>对你来说，规划不是控制所有变化，而是让今天的选择不堵住明天的路。</div></div><div class="insight"><h4>我会记住什么</h4><p>以后帮你看机会时，我会重点留意成长路径、学习密度、平台资源和内部流动空间，也会提醒你分辨真正的积累和只有忙碌感的“成长”。</p></div></div></div></div></div><p class="decision">结果类型名称只在「关于你」中保留，用来区分多次记录；对话摘要不再给用户贴类型标签。</p></section>
+<section class="panel" id="inventory"><header class="panel-head"><h2>当前已有的测试结果内容资产</h2><p>按“是否已经接入算法工程”分层。这里展示的是原文与真实状态，不把产品文档中的成熟资产判成缺失。</p></header><div class="inventory"><aside class="inventory-nav"><a href="#original">工程已接入</a><a href="#product-assets">产品资产已有</a><a href="#evidence">只有原始证据</a><a href="#missing">确实缺失</a><a href="#sources">来源文件</a><div class="summary">工程已接入：10 个维度、8 种类型、分享模板。<br><br>产品文档已有：人物映射、名句古诗、八类基础洞见和选择张力；尚未接入结果接口。</div></aside><div><section id="original"><h3>一｜算法工程已经接入</h3><p>以下内容来自 `HLPP_talent_algo-main`，可以直接由当前结果接口提供。</p><div class="table-wrap"><table><thead><tr><th>内容类型</th><th>研发原文</th><th>字段</th><th>来源</th></tr></thead><tbody id="original-body"></tbody></table></div></section>
+<section id="product-assets"><h3>二｜产品内容资产已有，尚未接入工程</h3><p>这些不是临时示例，已经存在于产品与叙事文档中；下一步是核对、结构化和接入，不是从零创作。</p><div class="table-wrap"><table><thead><tr><th>资产类别</th><th>已有原表达</th><th>成熟度</th><th>来源</th></tr></thead><tbody id="asset-body"></tbody></table></div></section>
+<details id="evidence"><summary>三｜只有原始证据，还需要组织成动态结果</summary><div class="table-wrap"><table><thead><tr><th>已有内容</th><th>工程现状</th><th>可支持内容</th></tr></thead><tbody><tr><td>用户答案与排序</td><td>每轮选择、完整排序与权重</td><td>解释为什么这样理解</td></tr><tr><td>九个生活切片</td><td>完整生活故事</td><td>生活场景证据</td></tr><tr><td>七组正式题库</td><td>生活、工作、代价、钱、城市、发展、稳定</td><td>识别用户想得到什么、愿意承受什么</td></tr><tr><td>十维排序</td><td>Top 1–10 与展示百分比</td><td>组合生成个体化洞见</td></tr><tr><td>多轮测试记录</td><td>结果可以逐次保存</td><td>形成跨次变化叙事</td></tr><tr><td>媒体字段</td><td>已有结构，具体素材未全部接入</td><td>承载人物、场景与结果视觉</td></tr></tbody></table></div></details>
+<details id="missing"><summary>四｜当前确实缺失或尚未形成规则</summary><ul class="absence"><li><b>动态组合规则</b><span>已有八类洞见，但尚未形成按本轮 Top 维度实时组合的生成规则。</span></li><li><b>企业偏好验证</b><span>缺少从本轮理解映射到企业选择题、再回写结果的完整规则与文案。</span></li><li><b>复测变化叙事</b><span>结果可以多次保存，但尚未形成跨次比较的稳定口径。</span></li><li><b>准确性分支</b><span>尚无确认与修正后的回复库；当前版本也不纳入主路径。</span></li></ul></details>
+<details id="sources"><summary>来源文件</summary><div class="code-list">工程｜03-技术方案/HLPP_talent_algo-main/src/modules/questionnaire/questionnaire.profile.ts<br>工程｜03-技术方案/HLPP_talent_algo-main/src/modules/preference-share/preference-share.template.ts<br>产品｜02-产品设计/03-对话策略与AI交互/画像与场景/八类用户画像-汇总.md<br>产品｜02-产品设计/03-品牌叙事/人格结果与分享海报/结果海报叙事分类与生成任务说明.md<br>产品｜02-产品设计/03-品牌叙事/人格结果与分享海报/09结果海报叙事01-你的选择更像谁.md<br>产品｜02-产品设计/03-品牌叙事/人格结果与分享海报/人格结果叙事与分享海报-工作共识.md</div></details></div></div></section>
+</main><script>
+const rows=[['价值维度 V1','大树好乘凉<br>优先考虑上市公司级别大企业'],['价值维度 V2','花园式城市<br>更喜欢自然生态好的城市'],['价值维度 V3','工作别太耗<br>给享受生活留些时间和精力'],['价值维度 V4','自己能做主<br>方向自己选择，节奏也由自己掌握'],['价值维度 V5','一直在成长<br>能学得到本事，也看得到发展空间'],['价值维度 V6','付出被看见<br>努力有人认可，身份也让自己自豪'],['价值维度 V7','做真实自己<br>不违背本心，也不浪费所长'],['价值维度 V8','身边有归属<br>重要的人在身边，圈子里有归属'],['价值维度 V9','做事有意义<br>做的事有价值，也真的帮到别人'],['价值维度 V10','未来有余地<br>保留尝试新方向的可能'],['筑巢者','想把生活安稳地扎下根来<br>优先筛选收入稳定、安家友好且长期可预期的机会'],['栖居者','想认真工作，也好好生活<br>优先排除长期高耗岗位，帮你守住时间和生活质量'],['执棋者','看重长线成长和上升空间<br>帮你看清成长路径、行业上限和未来几步的机会'],['铸剑师','愿意把专业磨成真正本事<br>优先寻找专业对口、能深耕并积累真本事的岗位'],['先行者','渴望更快成长，也敢闯新路<br>优先推荐学习密度高、机会多且成长更快的路径'],['抱薪者','希望工作能让一些事情变好<br>帮你找到成果可见、能真正产生积极影响的工作'],['野路子','想按自己的方式走出一条路<br>多给你自主选择和非标准路径，不替你规定答案'],['追风者','不愿太早定型，想保留可能<br>帮你保留转换空间，优先寻找开放灵活的更多机会'],['追风者分享标题','不急着定型，把可能性留在手里'],['统一分享正文','你更看重{{top1Title}}、{{top2Title}}和{{top3Title}}。'],['统一分享页脚','这是你当前的求职偏好画像，会随选择和经历逐渐变化。'],['统一话题','后浪澎湃<br>我的求职偏好']];document.querySelector('#original-body').innerHTML=rows.map((r,i)=>`<tr><td class="type">${r[0]}</td><td>${r[1]}</td><td>${i<10?'title / description':i<18?'summary / helpText':i===18?'headline':i===19?'body':i===20?'footer':'hashtags'}</td><td class="source">${i<18?'questionnaire.profile.ts':'preference-share.template.ts'}</td></tr>`).join('');
+const assetRows=[
+['人物映射｜执棋者','诸葛亮｜行动之前先看清更长的路径。<br>跨越时间，我和诸葛亮，都习惯先把眼前的一步放进更远的局里。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['人物映射｜筑巢者','李清照｜把珍视的事物安顿、整理并留存下来。<br>跨越时间，我和李清照，都愿意为珍视的东西认真留一个位置。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['人物映射｜先行者','玄奘｜答案不在原地时，愿意先朝未知出发。<br>跨越时间，我和玄奘，都愿意为了真正想知道的事先走出去。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['人物映射｜抱薪者','杜甫｜不让普通人的生活与痛苦被时代遗忘。<br>跨越时间，我和杜甫，都相信有些事情值得被看见、被记住。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['人物映射｜栖居者','陶渊明｜把普通日子本身当作人生的重要部分。<br>跨越时间，我和陶渊明，都把想过的日子当成一件正事。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['人物映射｜野路子','齐白石｜不被既有出身、年龄或画法限制自己的道路。<br>跨越时间，我和齐白石，都愿意在旧路之外画出自己的那一笔。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['人物映射｜铸剑师','王羲之｜长期吸收、练习和打磨，最终形成自己的方法。<br>跨越时间，我和王羲之，都相信真正的功夫会慢慢长成自己的样子。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['人物映射｜追风者','徐霞客｜为尚未见过的世界保留流动和出发的可能。<br>跨越时间，我和徐霞客，都愿意为没见过的世界保留一次出发。','八类完整映射与人物四层故事','结果海报叙事分类与生成任务说明.md'],
+['主题句｜执棋者','运筹帷幄之中，决胜千里之外。','已有；正式使用前核对原文与署名','八类用户画像-汇总.md'],['主题句｜筑巢者','此心安处是吾乡。','已有；正式使用前核对原文与署名','八类用户画像-汇总.md'],['主题句｜先行者','长风破浪会有时，直挂云帆济沧海。','已有；正式使用前核对原文与署名','八类用户画像-汇总.md'],['主题句｜抱薪者','有一分热，发一分光。','已有；正式使用前核对原文与署名','八类用户画像-汇总.md'],['主题句｜栖居者','人，诗意的栖居。','已有；属于主题句，不必等同人物原话','八类用户画像-汇总.md'],['主题句｜野路子','我命由我不由天。','已有；影视台词，需处理 IP 边界','八类用户画像-汇总.md'],['主题句｜铸剑师','十年磨一剑，霜刃未曾试。','已有；正式使用前核对原文与署名','八类用户画像-汇总.md'],['主题句｜追风者','行到水穷处，坐看云起时。','已有；正式使用前核对原文与署名','八类用户画像-汇总.md'],
+['洞见与张力｜筑巢者','不是不爱发展，是“先站稳，再向往”。愿意加班换薪资；钱和定居优先于成长空间。','已有类型级完整解释','八类用户画像-汇总.md'],['洞见与张力｜栖居者','不是不想赚钱，是“能正常下班比多两千块重要”。工作强度是硬约束，生活质量优先。','已有类型级完整解释','八类用户画像-汇总.md'],['洞见与张力｜执棋者','不是随便找一份工作，而是先问“这步棋下下去，三年后我在哪”。为发展可以接受低薪，为行业可以换城市。','已有类型级完整解释','八类用户画像-汇总.md'],['洞见与张力｜铸剑师','专业对口不是偏好，是底线。可以接受薪资低一点、城市远一点，但不能接受专业被浪费。','已有类型级完整解释','八类用户画像-汇总.md'],['洞见与张力｜先行者','不是没有方向，而是用行动替代犹豫；广泛投递，在反馈中收窄方向。第一份工作是验证，不是终点。','已有类型级完整解释','八类用户画像-汇总.md'],['洞见与张力｜抱薪者','使命感高于部分现实回报。先确认事情是否对别人有价值，过了这一关才看城市和现实条件。','已有类型级完整解释','八类用户画像-汇总.md'],['洞见与张力｜野路子','工作不是归宿，而是积累资源后自己创造事业的跳板。稳定与平台让位于自主支配和可迁移能力。','已有类型级完整解释','八类用户画像-汇总.md'],['洞见与张力｜追风者','不把第一份工作当成人生决定。对被绑定的恐惧大于没工作的恐惧；自由、体验与流动优先。','已有类型级完整解释','八类用户画像-汇总.md']
+];document.querySelector('#asset-body').innerHTML=assetRows.map(r=>`<tr><td class="type">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="source">${r[3]}</td></tr>`).join('');
+const tabs=[...document.querySelectorAll('.tab')];tabs.forEach(t=>t.onclick=()=>{tabs.forEach(x=>x.setAttribute('aria-selected','false'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));t.setAttribute('aria-selected','true');document.getElementById(t.dataset.target).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})});
+const menuIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',backIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+const aPhone=document.querySelector('#a .phone'),aNav=aPhone.querySelector('.icon-btn'),aHeader=aPhone.querySelector('.mentor-nav');function showAChat(){aPhone.querySelector('.detail-view').classList.remove('active');aPhone.querySelector('.chat-view').classList.add('active');aPhone.querySelector('.phone-title').textContent='派派';aHeader.classList.remove('detail-mode');aNav.innerHTML=menuIcon;aNav.setAttribute('aria-label','菜单')}document.querySelectorAll('#a .open-detail').forEach(b=>b.onclick=()=>{aPhone.querySelector('.chat-view').classList.remove('active');aPhone.querySelector('.detail-view').classList.add('active');aPhone.querySelector('.phone-title').textContent='本轮详情';aHeader.classList.add('detail-mode');aNav.innerHTML=backIcon;aNav.setAttribute('aria-label','返回对话')});aNav.onclick=()=>{if(aPhone.querySelector('.detail-view').classList.contains('active'))showAChat()};
+const aboutPhone=document.querySelector('#about .phone'),aboutNav=aboutPhone.querySelector('.icon-btn');function showGallery(){aboutPhone.querySelector('.about-detail').classList.remove('active');aboutPhone.querySelector('.gallery-view').classList.add('active');aboutPhone.querySelector('.phone-title').textContent='关于你'}document.querySelectorAll('.open-about-detail').forEach(b=>b.onclick=()=>{aboutPhone.querySelector('.gallery-view').classList.remove('active');aboutPhone.querySelector('.about-detail').classList.add('active');aboutPhone.querySelector('.phone-title').textContent='本轮详情';aboutNav.setAttribute('aria-label','返回全部结果')});aboutNav.onclick=()=>{if(aboutPhone.querySelector('.about-detail').classList.contains('active'))showGallery()};
+// 当前线框示例统一为“先行者”：五项数据、人物典故与主题句使用同一套证据链。
+const demoOpening='看完你在这些生活场景里的选择，我对你在意什么、又会怎样权衡，多了一些理解。';
+document.querySelector('#a .chat-view .message > p').textContent=demoOpening;
+document.querySelector('#b .chat-section:first-child > p').textContent=demoOpening;
+document.querySelectorAll('#a .result-card > h3, #b .result-card > h3').forEach(node=>node.remove());
+document.querySelectorAll('#a .result-card > p, #b .result-card > p').forEach(node=>node.textContent='这次选择中，你更在意这些');
+const aInsights=[...document.querySelectorAll('#a .detail-view .insight')];
+aInsights[2].querySelector('p').textContent='如果借一个人的选择方式来照见你，我会想到玄奘。为了求取更完整的佛典，他没有留在原地等待一个现成答案，而是决定西行，亲自走向答案所在的地方。让我想到你的，是这种愿意在行动中打开新路、又在一路积累中逐渐看清方向的选择方式。';
+aInsights[3].querySelector('.quote').innerHTML='“长风破浪会有时，直挂云帆济沧海。”<br>——李白《行路难》<br><br>你不必一开始就看清整条路。重要的是保持向前的能力，也给未来留下转向的空间。';
+const bSections=[...document.querySelectorAll('#b .chat-section')];
+bSections[3].querySelector('h4').textContent='这让我想到玄奘';
+bSections[3].querySelector('p').textContent='为了求取更完整的佛典，他没有留在原地等待一个现成答案，而是决定西行，亲自走向答案所在的地方。让我想到你的，是这种愿意在行动中打开新路、又在一路积累中逐渐看清方向的选择方式。';
+bSections[4].querySelector('.quote').innerHTML='“长风破浪会有时，直挂云帆济沧海。”<br>——李白《行路难》<br><br>你不必一开始就看清整条路。重要的是保持向前的能力，也给未来留下转向的空间。';
+const aboutInsights=[...document.querySelectorAll('#about .about-detail .insight')];
+aboutInsights[2].querySelector('p').textContent=aInsights[2].querySelector('p').textContent;
+aboutInsights[3].querySelector('.quote').innerHTML=aInsights[3].querySelector('.quote').innerHTML;
+const currentTile=document.querySelector('#about .tile');
+currentTile.querySelector('.tile-head b').textContent='先行者';
+currentTile.querySelector('.tile-copy > p').textContent='在行动中打开新的可能';
+// B 仅作为“对话内凝练版”保留，不承担完整结果说明。
+document.querySelector('#b .panel-head h2').textContent='B｜对话内凝练披露';
+document.querySelector('#b .panel-head p').textContent='没有详情入口。数值卡保持静态，导师只给出一段核心理解、一个典故和后续求职关注点。';
+const bFlowLabels=[...document.querySelectorAll('#b .flow b')];
+bFlowLabels[1].textContent='数值卡';
+bFlowLabels[2].textContent='凝练理解';
+bSections[1].innerHTML='<p>你像是在一边向前走，一边为下一步留出空间：想学到真正能带走的本事，也希望方向仍由自己决定。</p>';
+bSections[3].innerHTML='<p>这让我想到玄奘西行求法——不是留在原地等待答案，而是先出发，在路上把答案一点点走清楚。</p>';
+bSections[5].innerHTML='<p>以后帮你看机会时，我会重点留意成长速度、试错空间，以及你能不能真正参与方向选择。</p>';
+bSections[2].remove();
+bSections[4].remove();
+document.querySelector('#b .decision').textContent='B 作为对话内凝练披露的正式对照方案：第一个导师气泡完成结果解释，第二个导师气泡承接企业偏好测试占位。';
+// 「关于你」同时承担八类完整文案的设计审阅入口；正式产品只展示用户真实产生的记录。
+const profileCopyLibrary=[
+{id:'nester',name:'筑巢者',date:'8.31',summary:'先站稳，再慢慢向往',values:[['大树好乘凉',28],['身边有归属',22],['付出被看见',18],['工作别太耗',14],['一直在成长',10]],sections:[
+['你的选择里，我看见了什么','你想要的不是一份看起来漂亮的工作，而是一种可以安稳落下来的生活。收入有没有底、城市能不能久住、重要的人是否在身边，都会影响你对机会的判断。'],
+['你正在权衡什么','你并非不在意成长，只是比起一开始就追求最快的上升，你更希望先建立可靠的生活基础。站稳之后再向前，对你来说不是保守，而是让未来真正有落点。'],
+['这种选择，让我想到一个人','如果借一个人的选择方式来照见你，我会想到李清照。她与赵明诚长期搜集、整理金石文献，后来又在《金石录后序》中记录这些珍藏如何被建立、保存与失去。让我想到你的，是这种愿意为珍视的人和事认真留一个位置的心意。'],
+['也有一句话，很像你此刻的状态','“此心安处是吾乡。”<br>——苏轼《定风波》<br><br>你寻找的不只是一个工作地点，而是一种能够放心生活、慢慢建立未来的地方。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会重点核对收入稳定性、隐性福利、居住成本、城市长期生活条件和岗位风险，不让一句模糊的“发展不错”盖过你真正需要的底气。']]},
+{id:'dweller',name:'栖居者',date:'8.24',summary:'把生活放回未来中央',values:[['工作别太耗',28],['花园式城市',22],['自己能做主',18],['身边有归属',12],['大树好乘凉',10]],sections:[
+['你的选择里，我看见了什么','你希望工作是生活的一部分，而不是吞掉生活的全部。规律的作息、可以支配的时间、舒服的城市和身边的人，对你而言都不是附加福利，而是判断一份工作是否适合的基本条件。'],
+['你正在权衡什么','你不是拒绝努力，也不是不想获得更好的回报。你只是不愿用长期透支换取一份表面更体面的结果。比起多一点薪资，你更在意自己是否还能好好吃饭、休息、见朋友和感受日常。'],
+['这种选择，让我想到一个人','如果借一个人的生活方式来照见你，我会想到陶渊明。他把耕作、读书、饮酒、邻里往来和四季变化认真写进作品，没有把普通日子当作宏大人生之外的剩余。让我想到你的，是这种把日常本身当成人生正事的态度。'],
+['也有一句话，很像你此刻的状态','“采菊东篱下，悠然见南山。”<br>——陶渊明《饮酒》<br><br>你想守住的并不是闲散，而是在工作之外仍能感受到自己正在生活。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会优先核对真实工时、加班频率、通勤距离、休假方式和团队边界，也会提醒你识别那些只在招聘文案里承诺“平衡”的岗位。']]},
+{id:'strategist',name:'执棋者',date:'8.18',summary:'把眼前一步放进长线',values:[['一直在成长',28],['大树好乘凉',20],['付出被看见',18],['未来有余地',14],['自己能做主',10]],sections:[
+['你的选择里，我看见了什么','你不太会只问一个机会现在好不好，而会继续追问：它属于怎样的赛道，能积累什么，三年后又会把自己带到哪里。对你来说，第一步的价值取决于它是否通向更长的路径。'],
+['你正在权衡什么','你可以为了更好的成长和行业空间，暂时接受不那么理想的薪资或城市；但前提是这份让步真的能换来能力、履历和下一步，而不是只用“未来可期”要求你无限等待。'],
+['这种选择，让我想到一个人','如果借一个人的选择方式来照见你，我会想到诸葛亮。刘备三顾茅庐时，他尚未出山，却已在《隆中对》中把天下形势与未来几步推演清楚。让我想到你的，是这种先看清更远的路，再决定眼前一步的习惯。'],
+['也有一句话，很像你此刻的状态','“运筹帷幄之中，决胜千里之外。”<br>——《史记·高祖本纪》<br><br>对你来说，规划不是控制所有变化，而是让每一步都在为下一步积累条件。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会重点比较行业趋势、成长路径、平台资源、内部流动和履历价值，也会和你一起分辨：这是真正的长期机会，还是缺少现实支撑的远景。']]},
+{id:'craftsman',name:'铸剑师',date:'8.12',summary:'让本事慢慢长成自己',values:[['做真实自己',28],['一直在成长',22],['做事有意义',16],['付出被看见',14],['大树好乘凉',10]],sections:[
+['你的选择里，我看见了什么','你很在意自己学过的东西能不能真正用起来，也希望能力在长期练习中越扎越深。比起快速换来一个好看的头衔，你更想拥有一项经得住时间、也能带得走的真本事。'],
+['你正在权衡什么','专业对口对你不只是加分项，有时更接近一条底线。你可以为学习机会接受暂时不高的回报，但也需要警惕：所谓“专业成长”是否真的有人带、有事做、有方法沉淀。'],
+['这种选择，让我想到一个人','如果借一个人的成长方式来照见你，我会想到王羲之。他广泛吸收不同书体与前人经验，又在长期练习中不断调整，最终形成自己的书风。让我想到你的，是这种不满足于会做，而要把功夫慢慢磨成自己方法的耐心。'],
+['也有一句话，很像你此刻的状态','“十年磨一剑，霜刃未曾试。”<br>——贾岛《剑客》<br><br>真正能接住机会的能力，往往在掌声出现以前，就已经被反复打磨过。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会重点查看专业匹配度、实际工作内容、导师与培养机制、技术深度和成果归属，避免只凭岗位名称判断它是否真的值得深耕。']]},
+{id:'pioneer',name:'先行者',date:'8.06',summary:'在行动中打开新的可能',values:[['一直在成长',24],['未来有余地',20],['自己能做主',16],['大树好乘凉',14],['付出被看见',12]],sections:[
+['你的选择里，我看见了什么','你更愿意通过行动获得答案。比起先把所有方向想得万无一失，你会先迈出一步，在真实反馈里确认自己擅长什么、想继续什么，也让新的可能在行动中出现。'],
+['你正在权衡什么','你想快速成长，也希望方向仍由自己决定。广泛尝试能帮你打开局面，但机会太多时，也可能让积累变得分散。对你来说，关键不是少尝试，而是知道什么时候该把一次尝试继续做深。'],
+['这种选择，让我想到一个人','如果借一个人的选择方式来照见你，我会想到玄奘。为了求取更完整的佛典，他没有留在原地等待一个现成答案，而是决定西行，亲自走向答案所在的地方。让我想到你的，是这种愿意先出发、再一路把方向走清楚的选择方式。'],
+['也有一句话，很像你此刻的状态','“长风破浪会有时，直挂云帆济沧海。”<br>——李白《行路难》<br><br>你不必一开始就看清整条路。重要的是保持向前的能力，也给未来留下转向的空间。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会重点留意学习密度、试错空间、反馈速度和跨方向的可能，也会提醒你分辨：哪些尝试正在形成积累，哪些只是让选择越来越多。']]},
+{id:'torchbearer',name:'抱薪者',date:'7.29',summary:'让做的事真正帮助别人',values:[['做事有意义',30],['做真实自己',20],['身边有归属',16],['一直在成长',12],['付出被看见',10]],sections:[
+['你的选择里，我看见了什么','你会认真追问一份工作的成果最终落在谁身上、解决了什么问题。只有当事情本身值得，你才更愿意投入时间和力量。对你而言，工作不仅是交换回报，也是在确认自己把力气用在了哪里。'],
+['你正在权衡什么','意义感很重要，但你也需要一个能够长期做下去的现实基础。真正适合你的机会，不是要求你靠热情承受一切，而是既能看见工作的价值，也有足够的资源、协作和回报支撑这份投入。'],
+['这种选择，让我想到一个人','如果借一个人的选择方式来照见你，我会想到杜甫。他经历动荡与漂泊，却持续把普通人的处境和时代变化写进诗里，让许多容易被忽略的生活被后人看见。让我想到你的，是这种相信有些事情值得被看见、被记住的坚持。'],
+['也有一句话，很像你此刻的状态','“安得广厦千万间，大庇天下寒士俱欢颜。”<br>——杜甫《茅屋为秋风所破歌》<br><br>你在意的不只是自己走得多远，也在意所做的事能否让一些人的处境真正变好。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会重点核对产品或服务的真实受益者、成果如何被衡量、组织是否提供必要资源，也会提醒你避开只用使命感包装低回报和高消耗的岗位。']]},
+{id:'maverick',name:'野路子',date:'7.20',summary:'在旧路之外走出自己',values:[['自己能做主',28],['做真实自己',20],['未来有余地',18],['一直在成长',14],['做事有意义',10]],sections:[
+['你的选择里，我看见了什么','你不太愿意把一份现成路径当作唯一答案。对你来说，工作可以是积累能力、资源和人脉的阶段，但最终更重要的是拥有选择权，并逐渐走出一条真正由自己定义的路。'],
+['你正在权衡什么','你重视自主，也需要判断什么时候借助平台、什么时候走出去。过早离开可能失去必要的积累，停留太久又可能被稳定困住。你真正要寻找的，是能让能力和选择权一起增长的机会。'],
+['这种选择，让我想到一个人','如果借一个人的成长方式来照见你，我会想到齐白石。他早年做过木匠，后来学习绘画、诗文和篆刻，晚年仍通过“衰年变法”改变既有画法。让我想到你的，是这种不让出身、年龄和旧方法规定自己边界的劲头。'],
+['也有一句话，很像你此刻的状态','“其实地上本没有路，走的人多了，也便成了路。”<br>——鲁迅《故乡》<br><br>你未必需要找到一条完全现成的路，也可以在持续行动和积累中，把自己的路走出来。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会重点关注自主权、可迁移能力、资源积累、业务全貌和外部可能性，也会提醒你分辨：这是能为未来蓄力的平台，还是只让你承担风险却不给选择权。']]},
+{id:'explorer',name:'追风者',date:'7.11',summary:'为人生保留一次出发',values:[['未来有余地',30],['自己能做主',20],['花园式城市',16],['工作别太耗',14],['身边有归属',10]],sections:[
+['你的选择里，我看见了什么','你不想太早把人生固定在一座城市、一条赛道或一种生活里。比起立刻获得一个确定答案，你更希望先去看、去体验，再根据真实感受决定自己愿意在哪里停留。'],
+['你正在权衡什么','自由和流动让你保持活力，但长期不落点也可能让能力与关系难以积累。适合你的不是被迫定下来，而是在保留转换空间的同时，找到一些愿意持续带走的本事和连接。'],
+['这种选择，让我想到一个人','如果借一个人的生活方式来照见你，我会想到徐霞客。他没有把远方只留在图经和传闻里，而是亲自出发，持续记录沿途的山川、气候和地方生活。让我想到你的，是这种愿意为尚未见过的世界保留一次出发的心。'],
+['也有一句话，很像你此刻的状态','“行到水穷处，坐看云起时。”<br>——王维《终南别业》<br><br>方向暂时变化，并不意味着走错；有时先允许自己看见更多，新的路才会慢慢出现。'],
+['这些理解，会怎样帮到你','以后帮你看机会时，我会重点留意地点弹性、工作节奏、转岗空间、技能通用性和生活体验，也会提醒你识别：哪些自由是真正的选择，哪些只是缺少保障和支持。']]}
+];
+const primaryProfile=profileCopyLibrary.find(item=>item.id==='pioneer');
+primaryProfile.sections.forEach((section,index)=>{
+  if(index===3)aInsights[index].querySelector('.quote').innerHTML=section[1];
+  else aInsights[index].querySelector('p').innerHTML=section[1];
+});
+document.querySelector('#a .panel-head h2').textContent='A｜导师给出结果预览';
+document.querySelector('#a .panel-head p').textContent='第一个导师气泡给出结果预览，结果卡可进入完整详情；第二个导师气泡直接承接企业偏好测试。';
+document.querySelector('#a .flow').innerHTML='<b>测试完成</b><span>→</span><b>结果预览</b><span>→</span><b>企业偏好测试</b>';
+const galleryRecords=[...profileCopyLibrary,{...profileCopyLibrary.find(item=>item.id==='pioneer'),id:'pioneer-repeat',date:'7.03',summary:'先走一步，再逐渐看清'}];
+const aboutGallery=document.querySelector('#about .gallery');
+aboutGallery.innerHTML=galleryRecords.map(item=>`<button class="tile profile-sample" data-profile="${item.id}"><div class="cover" role="img" aria-label="${item.name}结果封面"></div><div class="tile-copy"><div class="tile-head"><b>${item.name}</b><time>${item.date}</time></div><p>${item.summary}</p></div></button>`).join('');
+function showProfileSample(item){
+  aboutPhone.querySelector('.gallery-view').classList.remove('active');
+  const view=aboutPhone.querySelector('.about-detail');view.classList.add('active');
+  const [month,day]=item.date.split('.');aboutPhone.querySelector('.phone-title').textContent=`2026年${month}月${day}日`;aboutNav.setAttribute('aria-label','返回全部结果');
+  const bars=[...view.querySelectorAll('.detail-bars .bar')];
+  const max=Math.max(...item.values.map(value=>value[1]));
+  item.values.forEach((value,index)=>{bars[index].querySelector('.dimension-copy strong').textContent=value[0];bars[index].querySelector('.dimension-copy small').textContent=dimensionDescriptions[value[0]];bars[index].querySelector('.fill').style.width=`${Math.round(value[1]/max*100)}%`;bars[index].querySelector('b').textContent=`${value[1]}%`});
+  const insights=[...view.querySelectorAll('.insight')];
+  insights[0].querySelector('p').innerHTML=item.sections[0][1];
+  insights[1].querySelector('p').innerHTML=item.sections[1][1];
+  insights[2].querySelector('p').innerHTML=item.sections[2][1];
+  insights[2].querySelector('.quote').innerHTML=item.sections[3][1];
+  insights[3].querySelector('p').innerHTML=item.sections[4][1];
+}
+document.querySelectorAll('#about .profile-sample').forEach(button=>button.onclick=()=>showProfileSample(galleryRecords.find(item=>item.id===button.dataset.profile)));
+const handoffStyle=document.createElement('style');handoffStyle.textContent=`
+.panel:not(#inventory) .stage{grid-template-columns:390px minmax(280px,360px);gap:34px;max-width:820px;margin:auto;align-items:start}.handoff-note{margin:0;padding:18px;text-align:left;max-width:none;background:var(--paper);border:1px solid var(--line);color:var(--ink)}.handoff-note h3{margin:0 0 12px;font-size:15px}.handoff-note dl{margin:0}.handoff-note dt{margin-top:12px;font-size:10px;font-weight:800;color:var(--green)}.handoff-note dd{margin:3px 0 0;color:var(--muted);font-size:10px}.media-slot{height:126px;margin:9px 0 11px;background:var(--soft);border:1px dashed var(--line)}#about .cover{background:var(--soft)}
+@media(max-width:860px){.panel:not(#inventory) .stage{grid-template-columns:minmax(0,390px);justify-content:center}.handoff-note{width:min(390px,100%)}}
+`;document.head.appendChild(handoffStyle);
+function placeHandoffNote(panelId,content){const panel=document.querySelector(panelId),note=panel.querySelector('.decision');note.classList.add('handoff-note');note.innerHTML=content;panel.querySelector('.stage').appendChild(note)}
+placeHandoffNote('#a','<h3>A｜设计师必须交付</h3><dl><dt>Figma 页面／状态</dt><dd>① 1 张对话页：本轮结果预览气泡后，自动出现独立的企业偏好测试气泡；② 1 张点击结果卡后的完整详情页。对话只预览五项结果，完整洞见放在详情中；全部使用当前“先行者”整套真实文案。</dd><dt>企业偏好测试承接</dt><dd>企业偏好测试是本轮结果后的默认下一步，不再使用过渡按钮，也不模拟用户发送“继续看看……”气泡。结果预览气泡输出完成后，导师另起一个新气泡展示企业偏好测试卡片；用户回答卡片内的题目时才正式开始作答。线框只表示卡片的信息位置，不扩展具体题目设计。</dd><dt>输入框</dt><dd>复用已完成的对话框二版，保留当前默认业务入口。企业偏好测试已通过独立对话气泡承接，不在输入框里重复露出。</dd><dt>必须解决的设计点</dt><dd>结果预览气泡与企业偏好测试气泡需要明确区分“已完成的结果”和“等待作答的下一步”；五项图表表达“更在意什么”，避免做成能力评分或业绩看板；详情正文按“结果—洞见—取舍—文化参照—求职应用”形成清晰阅读节奏。</dd><dt>本方案新增素材</dt><dd>不单独新增。详情中使用的玄奘场景图，归入「关于你」统一的 8 张人物典故素材；导师头像、返回图标和操作图标沿用现有素材。</dd><dt>不需要出图的部分</dt><dd>五项图表由 UI 组件绘制；名句通过字体、留白和背景材质完成，不另做插画。</dd></dl>');
+placeHandoffNote('#b','<h3>B｜设计师必须交付</h3><dl><dt>Figma 页面／状态</dt><dd>输出 1 张完整对话状态稿：第一个导师气泡包含静态五项结果卡和三段凝练理解，第二个导师气泡独立展示企业偏好测试卡片。B 不设计详情页，用于和 A 比较信息密度、阅读节奏和后续引导感受。</dd><dt>企业偏好测试承接</dt><dd>导师完整讲完数值结果、核心理解、人物典故和求职关注点后，另起一个新的导师气泡展示企业偏好测试卡片。不设置“接下来……”过渡按钮，不自动生成用户气泡；用户回答卡片内的题目时才正式开始作答。线框只表示卡片位置，不扩展具体题目设计。</dd><dt>输入框</dt><dd>输入框继续复用对话框二版，仅展示当前默认业务入口；企业偏好测试不在这里重复露出。</dd><dt>素材要求</dt><dd>不新增 B 专属素材；不加人物大图，不单独制作名句图片。</dd></dl>');
+placeHandoffNote('#about','<h3>“关于你”｜设计师必须交付</h3><dl><dt>Figma 页面／状态</dt><dd>① 1 张历次结果列表页，用 9 条代表性记录验证长列表，其中“先行者”重复出现，明确它是按时间沉淀的测试历史，不是八种类型的收集页；实际记录可以少于或多于 9 条，同一类型也可以重复。② 1 套通用结果详情页。③ 将八类全文分别放入详情页，检查 8 种真实内容长度，不用为八类重新设计八套布局。对话入口与「关于你」复访共用同一套详情内容，只有对话入口版本在底部增加“接下来，看看什么样的企业更适合你”。</dd><dt>必须解决的设计点</dt><dd>列表要像持续积累的个人理解档案，而不是后台记录或八型图鉴；记录卡既要有系列感，也要能通过日期、类型名和摘要快速区分；详情顶部用日期识别本次结果，不另设“我理解的你”或“本轮详情”；详情中的图表、人物场景和名句必须形成三种不同视觉层级，不能全部做成同款圆角卡片。</dd><dt>必须新增素材｜8 张结果封面</dt><dd><b>筑巢者</b>：逐渐亮起的房间或被安顿好的桌子。<br><b>栖居者</b>：工作日晚霞、回家路或晚餐。<br><b>执棋者</b>：尚未落下的棋子与展开的长线路径。<br><b>铸剑师</b>：工具、材料、工作台与反复练习的痕迹。<br><b>先行者</b>：地图空白处、启程背影或迈出的第一步。<br><b>抱薪者</b>：被传递的光、被照亮的人或窗口。<br><b>野路子</b>：旧路之外的新痕迹、被改写的剧本或自己搭出的入口。<br><b>追风者</b>：无固定终点的车票、转动路牌、风和远方。<br>八张统一画幅与绘制风格，图片内不重复类型名，不使用历史人物做封面；同一类型重复出现时复用对应封面体系，不另造新类型。</dd><dt>必须新增素材｜8 张人物典故场景</dt><dd>李清照整理金石；陶渊明生活于田园；诸葛亮在隆中判断局势；王羲之长期练习书法；玄奘启程西行；杜甫记录普通人的处境；齐白石晚年变法；徐霞客在行旅中记录山川。必须表现人物“正在做什么”，不做证件照式肖像。</dd><dt>不需要新增素材</dt><dd>五项图表、日期、类型名、正文排版由 UI 完成；名句模块不另配人物图。导师头像、返回图标等沿用现有素材。</dd><dt>素材边界</dt><dd>使用原创插图或版权明确的文化素材；不用影视 IP 形象和当代名人照片，不过度古风化。</dd></dl>');
+document.querySelector('#about .handoff-note dd').innerHTML='① 1 张历次结果列表页，用 9 条代表性记录验证长列表和同类型重复出现；② 1 套通用结果详情页；③ 将 8 类真实全文分别放入详情页检查内容长度，不重新设计 8 套布局。对话入口与「关于你」复访使用完全相同的详情内容；企业偏好测试只在对话主路径中作为独立的第二个导师气泡出现，不放入详情页。';
+[aInsights[2],aboutInsights[2]].forEach(insight=>insight.querySelector('h4').insertAdjacentHTML('afterend','<div class="media-slot" role="img" aria-label="人物典故插图位置"></div>'));
+document.querySelector('[data-target="b"] span').textContent='对话内凝练版';
+const dimensionDescriptions={
+  '大树好乘凉':'更看重成熟平台带来的资源与稳定支撑',
+  '花园式城市':'更喜欢自然舒适、适合生活的城市环境',
+  '工作别太耗':'希望工作之外仍有时间和精力过生活',
+  '自己能做主':'希望方向自己选择，节奏也由自己掌握',
+  '一直在成长':'希望持续学到本事，也看见发展空间',
+  '付出被看见':'希望努力获得认可，成果得到回应',
+  '做真实自己':'希望不违背本心，也能发挥自己的所长',
+  '身边有归属':'希望重要的人在身边，也能融入自己的圈子',
+  '做事有意义':'希望做的事有价值，也真正帮助到别人',
+  '未来有余地':'希望保留尝试和转换方向的可能'
+};
+function prepareDetailBars(view){view.querySelectorAll('.detail-bars .bar').forEach(bar=>{const label=bar.querySelector('span'),name=label.textContent;label.outerHTML=`<div class="dimension-copy"><strong>${name}</strong><small>${dimensionDescriptions[name]}</small></div>`})}
+[document.querySelector('#a .detail-view'),document.querySelector('#about .about-detail')].forEach(prepareDetailBars);
+const detailBarStyle=document.createElement('style');detailBarStyle.textContent=`.detail-bars .bar{grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;align-items:start;padding:4px 0}.detail-bars .dimension-copy{min-width:0}.detail-bars .dimension-copy strong{display:block;font-size:10px}.detail-bars .dimension-copy small{display:block;margin-top:2px;color:var(--muted);font-size:8px;line-height:1.45}.detail-bars .bar>b{grid-column:2;grid-row:1/3;align-self:center;font-size:9px}.detail-bars .track{grid-column:1/-1;height:7px;margin-top:2px}`;document.head.appendChild(detailBarStyle);
+function restructureDetail(view,dateText){
+  const heading=view.querySelector('.detail-title'),date=view.querySelector('.detail-sub');
+  date.textContent=dateText;heading.textContent='这次选择中，你更在意这些';view.insertBefore(date,heading);
+  const insights=[...view.querySelectorAll('.insight')];
+  insights[0].querySelector('h4').textContent='从这些选择里，我还看到';
+  insights[1].querySelector('h4').textContent='你也在做这样的取舍';
+  insights[2].querySelector('h4').textContent='有一个人的选择，让我想到你';
+  insights[2].appendChild(insights[3].querySelector('.quote'));
+  insights[3].remove();
+  insights[4].querySelector('h4').textContent='接下来，我会这样帮你看机会';
+}
+restructureDetail(document.querySelector('#a .detail-view'),'2026年8月31日');
+restructureDetail(document.querySelector('#about .about-detail'),'2026年8月31日');
+const sharedDetail=document.querySelector('#a .detail-view');
+const aboutDetail=document.querySelector('#about .about-detail');
+aboutDetail.innerHTML=sharedDetail.innerHTML;aboutDetail.querySelector('.next-link').remove();
+document.querySelectorAll('#a .open-detail').forEach(button=>button.onclick=()=>{aPhone.querySelector('.chat-view').classList.remove('active');aPhone.querySelector('.detail-view').classList.add('active');aPhone.querySelector('.phone-title').textContent='2026年8月31日';aHeader.classList.add('detail-mode');aNav.innerHTML=backIcon;aNav.setAttribute('aria-label','返回对话')});
+const detailStructureStyle=document.createElement('style');detailStructureStyle.textContent=`.mentor-nav.detail-mode .mentor-identity{text-align:center}.mentor-nav.detail-mode .phone-title{display:block;text-align:center}.detail-view>.detail-sub,.about-detail>.detail-sub{display:none}.detail-view>.detail-title,.about-detail>.detail-title{margin:0 0 14px;font-size:16px}.insight .media-slot+.quote{margin-top:10px}.insight .quote{margin-top:12px}`;document.head.appendChild(detailStructureStyle);
+const conversationBubbleStyle=document.createElement('style');conversationBubbleStyle.textContent=`#a .chat-view,#b .chat-view{min-height:690px;margin:-16px -15px -34px;padding:16px 15px 34px;background:var(--soft)}#a .chat-view .message,#b .chat-view .message{padding:15px;border:1px solid var(--line);border-radius:18px 18px 18px 6px;background:var(--paper)}#a .chat-view .turn,#b .chat-view .turn{margin-bottom:0}`;document.head.appendChild(conversationBubbleStyle);
+document.querySelectorAll('#a .next-link,#b .next-link').forEach(node=>node.remove());
+function createComposer(phone,labels=['精准匹配','简历优化']){
+  const functions=labels.map(label=>`<button class="context-function ${label==='企业偏好测试'?'enterprise-function':'default-function'}">${label}</button>`).join('');
+  const composer=document.createElement('div');composer.className='chat-composer';composer.innerHTML=`<div class="context-functions">${functions}</div><div class="composer-input"><button class="composer-round" aria-label="添加">＋</button><span>问问派派，说点什么……</span><button class="composer-round composer-voice" aria-label="语音输入">语音</button></div>`;phone.appendChild(composer);return composer;
+}
+const aComposer=createComposer(aPhone,['精准匹配','简历优化']),bPhone=document.querySelector('#b .phone'),bComposer=createComposer(bPhone,['精准匹配','简历优化']);
+function createEnterpriseTestCard(phone){
+  phone.querySelector('.chat-view').insertAdjacentHTML('beforeend',`<div class="turn enterprise-test-turn"><div class="message"><div class="enterprise-test-placeholder" role="img" aria-label="企业偏好测试卡片占位">企业偏好测试卡片占位</div></div></div>`);
+}
+createEnterpriseTestCard(aPhone);
+createEnterpriseTestCard(bPhone);
+const composerStyle=document.createElement('style');composerStyle.textContent=`.chat-composer{position:absolute;z-index:3;right:12px;bottom:12px;left:12px;padding:9px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}.context-functions{display:flex;gap:6px;margin-bottom:8px}.context-function{min-height:28px;padding:4px 10px;border:1px solid var(--line);border-radius:99px;background:var(--paper);color:var(--ink);font-size:9px;cursor:pointer}.context-function:first-child{border-color:#9fbfb7;background:var(--green-soft);color:var(--green);font-weight:750}.context-function:active{transform:translateY(1px)}.composer-input{display:grid;grid-template-columns:30px 1fr 34px;gap:8px;align-items:center;min-height:42px}.composer-input>span{color:#92999c;font-size:10px}.composer-round{display:grid;width:30px;height:30px;place-items:center;border:0;border-radius:50%;background:var(--soft);font-size:15px}.composer-voice{width:34px;background:var(--ink);color:var(--paper);font-size:8px}.mentor-nav.detail-mode~.chat-composer{display:none}#a .chat-view,#b .chat-view{padding-bottom:130px}.enterprise-test-turn{margin-top:12px!important}.enterprise-test-turn>.message{padding:12px!important}.enterprise-test-placeholder{display:grid;min-height:148px;place-items:center;border:1px dashed #9fbfb7;border-radius:12px;background:var(--green-soft);color:var(--green);font-size:10px;font-weight:750;text-align:center}`;document.head.appendChild(composerStyle);
+// 「关于你」改为一轮理解的渐进沉淀：生活阶段形成初步理解，企业阶段完成后原记录升级。
+document.querySelector('#about .panel-head h2').textContent='关于你｜保存每一轮理解';
+document.querySelector('#about .panel-head p').textContent='生活场景先形成初步理解，企业偏好完成后，同一条记录升级为完整结果。';
+document.querySelector('#about .flow').innerHTML='<b>生活场景完成</b><span>→</span><b>正在形成的理解</b><span>→</span><b>企业偏好完成</b><span>→</span><b>完整结果</b>';
+
+const preliminaryDetail=aboutDetail.cloneNode(true);
+preliminaryDetail.className='screen-view about-preliminary-detail';
+preliminaryDetail.classList.remove('active');
+preliminaryDetail.querySelector('.detail-title').textContent='这次选择中，你更在意这些';
+preliminaryDetail.insertAdjacentHTML('afterbegin','<div class="detail-state"><b>初步理解</b><span>生活场景选择已完成</span></div>');
+preliminaryDetail.insertAdjacentHTML('beforeend','<button class="resume-enterprise" data-destination="企业偏好测试"><span><b>让这次理解更完整</b><small>继续了解企业偏好</small></span><span aria-hidden="true">→</span></button>');
+aboutDetail.parentElement.appendChild(preliminaryDetail);
+
+const completeInsights=[...aboutDetail.querySelectorAll('.insight')];
+completeInsights[0].classList.add('complete-observation');
+completeInsights[1].classList.add('complete-tension');
+completeInsights[2].classList.add('complete-cultural-reference');
+completeInsights[3].classList.add('complete-help');
+aboutDetail.insertAdjacentHTML('afterbegin','<section class="complete-profile-head"><span>完整理解</span><h3>先行者</h3><p>你更愿意先走进真实选择，在行动中确认方向，也希望每一次尝试都能留下积累。</p></section>');
+aboutDetail.querySelector('.detail-title').textContent='综合来看，你更在意这些';
+completeInsights[1].insertAdjacentHTML('afterend','<section class="insight enterprise-insight"><h4>什么样的企业更适合你</h4><p>你更适合学习密度高、反馈及时、允许试错和内部转换的企业。平台可以提供资源和起点，但不应把你的方向与节奏完全规定好。</p></section><section class="insight enterprise-insight"><h4>你愿意交换什么，不愿放弃什么</h4><p>为了更快成长，你可以接受阶段性的忙碌和不够确定；但如果一份工作只有消耗、没有积累，或要求你长期放弃选择权，它就很难成为适合你的长期方向。</p></section>');
+
+const currentCompleteRecord={...primaryProfile,date:'8.31'};
+const historicalRecords=profileCopyLibrary.filter(item=>item.id!=='pioneer').slice(0,6);
+aboutGallery.classList.add('about-home');
+aboutGallery.innerHTML=`
+  <section class="about-block about-progress">
+    <div class="about-block-title"><h3>正在形成的理解</h3><span>1 条</span></div>
+    <button class="progress-record" data-open-about="preliminary">
+      <span class="record-state">生活场景选择已完成</span>
+      <strong>新的理解正在形成</strong>
+      <p>我已经看到你比较在意成长空间、自主选择和未来余地。再了解一些企业偏好，这次理解会更完整。</p>
+      <span class="value-pills"><i>一直在成长</i><i>未来有余地</i><i>自己能做主</i></span>
+      <span class="record-action">继续了解企业偏好 <b>→</b></span>
+    </button>
+  </section>
+  <section class="about-block about-current">
+    <div class="about-block-title"><h3>目前对你的理解</h3><span>最近完成</span></div>
+    <button class="current-record" data-open-about="complete">
+      <span class="current-cover" role="img" aria-label="先行者结果封面"></span>
+      <span class="current-copy"><small>完整结果 · 2026年8月31日</small><strong>先行者</strong><p>渴望更快成长，也敢闯新路</p><em>查看完整理解 →</em></span>
+    </button>
+  </section>
+  <section class="about-block about-history">
+    <div class="about-block-title"><h3>过去的理解</h3><span>${historicalRecords.length} 条</span></div>
+    <div class="history-grid">${historicalRecords.map(item=>`<button class="history-record" data-open-about="history" data-profile="${item.id}"><span class="history-cover" role="img" aria-label="${item.name}结果封面"></span><span><small>完整结果 · ${item.date}</small><strong>${item.name}</strong><p>${item.summary}</p></span></button>`).join('')}</div>
+  </section>`;
+
+function showAboutHome(){
+  aboutPhone.querySelectorAll('.screen-view').forEach(view=>view.classList.remove('active'));
+  aboutPhone.querySelector('.gallery-view').classList.add('active');
+  aboutPhone.querySelector('.phone-title').textContent='关于你';
+  aboutNav.setAttribute('aria-label','返回');
+}
+function openPreliminaryDetail(){
+  aboutPhone.querySelectorAll('.screen-view').forEach(view=>view.classList.remove('active'));
+  aboutPhone.querySelector('.about-preliminary-detail').classList.add('active');
+  aboutPhone.querySelector('.phone-title').textContent='2026年9月1日';
+  aboutNav.setAttribute('aria-label','返回关于你');
+}
+function openCompleteDetail(item=primaryProfile){
+  aboutPhone.querySelectorAll('.screen-view').forEach(view=>view.classList.remove('active'));
+  aboutDetail.classList.add('active');
+  const [month,day]=item.date.split('.');
+  aboutPhone.querySelector('.phone-title').textContent=`2026年${month}月${day}日`;
+  aboutDetail.querySelector('.complete-profile-head h3').textContent=item.name;
+  aboutDetail.querySelector('.complete-profile-head p').textContent=item.summary;
+  const bars=[...aboutDetail.querySelectorAll('.detail-bars .bar')],max=Math.max(...item.values.map(value=>value[1]));
+  item.values.forEach((value,index)=>{bars[index].querySelector('.dimension-copy strong').textContent=value[0];bars[index].querySelector('.dimension-copy small').textContent=dimensionDescriptions[value[0]];bars[index].querySelector('.fill').style.width=`${Math.round(value[1]/max*100)}%`;bars[index].querySelector('b').textContent=`${value[1]}%`});
+  aboutDetail.querySelector('.complete-observation p').innerHTML=item.sections[0][1];
+  aboutDetail.querySelector('.complete-tension p').innerHTML=item.sections[1][1];
+  aboutDetail.querySelector('.complete-cultural-reference p').innerHTML=item.sections[2][1];
+  aboutDetail.querySelector('.complete-cultural-reference .quote').innerHTML=item.sections[3][1];
+  aboutDetail.querySelector('.complete-help p').innerHTML=item.sections[4][1];
+  aboutNav.setAttribute('aria-label','返回关于你');
+}
+aboutGallery.querySelector('[data-open-about="preliminary"]').onclick=openPreliminaryDetail;
+aboutGallery.querySelector('[data-open-about="complete"]').onclick=()=>openCompleteDetail(currentCompleteRecord);
+aboutGallery.querySelectorAll('[data-open-about="history"]').forEach(button=>button.onclick=()=>openCompleteDetail(profileCopyLibrary.find(item=>item.id===button.dataset.profile)));
+aboutNav.onclick=()=>{if(!aboutPhone.querySelector('.gallery-view').classList.contains('active'))showAboutHome()};
+
+const aboutProgressiveStyle=document.createElement('style');aboutProgressiveStyle.textContent=`
+#about .phone{min-height:844px}#about .screen{padding:14px 14px 30px}#about .about-home{display:grid;grid-template-columns:1fr;gap:18px}#about .about-block{display:grid;gap:8px}.about-block-title{display:flex;align-items:center;justify-content:space-between}.about-block-title h3{margin:0;font-size:12px}.about-block-title span{color:var(--muted);font-size:8px}.progress-record,.current-record,.history-record{width:100%;border:1px solid var(--line);background:var(--paper);color:var(--ink);text-align:left;cursor:pointer}.progress-record{display:grid;gap:7px;padding:14px;border-color:#99bdb3;background:var(--green-soft)}.progress-record .record-state{color:var(--green);font-size:8px;font-weight:800}.progress-record>strong{font-size:15px}.progress-record p{margin:0;color:#3d514c;font-size:9px}.value-pills{display:flex;flex-wrap:wrap;gap:5px}.value-pills i{padding:3px 7px;border-radius:99px;background:rgba(255,255,255,.72);font-size:7px;font-style:normal}.record-action{display:flex;justify-content:space-between;margin-top:2px;padding-top:8px;border-top:1px solid #b8d1ca;color:var(--green);font-size:9px;font-weight:800}.current-record{display:grid;grid-template-columns:104px 1fr;min-height:128px;padding:0;overflow:hidden}.current-cover,.history-cover{display:block;background:var(--soft)}.current-copy{display:grid;align-content:center;gap:4px;padding:12px}.current-copy small,.history-record small{color:var(--muted);font-size:7px}.current-copy strong{font-size:18px}.current-copy p,.history-record p{margin:0;color:var(--muted);font-size:8px}.current-copy em{margin-top:5px;color:var(--green);font-size:8px;font-style:normal;font-weight:800}.history-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.history-record{padding:0;overflow:hidden}.history-cover{height:64px}.history-record>span:last-child{display:grid;gap:2px;padding:8px}.history-record strong{font-size:11px}.about-preliminary-detail>.detail-sub{display:none}.detail-state{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:8px 10px;background:var(--green-soft);color:var(--green);font-size:8px}.detail-state b{font-size:9px}.resume-enterprise{display:flex;width:100%;align-items:center;justify-content:space-between;margin-top:14px;padding:13px;border:1px solid #99bdb3;background:var(--green-soft);color:var(--green);text-align:left;cursor:pointer}.resume-enterprise span:first-child{display:grid;gap:2px}.resume-enterprise b{font-size:10px}.resume-enterprise small{font-size:8px}.complete-profile-head{margin-bottom:14px;padding:14px;background:var(--green-soft)}.complete-profile-head span{color:var(--green);font-size:8px;font-weight:800}.complete-profile-head h3{margin:3px 0;font-size:22px}.complete-profile-head p{margin:0;color:#355047;font-size:9px}.enterprise-insight{background:#f4f6f5;padding-right:10px;padding-left:10px}
+`;document.head.appendChild(aboutProgressiveStyle);
+
+document.querySelector('#about .handoff-note').innerHTML='<h3>“关于你”｜设计师必须交付</h3><dl><dt>产品结构</dt><dd>一条记录代表一轮完整测试：生活场景完成后形成未命名的初步结果；企业偏好是同一轮的第二阶段，完成后原记录升级为完整结果，不新增第二条。</dd><dt>当前版本决策</dt><dd>MVP 不做跨轮融合，也不把多次测试计算成一份长期画像。“目前对你的理解”只表示最新一轮完整结果；“过去的理解”表示历次独立结果，不参与当前结果计算。当前研发只有一条累计的 V1–V10 用户向量，尚未具备轮次快照与重新测试能力，因此本期页面不提供“重新测试”入口；历史列表作为未来形态与内容压力测试，不代表本期已有完整数据能力。</dd><dt>Figma 页面／状态</dt><dd>① 首页有进行中记录：正在形成的理解＋目前完整理解＋过去的理解；② 首页无进行中记录：隐藏第一组，其余结构上移；③ 初步详情：生活权重、洞见与继续企业偏好入口，不出现类型名；④ 完整详情：正式类型、综合权重、生活洞见、企业适配、选择交换、文化参照与后续帮助。共 4 张代表状态。</dd><dt>交互</dt><dd>进行中卡进入初步详情并可继续既有企业偏好流程；企业偏好完成后同一记录原地升级为完整结果。历史只收录完成结果。新一轮如何发起不在本期设计范围内。</dd><dt>后期演进</dt><dd>补充测试轮次与结果快照；新一轮从统一初始状态独立计算，完成后成为最新结果，旧结果进入历史；支持独立重测、历史结果回看及前后变化对比。是否进一步做跨轮综合理解，待积累真实数据并验证用户价值后再决定，不作为当前默认方向。</dd><dt>必须解决的视觉层级</dt><dd>进行中卡体现“可继续”但不能像告警；当前完整结果是首页主视觉；历史记录弱化为可回顾档案。初步详情不得通过封面或称号暗示正式类型，完整详情才使用类型封面与名称。</dd><dt>素材</dt><dd>沿用既定 8 张结果封面与 8 张人物典故图；进行中记录不新增专属类型封面，可使用轻量进度纹理或纯 UI 图形。</dd></dl>';
+
+// 企业偏好测试：A/B 共用同一套逐题业务流程，差异只保留在生活结果的披露方式。
+const enterpriseJobs=[
+  {category:'高薪机会',company:'华海药业',role:'国际注册专员',city:'浙江 · 台州',salary:'15–22K · 14薪',summary:'收入上限更高，英文与跨区域协作要求也更高。',facts:[['待遇','15–22K · 14薪'],['工作','海外注册申报与项目协同'],['节奏','关键节点可能集中加班'],['成长','接触国际法规与完整项目']],positive:['薪资更有吸引力','成长空间更大','工作内容感兴趣','城市可以接受'],negative:['工作强度太高','收入不够确定','工作内容不适合','城市生活不合适']},
+  {category:'高性价比机会',company:'海正药业',role:'制剂研发助理',city:'浙江 · 台州',salary:'10–14K · 13薪',summary:'薪资没有最高，但生活成本、通勤和工作节奏更友好。',facts:[['待遇','10–14K · 13薪'],['生活','通勤约 25 分钟，租住成本较低'],['节奏','常规双休，项目节点偶有加班'],['成长','研发路径清晰，专业相关度高']],positive:['生活成本更友好','工作节奏更合适','专业更对口','发展路径更清晰'],negative:['薪资吸引力不足','成长速度太慢','工作内容不喜欢','城市机会不够多']},
+  {category:'非本专业机会',company:'药明康德',role:'项目运营管培生',city:'上海',salary:'12–18K · 13薪',summary:'不要求完全专业对口，进入新方向的空间更大，也需要重新学习。',facts:[['工作','项目排期、客户协同与交付推进'],['门槛','接受理工科跨专业申请'],['节奏','多任务并行，反馈速度快'],['成长','可向项目管理或业务运营发展']],positive:['愿意跨专业尝试','工作内容有新鲜感','成长方向更多','平台资源更丰富'],negative:['不想离开本专业','重新学习成本太高','工作节奏太快','岗位方向不确定']}
+];
+const enterpriseRuleCopy=`<section class="enterprise-rules"><h3>企业偏好测试｜已定产品规则</h3><dl><dt>主路径</dt><dd>生活场景结果输出后，导师自动另起一个气泡，依次给出 3 个真实企业岗位。三类机会固定为高薪、高性价比、非本专业；每题必须完成“喜欢／不喜欢＋原因”，不存在“暂时无法判断”，3 题全部完成后才生成完整结果。</dd><dt>卡片与详情</dt><dd>岗位卡提供足以直接判断的企业、岗位、城市、薪资和机会特点。岗位详情是可选的决策证据页，不是必经步骤；复用常规岗位信息结构，但进入“测试查看态”，隐藏投递、收藏和咨询，底部只保留喜欢／不喜欢。</dd><dt>保存与计算</dt><dd>每题保存机会类别、企业岗位快照、喜欢／不喜欢、1–2 个原因标签。原因标签映射岗位事实字段，再沿用研发已有 carrier → V1–V10 映射；不重复给类别、判断按钮和原因三次计分。</dd><dt>结果生成</dt><dd>生活场景初步权重＋企业偏好增量＝本轮完整结果。企业偏好完成后，原有“正在形成的理解”记录原地升级，生成唯一正式类型、综合五项倾向、企业适配、选择交换与后续求职帮助。</dd><dt>恢复规则</dt><dd>允许中途退出并从未完成题目继续；已经提交的题目默认只回看、不重复作答。三题未完成时不提前显示类型名称或完整结果。</dd></dl></section>`;
+document.querySelector('#about').insertAdjacentHTML('beforeend',enterpriseRuleCopy);
+
+function enterpriseCardMarkup(job,index,furthest){
+  const historyNav=index>0||index<furthest?`<div class="question-history-nav">${index>0?'<button type="button" data-question-nav="previous">← 上一份</button>':'<span></span>'}${index<furthest?'<button type="button" data-question-nav="next">返回当前进度 →</button>':'<span></span>'}</div>`:'';
+  return `<article class="enterprise-question-card" data-question="${index}">
+    <div class="enterprise-progress"><span>企业偏好测试</span><b>${index+1} / 3</b></div>
+    ${historyNav}
+    <div class="enterprise-category">${job.category}</div>
+    <h3>${job.company} · ${job.role}</h3>
+    <p>${job.city}<br>${job.salary}</p>
+    <div class="job-summary">${job.summary}</div>
+    <button class="job-detail-link" type="button">查看完整岗位 <span>→</span></button>
+    <p class="judgement-prompt">只看这份真实机会，你喜欢吗？</p>
+    <div class="judgement-actions"><button type="button" data-verdict="like">喜欢</button><button type="button" data-verdict="dislike">不喜欢</button></div>
+    <div class="reason-sheet" aria-live="polite"></div>
+  </article>`;
+}
+function reasonMarkup(job,verdict,submitLabel,selectedReasons=[]){
+  const labels=verdict==='like'?job.positive:job.negative;
+  return `<div class="reason-head"><b>${verdict==='like'?'喜欢它的哪些地方？':'哪些地方让你不喜欢？'}</b><span>至少选择 1 项，最多选择 2 项</span></div><div class="reason-options">${labels.map(label=>`<button type="button" aria-pressed="${selectedReasons.includes(label)}">${label}</button>`).join('')}</div><button class="reason-submit" type="button" ${selectedReasons.length?'':'disabled'}>${submitLabel}</button>`;
+}
+function detailMarkup(job,index){
+  return `<div class="screen-view enterprise-job-detail">
+    <div class="test-mode-label"><span>企业偏好测试 · ${index+1}/3</span><b>测试查看态</b></div>
+    <header class="job-detail-head"><span>${job.category}</span><h3>${job.role}</h3><p>${job.company} · ${job.city}</p></header>
+    <section class="job-fact-list">${job.facts.map(item=>`<div><b>${item[0]}</b><span>${item[1]}</span></div>`).join('')}</section>
+    <section class="job-detail-note"><h4>判断时可以留意</h4><p>这里提供的是一份真实机会的必要事实。你不需要判断它“好不好”，只需要判断自己是否愿意接受它提供的条件与交换。</p></section>
+    <div class="detail-judgement"><p>了解完整信息后，你喜欢这份机会吗？</p><div class="judgement-actions"><button type="button" data-verdict="like">喜欢</button><button type="button" data-verdict="dislike">不喜欢</button></div><div class="reason-sheet" aria-live="polite"></div></div>
+  </div>`;
+}
+function mountEnterpriseTest(panelId){
+  const panel=document.querySelector(`#${panelId}`),phone=panel.querySelector('.phone'),screen=phone.querySelector('.screen'),chat=phone.querySelector('.chat-view'),turn=chat.querySelector('.enterprise-test-turn');
+  const state={index:0,furthest:0,answers:[],completed:false};
+  turn.querySelector('.message').innerHTML='<p class="enterprise-intro">我还想用三份真实机会，看看你更愿意接受怎样的工作与交换。我们一份一份看。</p><div class="enterprise-card-host"></div>';
+  const host=turn.querySelector('.enterprise-card-host');
+  function selectReason(sheet,button){
+    const active=[...sheet.querySelectorAll('.reason-options button[aria-pressed="true"]')];
+    if(button.getAttribute('aria-pressed')==='true')button.setAttribute('aria-pressed','false');
+    else if(active.length<2)button.setAttribute('aria-pressed','true');
+    const count=sheet.querySelectorAll('.reason-options button[aria-pressed="true"]').length;
+    sheet.querySelector('.reason-submit').disabled=count<1;
+  }
+  function submitLabel(){
+    if(state.index<state.furthest)return '保存修改并返回当前进度';
+    if(state.index===enterpriseJobs.length-1)return '完成测试并查看结果';
+    return '确认并看下一个';
+  }
+  function bindReasonSheet(sheet,job,verdict,source,selectedReasons=[]){
+    sheet.classList.add('active');sheet.innerHTML=reasonMarkup(job,verdict,submitLabel(),selectedReasons);
+    sheet.querySelectorAll('.reason-options button').forEach(button=>button.onclick=()=>selectReason(sheet,button));
+    sheet.querySelector('.reason-submit').onclick=()=>{
+      const reasons=[...sheet.querySelectorAll('.reason-options button[aria-pressed="true"]')].map(button=>button.textContent);
+      state.answers[state.index]={category:job.category,company:job.company,role:job.role,verdict,reasons};
+      if(state.index<state.furthest)state.index=state.furthest;
+      else if(state.index<enterpriseJobs.length-1){state.index+=1;state.furthest=Math.max(state.furthest,state.index);}
+      else state.completed=true;
+      closeDetail();
+      render();
+    };
+    source.querySelectorAll('[data-verdict]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.verdict===verdict)));
+  }
+  function bindJudgement(container,job){
+    container.querySelectorAll('[data-verdict]').forEach(button=>button.onclick=()=>{
+      const existing=state.answers[state.index],reasons=existing?.verdict===button.dataset.verdict?existing.reasons:[];
+      bindReasonSheet(container.querySelector('.reason-sheet'),job,button.dataset.verdict,container,reasons);
+    });
+  }
+  function restoreMentorNav(){
+    const nav=phone.querySelector('.mentor-nav');if(!nav)return;
+    nav.classList.remove('detail-mode');nav.querySelector('.phone-title').textContent='派派';
+    const left=nav.querySelector('.icon-btn');left.setAttribute('aria-label','菜单');left.innerHTML='<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+  }
+  function closeDetail(){
+    phone.querySelectorAll('.enterprise-job-detail').forEach(view=>view.remove());
+    phone.querySelectorAll('.screen-view').forEach(view=>view.classList.remove('active'));
+    chat.classList.add('active');restoreMentorNav();
+  }
+  function openDetail(job){
+    phone.querySelectorAll('.enterprise-job-detail').forEach(view=>view.remove());
+    screen.insertAdjacentHTML('beforeend',detailMarkup(job,state.index));
+    const detail=screen.querySelector('.enterprise-job-detail');
+    phone.querySelectorAll('.screen-view').forEach(view=>view.classList.remove('active'));detail.classList.add('active');
+    const nav=phone.querySelector('.mentor-nav');
+    if(nav){nav.classList.add('detail-mode');nav.querySelector('.phone-title').textContent='岗位详情';const left=nav.querySelector('.icon-btn');left.setAttribute('aria-label','返回企业偏好测试');left.innerHTML='<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>';left.onclick=closeDetail;}
+    else detail.insertAdjacentHTML('afterbegin','<button class="inline-detail-back" type="button">← 返回企业偏好测试</button>');
+    detail.querySelector('.inline-detail-back')?.addEventListener('click',closeDetail);
+    bindJudgement(detail,job);
+    const answer=state.answers[state.index];if(answer)bindReasonSheet(detail.querySelector('.reason-sheet'),job,answer.verdict,detail,answer.reasons);
+  }
+  function render(){
+    if(state.completed){
+      host.innerHTML='<article class="final-profile-card"><span class="final-card-state">生活场景＋企业偏好 · 完整结果</span><div class="final-card-cover" role="img" aria-label="先行者结果封面占位"></div><h3>先行者</h3><p>你更愿意先走进真实选择，在行动中确认方向，也希望每一次尝试都能留下积累。</p><div class="final-value-preview"><span>一直在成长</span><span>未来有余地</span><span>自己能做主</span></div><div class="final-fit"><b>更适合你的企业环境</b><span>学习密度高 · 允许试错 · 方向可转换</span></div><div class="final-card-actions"><button type="button" class="view-complete-result">查看完整结果</button><button type="button" class="share-complete-result">分享结果</button></div><button type="button" class="restart-enterprise-test">重新测企业偏好</button></article>';
+      host.querySelector('.view-complete-result').onclick=()=>document.querySelector('[data-target="about"]').click();
+      host.querySelector('.share-complete-result').onclick=()=>{
+        phone.querySelector('.share-result-sheet')?.remove();
+        phone.insertAdjacentHTML('beforeend','<section class="share-result-sheet active"><div class="share-sheet-head"><b>分享结果</b><button type="button" aria-label="关闭">×</button></div><div class="share-poster"><span>我的求职选择方式</span><strong>先行者</strong><p>在行动中确认方向<br>让每次尝试都留下积累</p><small>生活场景＋企业偏好 · 完整结果</small></div><div class="share-sheet-actions"><button type="button">保存分享海报</button><button type="button">发给朋友</button></div></section>');
+        const sheet=phone.querySelector('.share-result-sheet');sheet.querySelector('[aria-label="关闭"]').onclick=()=>sheet.remove();
+      };
+      host.querySelector('.restart-enterprise-test').onclick=()=>{state.index=0;state.furthest=0;state.answers=[];state.completed=false;render()};
+      return;
+    }
+    const job=enterpriseJobs[state.index];host.innerHTML=enterpriseCardMarkup(job,state.index,state.furthest);
+    const card=host.querySelector('.enterprise-question-card');
+    card.querySelector('.job-detail-link').onclick=()=>openDetail(job);bindJudgement(card,job);
+    card.querySelector('[data-question-nav="previous"]')?.addEventListener('click',()=>{state.index-=1;render()});
+    card.querySelector('[data-question-nav="next"]')?.addEventListener('click',()=>{state.index=state.furthest;render()});
+    const answer=state.answers[state.index];if(answer)bindReasonSheet(card.querySelector('.reason-sheet'),job,answer.verdict,card,answer.reasons);
+  }
+  render();
+}
+mountEnterpriseTest('a');mountEnterpriseTest('b');
+
+document.querySelector('#a .panel-head p').textContent='生活结果卡进入详情；随后导师逐题给出三份真实企业岗位，岗位详情按需查看。';
+document.querySelector('#b .panel-head p').textContent='生活结果在对话中凝练披露；随后进入与 A 完全相同的逐题企业偏好测试。';
+document.querySelector('.hero p').textContent='本稿统一说明生活场景初步结果、逐题企业偏好测试、完整结果与「关于你」沉淀，供产品确认并交付 Figma。';
+document.querySelector('[data-target="a"] span').textContent='结果卡＋详情';
+document.querySelector('#a .flow').innerHTML='<b>生活结果</b><span>→</span><b>企业岗位 1–3</b><span>→</span><b>完整结果</b>';
+document.querySelector('#b .flow').innerHTML='<b>生活结果</b><span>→</span><b>企业岗位 1–3</b><span>→</span><b>完整结果</b>';
+const aHandoff=document.querySelector('#a .handoff-note dl'),bHandoff=document.querySelector('#b .handoff-note dl');
+const aTerms=[...aHandoff.querySelectorAll('dt')],bTerms=[...bHandoff.querySelectorAll('dt')];
+aTerms.find(term=>term.textContent.includes('Figma 页面')).nextElementSibling.textContent='A 专属 2 张：① 生活结果预览＋企业第 1/3 题同屏的对话页；② 点击生活结果卡后的完整详情页。企业测试的后续状态与 B 共用，不重复设计。';
+aTerms.find(term=>term.textContent.includes('企业偏好测试承接')).nextElementSibling.textContent='生活结果气泡输出完成后，导师自动另起气泡进入第 1/3 题；没有过渡按钮，不模拟用户发言。岗位卡可直接作答，也可进入测试态岗位详情补充证据。';
+bTerms.find(term=>term.textContent.includes('Figma 页面')).nextElementSibling.textContent='B 专属 1 张：生活结果凝练披露＋企业第 1/3 题同屏的完整对话页。B 不设置生活结果详情页；企业测试流程与 A 共用。';
+bTerms.find(term=>term.textContent.includes('企业偏好测试承接')).nextElementSibling.textContent='导师讲完生活结果后自动另起气泡进入第 1/3 题；没有过渡按钮，不模拟用户发言。岗位卡、原因选择和测试态岗位详情与 A 完全相同。';
+[aHandoff,bHandoff].forEach(dl=>dl.insertAdjacentHTML('beforeend','<dt>企业偏好测试共用稿</dt><dd>共用 5 张补充状态：① 喜欢／不喜欢后的原因选择；② 常规岗位详情的测试查看态；③ 返回上一份并回填旧答案的修改态；④ 3/3 后直接输出可分享的完整结果卡；⑤ 分享结果面板。测试完成前可前后切换并改选；没有中立、跳过或暂时无法判断。完成后不再出现“测试完成—查看结果”的过渡卡。</dd><dt>结果卡操作</dt><dd>“查看完整结果”进入与「关于你」共用的详情页；“分享结果”打开分享海报；“重新测企业偏好”沿用本轮生活结果重启三道企业题，刚生成的完整结果已保存到「关于你」，不被覆盖。</dd><dt>企业测试新增素材</dt><dd>企业 Logo、岗位事实图标沿用现有素材。分享海报复用既定 8 张结果封面与类型文案，新增 1 套通用分享海报版式，不新增企业测试插图或三张机会宣传海报。</dd>'));
+document.querySelector('#a .handoff-note h3').textContent='A｜生活结果卡＋逐题企业测试';
+document.querySelector('#b .handoff-note h3').textContent='B｜生活结果凝练披露＋逐题企业测试';
+const missingEnterprise=[...document.querySelectorAll('#missing li')].find(li=>li.textContent.includes('企业偏好验证'));
+if(missingEnterprise)missingEnterprise.innerHTML='<b>企业偏好实现</b><span>本稿已补齐前端流程、必答规则、保存字段和结果合成口径；研发仍需配置三类真实岗位、原因标签与 carrier → V1–V10 的具体映射表。</span>';
+const ruleTerms=[...document.querySelectorAll('#about .enterprise-rules dt')];
+ruleTerms.find(term=>term.textContent==='恢复规则').nextElementSibling.textContent='允许中途退出并从未完成题目继续。完整结果生成前，用户可前后切换三道题，旧判断与原因自动回填并允许修改；完成第三题并提交后，本轮答卷锁定，历史结果不被悄悄改写。';
+ruleTerms.find(term=>term.textContent==='结果生成').nextElementSibling.textContent='生活场景初步权重＋企业偏好增量＝本轮完整结果。第三题提交后不展示完成过渡卡，导师直接输出含正式类型、综合倾向和企业适配摘要的最终结果卡；结果可查看详情、分享，或沿用本轮生活结果重新测试企业偏好。';
+document.querySelector('#about .enterprise-rules').insertAdjacentHTML('afterend','<section class="delivery-matrix"><h3>本轮 Figma 交付计数</h3><p><b>共 12 张代表稿：</b>A 2 张、B 1 张、企业测试共用补充状态 5 张、「关于你」4 张。第 2/3 与第 3/3 只做组件内容适配，不增加独立版式；新增 1 套通用分享海报版式，复用既定 8 张结果封面与现有企业素材。</p></section>');
+
+const enterpriseStyle=document.createElement('style');enterpriseStyle.textContent=`
+.enterprise-rules{max-width:820px;margin:24px auto 0;padding:20px;border-top:2px solid var(--ink);background:var(--paper)}.enterprise-rules h3{margin:0 0 12px;font-size:18px}.enterprise-rules dl{display:grid;grid-template-columns:110px 1fr;margin:0}.enterprise-rules dt,.enterprise-rules dd{margin:0;padding:9px 0;border-top:1px solid var(--line);font-size:10px}.enterprise-rules dt{font-weight:800}.enterprise-rules dd{color:#384146}.delivery-matrix{max-width:820px;margin:12px auto 0;padding:16px 20px;background:var(--green-soft)}.delivery-matrix h3{margin:0 0 5px;font-size:14px}.delivery-matrix p{margin:0;color:#2f4b43;font-size:10px}.enterprise-intro{margin-bottom:10px!important}.enterprise-test-turn>.message{padding:14px!important}.enterprise-question-card{border:1px solid var(--ink);background:var(--paper)}.enterprise-progress{display:flex;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line);font-size:8px}.enterprise-progress span{color:var(--muted)}.question-history-nav{display:flex;min-height:28px;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--line)}.question-history-nav button{border:0;background:none;color:var(--green);font-size:8px;font-weight:800;cursor:pointer}.enterprise-progress span{color:var(--muted)}.enterprise-category{display:inline-block;margin:12px 12px 5px;padding:3px 7px;background:var(--green-soft);color:var(--green);font-size:8px;font-weight:800}.enterprise-question-card h3{margin:0;padding:0 12px;font-size:14px}.enterprise-question-card>p{margin:4px 0 0;padding:0 12px;color:var(--muted);font-size:8px}.job-summary{margin:10px 12px 0;padding:10px;background:var(--soft);font-size:9px}.job-detail-link{display:flex;width:calc(100% - 24px);justify-content:space-between;margin:0 12px;padding:9px 0;border:0;border-bottom:1px solid var(--line);background:none;color:var(--green);font-size:9px;font-weight:800;text-align:left;cursor:pointer}.enterprise-question-card>.judgement-prompt{margin-top:10px;color:var(--ink);font-size:9px;font-weight:750}.judgement-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 12px 12px}.judgement-actions button{min-height:34px;border:1px solid var(--ink);background:var(--paper);font-size:9px;font-weight:800;cursor:pointer}.judgement-actions button[aria-pressed=true]{background:var(--ink);color:var(--paper)}.reason-sheet{display:none;border-top:1px solid var(--line);background:#f5f7f6}.reason-sheet.active{display:block;padding:11px 12px}.reason-head{display:flex;justify-content:space-between;gap:8px}.reason-head b{font-size:9px}.reason-head span{color:var(--muted);font-size:7px}.reason-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px}.reason-options button{min-height:31px;padding:5px;border:1px solid var(--line);background:var(--paper);font-size:8px;cursor:pointer}.reason-options button[aria-pressed=true]{border-color:var(--green);background:var(--green-soft);color:var(--green);font-weight:800}.reason-submit{width:100%;min-height:34px;margin-top:9px;border:0;background:var(--green);color:var(--paper);font-size:9px;font-weight:800}.reason-submit:disabled{background:#c8cdcf;color:#727b7e}.enterprise-job-detail{padding-bottom:144px}.test-mode-label{display:flex;justify-content:space-between;padding:8px 10px;background:var(--green-soft);color:var(--green);font-size:8px}.job-detail-head{padding:15px 2px 12px;border-bottom:1px solid var(--line)}.job-detail-head>span{color:var(--green);font-size:8px;font-weight:800}.job-detail-head h3{margin:3px 0;font-size:20px}.job-detail-head p{margin:0;color:var(--muted);font-size:9px}.job-fact-list{display:grid}.job-fact-list div{display:grid;grid-template-columns:54px 1fr;gap:9px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:9px}.job-detail-note{margin-top:12px;padding:11px;background:var(--soft)}.job-detail-note h4{margin:0 0 4px;font-size:10px}.job-detail-note p{margin:0;color:#41494d;font-size:8px}.detail-judgement{position:absolute;right:15px;bottom:15px;left:15px;padding:9px;border:1px solid var(--line);background:var(--paper)}.detail-judgement>p{margin:0 0 2px;font-size:9px;font-weight:800}.detail-judgement .judgement-actions{padding:7px 0 0}.detail-judgement .reason-sheet.active{margin:8px -9px -9px}.inline-detail-back{margin-bottom:8px;border:0;background:none;color:var(--green);font-size:9px}.enterprise-complete{padding:14px;border:1px solid var(--ink);background:var(--paper)}.enterprise-complete>span{color:var(--green);font-size:8px;font-weight:800}.enterprise-complete h3{margin:4px 0;font-size:17px}.enterprise-complete p{margin:0!important;color:#3c4548;font-size:9px!important}.complete-preview{display:grid;gap:3px;margin-top:11px;padding:10px;background:var(--soft);font-size:8px}.complete-preview span{color:var(--muted)}.view-complete-result{width:100%;margin-top:10px;padding:9px;border:0;background:var(--green);color:var(--paper);font-size:9px;font-weight:800}.enterprise-test-placeholder{display:none}#a .phone,#b .phone{min-height:900px}#a .chat-view,#b .chat-view{padding-bottom:122px}@media(max-width:760px){.enterprise-rules dl{grid-template-columns:1fr}.enterprise-rules dt{padding-bottom:0}.enterprise-rules dd{border-top:0;padding-top:3px}}
+`;document.head.appendChild(enterpriseStyle);
+const finalResultStyle=document.createElement('style');finalResultStyle.textContent=`
+.final-profile-card{padding:14px;border:1px solid var(--ink);background:var(--paper)}.final-card-state{color:var(--green);font-size:8px;font-weight:800}.final-card-cover{height:72px;margin:9px 0;background:var(--soft);border:1px dashed var(--line)}.final-profile-card h3{margin:0;font-size:22px}.final-profile-card>p{margin:4px 0 0!important;padding:0!important;color:#394246!important;font-size:9px!important}.final-value-preview{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}.final-value-preview span{padding:4px 7px;border-radius:99px;background:var(--green-soft);color:var(--green);font-size:7px}.final-fit{display:grid;gap:3px;margin-top:10px;padding:9px;background:var(--soft);font-size:8px}.final-fit span{color:var(--muted)}.final-card-actions{display:grid;grid-template-columns:1.35fr 1fr;gap:7px;margin-top:10px}.final-card-actions button{min-height:34px;border:1px solid var(--green);background:var(--paper);color:var(--green);font-size:9px;font-weight:800}.final-card-actions .view-complete-result{margin:0;background:var(--green);color:var(--paper)}.restart-enterprise-test{width:100%;margin-top:7px;padding:7px;border:0;background:none;color:var(--muted);font-size:8px;text-decoration:underline}.share-result-sheet{position:absolute;z-index:12;inset:0;display:none;padding:70px 24px 24px;background:rgba(238,240,239,.97)}.share-result-sheet.active{display:block}.share-sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.share-sheet-head b{font-size:14px}.share-sheet-head button{width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:var(--paper);font-size:16px}.share-poster{display:grid;min-height:430px;align-content:end;padding:24px;border:1px solid var(--ink);background:var(--paper)}.share-poster>span{color:var(--muted);font-size:9px}.share-poster strong{margin:3px 0;font-size:34px}.share-poster p{margin:0;font-size:13px}.share-poster small{margin-top:18px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:8px}.share-sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.share-sheet-actions button{min-height:38px;border:1px solid var(--ink);background:var(--paper);font-size:9px;font-weight:800}.share-sheet-actions button:last-child{background:var(--ink);color:var(--paper)}
+`;document.head.appendChild(finalResultStyle);
+</script></body></html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>后浪澎湃 · 产品线框图</title>
+<style>
+:root{--bg:#eef0ef;--ink:#171b1d;--muted:#657075;--line:#c8cdcf;--green:#176957;--green-soft:#dfede8}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif;line-height:1.6}
+.page{width:min(720px,calc(100% - 32px));margin:auto;padding:56px 0 80px}
+header{padding-bottom:24px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:clamp(28px,5vw,40px);letter-spacing:-.03em}
+header p{margin:8px 0 0;color:var(--muted)}
+.list{display:grid;gap:14px;margin-top:28px}
+a.card{display:block;padding:20px 22px;color:inherit;background:#fff;border:1px solid var(--line);border-radius:14px;text-decoration:none;transition:.15s ease}
+a.card:hover,a.card:focus-visible{border-color:var(--green);outline:none}
+.card h2{margin:0;font-size:17px;letter-spacing:-.01em}
+.card p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.card .meta{display:flex;gap:12px;margin-top:12px;color:var(--green);font-size:12px;font-weight:600}
+@media(max-width:480px){.page{padding-top:36px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <h1>后浪澎湃 · 产品线框图</h1>
+  <p>交互方案快速索引，手机可直接打开查看。</p>
+</header>
+<main class="list">
+  <a class="card" href="enterprise-preference-guide.html">
+    <h2>关于我的理解 · 企业偏好引导</h2>
+    <p>测试结果解释主路径：导师解释本轮结果、查看详情、继续企业偏好测试，并沉淀到「关于你」。含方案 A / B、关于你、研发原表达盘点。</p>
+    <div class="meta"><span>更新 2026-09-01</span></div>
+  </a>
+  <a class="card" href="chat-waiting-error-feedback.html">
+    <h2>派派对话 · 等待与异常反馈</h2>
+    <p>等待与异常状态设计：不把断网、超时、切后台等工程状态逐项展示，系统能恢复的保持安静，需要用户介入时才给出一个明确动作。</p>
+    <div class="meta"><span>更新 2026-09-01</span></div>
+  </a>
+</main>
+</div>
+</body>
+</html>
