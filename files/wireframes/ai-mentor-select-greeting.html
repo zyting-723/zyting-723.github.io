@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI 导师选择与问候｜流程线框</title>
+  <style>
+    .service-list{margin:-3px 0 13px;padding-left:19px}.service-list li{margin:0 0 7px;padding-left:2px}.service-list li:last-child{margin-bottom:0}
+    :root{--bg:#eef0ef;--paper:#fff;--ink:#191c1b;--muted:#69716e;--line:#c9cecb;--green:#236653;--soft:#e5eee9;--warm:#f6f2e9}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans SC",sans-serif}button{font:inherit}.page{width:min(1180px,calc(100% - 32px));margin:auto;padding:30px 0 72px}.hero{display:flex;justify-content:space-between;gap:36px;align-items:end;padding-bottom:20px;border-bottom:1px solid var(--line)}h1{max-width:700px;margin:0;font-size:clamp(32px,5vw,54px);line-height:1.06;letter-spacing:-.04em}.hero p{max-width:390px;margin:0;color:var(--muted)}
+    .journey{display:grid;grid-template-columns:repeat(2,1fr);margin:24px 0 28px;border-bottom:1px solid var(--line)}.journey button{padding:13px 10px;border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);cursor:pointer}.journey b{display:block;font-size:15px}.journey span{font-size:11px}.journey button[aria-current="step"]{border-color:var(--green);color:var(--ink)}
+    .review-head{max-width:760px;margin:0 auto 18px;text-align:center}.review-head h2{margin:0;font-size:clamp(25px,4vw,36px)}.review-head p{margin:6px 0 0;color:var(--muted)}.control-stack{display:grid;gap:9px;margin-bottom:18px}.control-row{display:flex;align-items:center;justify-content:center;gap:9px}.control-row[hidden],.sub-controls[hidden]{display:none}.control-row>span{width:72px;color:var(--muted);font-size:11px;text-align:right}.sub-controls{display:flex;justify-content:center;gap:8px}.sub-controls button{padding:8px 13px;border:1px solid var(--line);border-radius:99px;background:var(--paper);color:var(--muted);cursor:pointer}.sub-controls button.active{border-color:var(--green);background:var(--green);color:#fff}
+    .stage{display:grid;grid-template-columns:minmax(390px,1fr) 360px;gap:42px;align-items:start}.phone-wrap{display:grid;min-width:0;place-items:center}.phone{position:relative;width:100%;height:844px;max-width:390px;overflow:hidden;border:1.5px solid var(--ink);border-radius:31px;background:var(--paper);box-shadow:0 16px 38px #1d292422}.phone:before{content:"";position:absolute;z-index:6;top:9px;left:50%;width:68px;height:17px;transform:translateX(-50%);border-radius:99px;background:var(--ink)}.status{display:flex;justify-content:space-between;padding:12px 20px 8px;font-size:10px;font-weight:750}.nav{display:grid;grid-template-columns:54px 1fr 54px;height:51px;align-items:center;border-bottom:1px solid var(--line)}.nav strong{text-align:center;font-size:15px}.back{border:0;background:none;font-weight:700}.screen{height:calc(100% - 71px);overflow-y:auto;padding:15px}.screen-view{display:none}.screen-view.active{display:block}
+    .mentor-list{display:grid;gap:13px}.mentor-card{display:grid;grid-template-columns:1fr 42%;min-height:198px;overflow:hidden;border:1px solid var(--line);border-top:4px solid var(--tone);border-radius:19px;background:var(--warm);cursor:pointer}.mentor-card:focus-visible,.grid-card:focus-visible{outline:3px solid #81b4a6;outline-offset:2px}.mentor-copy{display:flex;flex-direction:column;justify-content:center;padding:19px 8px 16px 17px}.mentor-copy h3{margin:0;font-size:23px}.mentor-copy b{color:var(--green);font-size:11px}.mentor-copy p{margin:15px 0 0;font-size:13px}.mentor-visual{display:grid;place-items:end center;min-height:174px;margin:8px 8px 0 0;border:1px dashed #929892;border-radius:14px 14px 0 0;background:linear-gradient(#efede6,#ddddd4);color:var(--muted);font-size:10px;text-align:center}.mentor-visual span{padding:8px}
+    #select-b{height:100%}.mentor-grid{display:grid;grid-template-columns:repeat(2,1fr);align-content:start;gap:11px 14px;padding-top:3px}.grid-card{position:relative;min-height:0;aspect-ratio:.87;overflow:hidden;border:0;border-radius:15px;background:transparent;cursor:pointer}.grid-visual{position:absolute;top:0;right:7px;left:7px;display:grid;aspect-ratio:240/290;place-items:center;border:1px dashed #929892;border-radius:13px;background:linear-gradient(#efede6,#ddddd4);color:var(--muted);font-size:9px;text-align:center}.grid-meta{position:absolute;z-index:2;right:7px;bottom:0;left:7px;min-height:46px;padding:16px 9px 5px;border-radius:0 0 13px 13px;background:linear-gradient(transparent,rgba(246,242,233,.96) 42%)}.grid-meta strong{display:block;font-size:13px;line-height:1.1}.grid-meta span{display:block;color:var(--green);font-size:8px;font-weight:800;line-height:1.2}
+    .chat-head{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:15px}.mini-avatar{display:grid;width:38px;height:38px;place-items:center;border:1px dashed var(--muted);border-radius:50%;font-size:9px}.chat-head strong{font-size:14px}.bubble{padding:17px 18px;border:1px solid var(--line);border-radius:5px 18px 18px 18px;background:#fff;font-size:14px}.bubble p{margin:0 0 12px}.bubble p:last-child{margin:0}.bubble p strong{font-weight:700}.entry-card{position:relative;margin-top:15px;overflow:hidden;border:1px solid var(--line);border-radius:18px;cursor:pointer}.entry-card:focus-visible{outline:3px solid #81b4a6;outline-offset:2px}.entry-card .scene-art{display:grid;place-items:center;color:var(--muted);font-size:10px}.entry-copy h3{margin:0;font-size:20px}.entry-kicker{display:block;margin-bottom:7px;color:var(--muted);font-size:12px}.entry-kicker:empty{display:none}.entry-card.layout-a{height:178px;background:#dfe6e2}.layout-a .scene-art{position:absolute;inset:0;border:1px dashed #929892}.layout-a .entry-copy{position:absolute;bottom:16px;left:16px;max-width:280px}.entry-card.layout-b{min-height:132px;background:#fff}.layout-b .scene-art{display:none}.layout-b .entry-copy{padding:24px 22px}.layout-b .entry-copy h3{max-width:310px;font-size:24px;line-height:1.3}.copy-action .entry-copy{display:flex;flex-direction:column}.copy-action .entry-copy h3{order:1}.copy-action .entry-kicker{order:2;margin:9px 0 0}.input{position:absolute;right:14px;bottom:17px;left:14px;padding:11px 14px;border:1px solid var(--line);border-radius:24px;color:#a1a6a3;background:#fff;font-size:12px}
+    .notes{padding-top:8px}.notes h3{margin:0 0 10px;font-size:22px}.notes p{margin:0 0 15px;color:var(--muted)}.notes dl{margin:0;border-top:1px solid var(--line)}.notes dt{padding-top:13px;font-weight:800}.notes dd{margin:3px 0 13px;color:var(--muted)}.flow-line{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:18px;color:var(--muted);font-size:12px}.flow-line b{color:var(--ink)}
+    .handoff{margin-top:42px;padding-top:28px;border-top:1px solid var(--line)}.handoff h2{margin:0 0 14px}.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.count{padding:14px;border:1px solid var(--line);background:var(--paper)}.count strong{display:block;font-size:25px}.count span{color:var(--muted);font-size:11px}
+    @media(max-width:820px){.hero{display:block}.hero p{margin-top:10px}.stage{grid-template-columns:minmax(0,1fr)}.notes{max-width:540px;margin:auto}.counts{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:520px){.page{width:min(100% - 20px,430px);padding-top:18px}.journey{grid-template-columns:1fr}.journey button{text-align:left}.control-row{display:block}.control-row>span{display:block;width:auto;margin-bottom:6px;text-align:left}.sub-controls{display:grid;grid-template-columns:1fr 1fr}.phone{height:780px}.stage{gap:24px}.notes{padding:0}.counts{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero"><h1>AI 导师选择与首次问候</h1><p>按流程阶段查看页面；只有当前阶段存在多个方案时，才出现阶段内方案切换。</p></header>
+    <nav class="journey" id="journey-nav" aria-label="完整流程">
+      <button aria-current="step" data-stage="select"><b>01｜选择导师</b><span>比较两种列表方案</span></button>
+      <button aria-current="false" data-stage="greeting"><b>02｜首次对话</b><span>问候后紧跟测试入口</span></button>
+    </nav>
+
+    <section class="review-head"><h2 id="stage-title">选择导师</h2><p id="stage-subtitle">同一页只比较信息密度：A 强调人物与一句介绍，B 一屏展示六位导师。</p></section>
+    <div class="control-stack">
+      <div class="sub-controls" id="variant-controls">
+        <button class="active" data-variant="a">方案 A｜大图纵向浏览</button><button data-variant="b">方案 B｜一屏看全六人</button>
+      </div>
+      <div class="control-row" id="mentor-preview-row" hidden><span>导师文案</span><div class="sub-controls" id="mentor-preview-controls"></div></div>
+      <div class="control-row" id="entry-plan-row" hidden><span>入口方案</span><div class="sub-controls" id="entry-plan-controls">
+        <button class="active" data-entry-plan="a1">A1｜重图片</button><button data-entry-plan="a2">A2｜重图片</button><button data-entry-plan="b1">B1｜纯文字</button><button data-entry-plan="b2">B2｜纯文字</button>
+      </div></div>
+    </div>
+
+    <section class="stage">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="status"><span>9:41</span><span>5G　100%</span></div>
+          <div class="nav"><button class="back">返回</button><strong id="phone-title">选择你的 AI 导师</strong><span></span></div>
+          <div class="screen" id="phone-stage">
+            <div class="screen-view active" id="select-a"><div class="mentor-list" id="mentor-list"></div></div>
+            <div class="screen-view" id="select-b"><div class="mentor-grid" id="mentor-grid"></div></div>
+            <div class="screen-view" id="greeting-view"><div class="chat-head"><div class="mini-avatar">导师</div><strong id="greeting-name"></strong></div><div class="bubble" id="greeting-bubble"></div><article class="entry-card layout-a" id="entry-card" role="button" tabindex="0"><div class="scene-art">设计输出的生活场景视觉</div><div class="entry-copy"><span class="entry-kicker" id="entry-kicker"></span><h3>生活场景选择</h3></div></article><div class="input">问问导师，说点什么……</div></div>
+          </div>
+        </div>
+      </div>
+      <aside class="notes"><h3 id="note-title">本阶段要判断什么</h3><p id="note-summary">导师卡是否能让角色形象先被看见，同时保持选择动作足够直接。</p><dl id="note-list"><dt>共同规则</dt><dd>六位导师能力一致；整张卡点击后直接进入首次问候。</dd><dt>方案差异</dt><dd>A 保留一句相处感受；B 只保留人物、姓名与风格词。</dd><dt>图片</dt><dd>复用现有透明背景 3D 全身角色，不裁成头像。</dd></dl><div class="flow-line"><b>选择导师</b><span>→</span><span>首次问候</span><span>→</span><span>生活场景选择</span></div></aside>
+    </section>
+
+    <section class="handoff"><h2>统一交付</h2><div class="counts"><div class="count"><strong>2</strong><span>流程页面／状态</span></div><div class="count"><strong>2</strong><span>选择导师页方案</span></div><div class="count"><strong>4</strong><span>生活场景完整入口方案</span></div><div class="count"><strong>6</strong><span>导师文案状态</span></div></div></section>
+  </main>
+  <script>
+    const mentors=[
+      {id:'kaige',name:'开哥',tone:'沉稳 · 直接',role:'直说重点，陪你看清取舍',color:'#9d5a3b',g:['嗨，我是开哥。找工作的事，咱们不绕弯。','先凭感觉做几次选择，让我知道你更看重什么。']},
+      {id:'linjie',name:'琳姐',tone:'大方 · 清晰',role:'理清思路，也照顾你的感受',color:'#4a6b8c',g:['嗨，我是琳姐。找工作头绪多，我们可以慢慢理。','先做几次简单选择，看看你会把什么放在前面。']},
+      {id:'xiaohao',name:'小豪',tone:'务实 · 自然',role:'从现实出发，陪你踏实判断',color:'#527266',g:['嗨，我是小豪。找工作这件事，咱们一步一步来。','先凭感觉选几次，我好知道你在意什么。']},
+      {id:'xiaoqing',name:'小晴',tone:'亲近 · 清醒',role:'接住犹豫，帮你听见自己',color:'#ac6947',g:['嗨，我是小晴。关于工作和未来，你都可以来和我聊聊。','我们先做几次简单选择。没有标准答案，选你更喜欢的就好。']},
+      {id:'paipai',name:'派派',tone:'轻松 · 活泼',role:'轻松试试看，边聊边找方向',color:'#bd8b2e',g:['嗨，我是派派。找工作的路上，我陪你边走边看。','接下来很轻松，凭感觉选几次就好。']},
+      {id:'lili',name:'历历',tone:'舒展 · 笃定',role:'把眼光放远，陪你想清未来',color:'#647a98',g:['嗨，我是历历。找工作的路很长，不必急着一次选定。','我们先从几次简单选择开始，看看你想要怎样的工作和日子。']}
+    ];
+    const services=['推送你订阅的新机会、求职节点和前辈内容','从岗位、公司、城市和生活出发，帮你判断机会','找前辈、改简历，陪你走到投递这一步'];
+    const entryPlans={a1:{layout:'a',kicker:'',title:'生活场景选择'},a2:{layout:'a',kicker:'',title:'你向往怎样的生活？'},b1:{layout:'b',mode:'copy-action',kicker:'得到一份工作与生活偏好的初步理解',title:'完成几次生活场景选择'},b2:{layout:'b',mode:'copy-action',kicker:'我会据此理解，你更看重怎样的工作与日子。',title:'选出你向往的生活'}};
+    const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];let selected='paipai';let stage='select';let variant='a';let entryPlan='a1';
+    $('#mentor-list').innerHTML=mentors.map(m=>`<article class="mentor-card" role="button" tabindex="0" data-mentor="${m.id}" style="--tone:${m.color}"><div class="mentor-copy"><h3>${m.name}</h3><b>${m.tone}</b><p>${m.role}</p></div><div class="mentor-visual"><span>现有 ${m.name}<br>3D 全身形象</span></div></article>`).join('');
+    $('#mentor-grid').innerHTML=mentors.map(m=>`<article class="grid-card" role="button" tabindex="0" data-mentor="${m.id}"><div class="grid-visual">现有 ${m.name}<br>3D 全身形象</div><div class="grid-meta"><strong>${m.name}</strong><span>${m.tone}</span></div></article>`).join('');
+    $('#mentor-preview-controls').innerHTML=mentors.map((m,i)=>`<button class="${i===4?'active':''}" data-mentor-preview="${m.id}">${m.name}</button>`).join('');
+    function greetingHTML(m){return `<p>${m.g[0]}</p><p>我可以帮你：</p><ul class="service-list">${services.map(item=>`<li>${item}</li>`).join('')}</ul><p>${m.g[1]}</p>`}
+    function showOnly(id){$$('.screen-view').forEach(v=>v.classList.toggle('active',v.id===id))}
+    function render(){const m=mentors.find(x=>x.id===selected);const plan=entryPlans[entryPlan];$('#variant-controls').hidden=stage!=='select';$('#mentor-preview-row').hidden=stage!=='greeting';$('#entry-plan-row').hidden=stage!=='greeting';if(stage==='select'){showOnly(variant==='a'?'select-a':'select-b');$('#phone-title').textContent='选择你的 AI 导师';$('#stage-title').textContent='选择导师';$('#stage-subtitle').textContent='同一页只比较信息密度：A 强调人物与一句介绍，B 一屏展示六位导师。';$('#note-summary').textContent='导师卡是否能让角色形象先被看见，同时保持选择动作足够直接。';$('#note-list').innerHTML='<dt>共同规则</dt><dd>六位导师能力一致；整张卡点击后直接进入首次对话。</dd><dt>方案差异</dt><dd>A 保留一句相处感受；B 只保留人物、姓名与风格词。</dd><dt>图片</dt><dd>复用现有透明背景 3D 全身角色，不裁成头像。</dd>'}if(stage==='greeting'){showOnly('greeting-view');$('#phone-title').textContent=m.name;$('#greeting-name').textContent=m.name;$('#greeting-bubble').innerHTML=greetingHTML(m);$('#entry-card').className=`entry-card layout-${plan.layout}${plan.mode?' '+plan.mode:''}`;$('#entry-kicker').textContent=plan.kicker;$('#entry-card h3').textContent=plan.title;$('#stage-title').textContent='首次对话';$('#stage-subtitle').textContent='导师问候后自动出现生活场景测试入口；比较四个版式与文案绑定的完整方案。';$('#note-summary').textContent='导师气泡已经说明如何选择；入口卡不再重复动作，纯文字版只补充完成后会得到什么。';$('#note-list').innerHTML='<dt>A1／A2｜重图片、轻文字</dt><dd>画面承担生活场景语义和点击感，卡片只保留一句入口标题。</dd><dt>B1｜结果先行</dt><dd>直接说明完成后用户会得到什么。</dd><dt>B2｜行动＋收益</dt><dd>先说明要做什么，再说明这些选择会带来什么理解。</dd>'}}
+    $$('#journey-nav button').forEach(b=>b.onclick=()=>{stage=b.dataset.stage;$$('#journey-nav button').forEach(x=>x.setAttribute('aria-current',x===b?'step':'false'));render()});
+    $$('#variant-controls button').forEach(b=>b.onclick=()=>{variant=b.dataset.variant;$$('#variant-controls button').forEach(x=>x.classList.toggle('active',x===b));render()});
+    $$('#mentor-preview-controls button').forEach(b=>b.onclick=()=>{selected=b.dataset.mentorPreview;$$('#mentor-preview-controls button').forEach(x=>x.classList.toggle('active',x===b));render()});
+    $$('#entry-plan-controls button').forEach(b=>b.onclick=()=>{entryPlan=b.dataset.entryPlan;$$('#entry-plan-controls button').forEach(x=>x.classList.toggle('active',x===b));render()});
+    $$('[data-mentor]').forEach(card=>{const choose=()=>{selected=card.dataset.mentor;stage='greeting';$$('#journey-nav button').forEach(x=>x.setAttribute('aria-current',x.dataset.stage==='greeting'?'step':'false'));render()};card.onclick=choose;card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}}});render();
+  </script>
+</body>
+</html>
