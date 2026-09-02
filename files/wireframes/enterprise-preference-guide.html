@@ -290,49 +290,141 @@ const aboutProgressiveStyle=document.createElement('style');aboutProgressiveStyl
 #about .phone{min-height:844px}#about .screen{padding:14px 14px 30px}#about .about-home{display:grid;grid-template-columns:1fr;gap:18px}#about .about-block{display:grid;gap:8px}.about-block-title{display:flex;align-items:center;justify-content:space-between}.about-block-title h3{margin:0;font-size:12px}.about-block-title span{color:var(--muted);font-size:8px}.progress-record,.current-record,.history-record{width:100%;border:1px solid var(--line);background:var(--paper);color:var(--ink);text-align:left;cursor:pointer}.progress-record{display:grid;gap:7px;padding:14px;border-color:#99bdb3;background:var(--green-soft)}.progress-record .record-state{color:var(--green);font-size:8px;font-weight:800}.progress-record>strong{font-size:15px}.progress-record p{margin:0;color:#3d514c;font-size:9px}.value-pills{display:flex;flex-wrap:wrap;gap:5px}.value-pills i{padding:3px 7px;border-radius:99px;background:rgba(255,255,255,.72);font-size:7px;font-style:normal}.record-action{display:flex;justify-content:space-between;margin-top:2px;padding-top:8px;border-top:1px solid #b8d1ca;color:var(--green);font-size:9px;font-weight:800}.current-record{display:grid;grid-template-columns:104px 1fr;min-height:128px;padding:0;overflow:hidden}.current-cover,.history-cover{display:block;background:var(--soft)}.current-copy{display:grid;align-content:center;gap:4px;padding:12px}.current-copy small,.history-record small{color:var(--muted);font-size:7px}.current-copy strong{font-size:18px}.current-copy p,.history-record p{margin:0;color:var(--muted);font-size:8px}.current-copy em{margin-top:5px;color:var(--green);font-size:8px;font-style:normal;font-weight:800}.history-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.history-record{padding:0;overflow:hidden}.history-cover{height:64px}.history-record>span:last-child{display:grid;gap:2px;padding:8px}.history-record strong{font-size:11px}.about-preliminary-detail>.detail-sub{display:none}.detail-state{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:8px 10px;background:var(--green-soft);color:var(--green);font-size:8px}.detail-state b{font-size:9px}.resume-enterprise{display:flex;width:100%;align-items:center;justify-content:space-between;margin-top:14px;padding:13px;border:1px solid #99bdb3;background:var(--green-soft);color:var(--green);text-align:left;cursor:pointer}.resume-enterprise span:first-child{display:grid;gap:2px}.resume-enterprise b{font-size:10px}.resume-enterprise small{font-size:8px}.complete-profile-head{margin-bottom:14px;padding:14px;background:var(--green-soft)}.complete-profile-head span{color:var(--green);font-size:8px;font-weight:800}.complete-profile-head h3{margin:3px 0;font-size:22px}.complete-profile-head p{margin:0;color:#355047;font-size:9px}.enterprise-insight{background:#f4f6f5;padding-right:10px;padding-left:10px}
 `;document.head.appendChild(aboutProgressiveStyle);
 
-document.querySelector('#about .handoff-note').innerHTML='<h3>“关于你”｜设计师必须交付</h3><dl><dt>产品结构</dt><dd>一条记录代表一轮完整测试：生活场景完成后形成未命名的初步结果；企业偏好是同一轮的第二阶段，完成后原记录升级为完整结果，不新增第二条。</dd><dt>当前版本决策</dt><dd>MVP 不做跨轮融合，也不把多次测试计算成一份长期画像。“目前对你的理解”只表示最新一轮完整结果；“过去的理解”表示历次独立结果，不参与当前结果计算。当前研发只有一条累计的 V1–V10 用户向量，尚未具备轮次快照与重新测试能力，因此本期页面不提供“重新测试”入口；历史列表作为未来形态与内容压力测试，不代表本期已有完整数据能力。</dd><dt>Figma 页面／状态</dt><dd>① 首页有进行中记录：正在形成的理解＋目前完整理解＋过去的理解；② 首页无进行中记录：隐藏第一组，其余结构上移；③ 初步详情：生活权重、洞见与继续企业偏好入口，不出现类型名；④ 完整详情：正式类型、综合权重、生活洞见、企业适配、选择交换、文化参照与后续帮助。共 4 张代表状态。</dd><dt>交互</dt><dd>进行中卡进入初步详情并可继续既有企业偏好流程；企业偏好完成后同一记录原地升级为完整结果。历史只收录完成结果。新一轮如何发起不在本期设计范围内。</dd><dt>后期演进</dt><dd>补充测试轮次与结果快照；新一轮从统一初始状态独立计算，完成后成为最新结果，旧结果进入历史；支持独立重测、历史结果回看及前后变化对比。是否进一步做跨轮综合理解，待积累真实数据并验证用户价值后再决定，不作为当前默认方向。</dd><dt>必须解决的视觉层级</dt><dd>进行中卡体现“可继续”但不能像告警；当前完整结果是首页主视觉；历史记录弱化为可回顾档案。初步详情不得通过封面或称号暗示正式类型，完整详情才使用类型封面与名称。</dd><dt>素材</dt><dd>沿用既定 8 张结果封面与 8 张人物典故图；进行中记录不新增专属类型封面，可使用轻量进度纹理或纯 UI 图形。</dd></dl>';
+document.querySelector('#about .handoff-note').innerHTML='<h3>“关于你”｜设计师必须交付</h3><dl><dt>产品结构</dt><dd>一条记录代表一轮完整测试：生活场景完成后形成未命名的初步结果；企业偏好是同一轮的第二阶段，完成后原记录升级为完整结果，不新增第二条。</dd><dt>当前版本决策</dt><dd>MVP 不做跨轮融合，也不把多次测试计算成一份长期画像。“目前对你的理解”只表示最新一轮完整结果；“过去的理解”表示历次独立结果，不参与当前结果计算。当前研发只有一条累计的 V1–V10 用户向量，尚未具备完整的轮次快照能力。企业完整结果卡可沿用本轮生活结果重新测试企业偏好；完整生活场景测试的新一轮发起暂不在本期入口设计范围内。历史列表作为未来形态与内容压力测试，不代表本期已有完整数据能力。</dd><dt>Figma 页面／状态</dt><dd>① 首页有进行中记录：正在形成的理解＋目前完整理解＋过去的理解；② 首页无进行中记录：隐藏第一组，其余结构上移；③ 初步详情：生活权重、洞见与继续企业偏好入口，不出现类型名；④ 完整详情：正式类型、综合权重、生活洞见、企业适配、选择交换、文化参照与后续帮助。共 4 张代表状态。</dd><dt>交互</dt><dd>进行中卡进入初步详情并可继续既有企业偏好流程；企业偏好完成后同一记录原地升级为完整结果。历史只收录完成结果。完整生活场景测试如何重新发起不在本期设计范围内。</dd><dt>后期演进</dt><dd>补充测试轮次与结果快照；新一轮从统一初始状态独立计算，完成后成为最新结果，旧结果进入历史；支持独立重测、历史结果回看及前后变化对比。是否进一步做跨轮综合理解，待积累真实数据并验证用户价值后再决定，不作为当前默认方向。</dd><dt>必须解决的视觉层级</dt><dd>进行中卡体现“可继续”但不能像告警；当前完整结果是首页主视觉；历史记录弱化为可回顾档案。初步详情不得通过封面或称号暗示正式类型，完整详情才使用类型封面与名称。</dd><dt>素材</dt><dd>沿用既定 8 张结果封面与 8 张人物典故图；进行中记录不新增专属类型封面，可使用轻量进度纹理或纯 UI 图形。</dd></dl>';
 
 // 企业偏好测试：A/B 共用同一套逐题业务流程，差异只保留在生活结果的披露方式。
+const enterprisePreferenceTags={
+  prefer_high_salary:{name:'更看重收入水平',carrier:'money.nominal_salary',delta:{V2:1,V6:1}},
+  prefer_purchasing_power:{name:'更看重实际购买力',carrier:'money.purchasing_power',delta:{V2:1}},
+  prefer_income_certainty:{name:'更看重收入确定',carrier:'money.income_certainty',delta:{V1:1}},
+  prefer_income_growth:{name:'更看重收入增长',carrier:'money.growth_curve',delta:{V1:1,V5:1}},
+  prefer_learning_density:{name:'更看重学习密度',carrier:'development.learning_density',delta:{V5:1,V10:1}},
+  prefer_novel_work:{name:'更看重工作新鲜感',carrier:'work.novelty',delta:{V5:1,V10:1}},
+  prefer_low_intensity:{name:'更看重低强度',carrier:'time.intensity',delta:{V3:1}},
+  prefer_low_collaboration_load:{name:'更看重低情绪耗损',carrier:'time.emotional_labor',delta:{V3:1,V7:1}},
+  prefer_time_autonomy:{name:'更看重时间自主',carrier:'time.autonomy',delta:{V3:1,V4:1}},
+  prefer_low_travel:{name:'更看重少出差驻外',carrier:'time.business_travel',delta:{V3:1,V8:1,V10:-1}},
+  prefer_low_living_cost:{name:'更看重低生活成本',carrier:'city.living_cost',delta:{V1:1,V2:1}},
+  prefer_city_resources:{name:'更看重城市资源',carrier:'city.resource_density',delta:{V5:1,V10:1}},
+  prefer_short_commute:{name:'更看重短通勤',carrier:'time.commute',delta:{V3:1}},
+  prefer_complete_leave:{name:'更看重假期完整',carrier:'time.leave_integrity',delta:{V2:1,V3:1}},
+  prefer_professional_fit:{name:'更看重专业对口',carrier:'work.professional_relevance',delta:{V7:1}},
+  prefer_clear_path:{name:'更看重发展路径清晰',carrier:'development.promotion_clarity',delta:{V1:1,V5:1}},
+  prefer_growth_ceiling:{name:'更看重发展上限',carrier:'development.ceiling',delta:{V5:1}},
+  prefer_cross_profession:{name:'更愿意跨专业尝试',carrier:'work.professional_relevance',delta:{V7:-1}},
+  prefer_transferable_skills:{name:'更看重可迁移能力',carrier:'development.skill_transferability',delta:{V1:1,V4:1}},
+  prefer_multiple_paths:{name:'更看重发展可能性',carrier:'work.outcome_uncertainty',delta:{V1:-1,V5:1}},
+  prefer_low_transition_cost:{name:'更看重转向成本可控',carrier:'development.skill_transferability',delta:{V1:1,V4:1}},
+  prefer_certainty:{name:'更看重方向确定',carrier:'work.outcome_uncertainty',delta:{V1:1,V5:-1}},
+  prefer_unit_brand:{name:'更看重企业平台',carrier:'identity.unit_brand',delta:{V1:1,V6:1}}
+};
+const enterpriseTestCases={
+  high_salary:{name:'最高薪机会',goal:'测量用户愿意为高收入承担什么',allowed:['prefer_high_salary','prefer_income_growth','prefer_unit_brand','prefer_growth_ceiling','prefer_learning_density','prefer_novel_work','prefer_low_intensity','prefer_low_collaboration_load','prefer_complete_leave','prefer_low_travel','prefer_short_commute','prefer_low_living_cost','prefer_low_transition_cost']},
+  cost_effective:{name:'最高性价比机会',goal:'测量用户是否愿意用部分上限换取更好的现实生活',allowed:['prefer_purchasing_power','prefer_income_certainty','prefer_low_living_cost','prefer_short_commute','prefer_complete_leave','prefer_time_autonomy','prefer_low_intensity','prefer_professional_fit','prefer_clear_path','prefer_growth_ceiling','prefer_city_resources','prefer_high_salary','prefer_novel_work']},
+  cross_industry:{name:'跨行业机会',goal:'测量用户对新可能性的接受边界',allowed:['prefer_cross_profession','prefer_professional_fit','prefer_novel_work','prefer_transferable_skills','prefer_learning_density','prefer_multiple_paths','prefer_certainty','prefer_low_transition_cost','prefer_low_intensity','prefer_unit_brand','prefer_growth_ceiling']}
+};
 const enterpriseJobs=[
-  {category:'高薪机会',company:'华海药业',role:'国际注册专员',city:'浙江 · 台州',salary:'15–22K · 14薪',summary:'收入上限更高，英文与跨区域协作要求也更高。',facts:[['待遇','15–22K · 14薪'],['工作','海外注册申报与项目协同'],['节奏','关键节点可能集中加班'],['成长','接触国际法规与完整项目']],positive:['薪资更有吸引力','成长空间更大','工作内容感兴趣','城市可以接受'],negative:['工作强度太高','收入不够确定','工作内容不适合','城市生活不合适']},
-  {category:'高性价比机会',company:'海正药业',role:'制剂研发助理',city:'浙江 · 台州',salary:'10–14K · 13薪',summary:'薪资没有最高，但生活成本、通勤和工作节奏更友好。',facts:[['待遇','10–14K · 13薪'],['生活','通勤约 25 分钟，租住成本较低'],['节奏','常规双休，项目节点偶有加班'],['成长','研发路径清晰，专业相关度高']],positive:['生活成本更友好','工作节奏更合适','专业更对口','发展路径更清晰'],negative:['薪资吸引力不足','成长速度太慢','工作内容不喜欢','城市机会不够多']},
-  {category:'非本专业机会',company:'药明康德',role:'项目运营管培生',city:'上海',salary:'12–18K · 13薪',summary:'不要求完全专业对口，进入新方向的空间更大，也需要重新学习。',facts:[['工作','项目排期、客户协同与交付推进'],['门槛','接受理工科跨专业申请'],['节奏','多任务并行，反馈速度快'],['成长','可向项目管理或业务运营发展']],positive:['愿意跨专业尝试','工作内容有新鲜感','成长方向更多','平台资源更丰富'],negative:['不想离开本专业','重新学习成本太高','工作节奏太快','岗位方向不确定']}
+  {category:'高薪机会',company:'华海药业',role:'国际注册专员',city:'浙江 · 台州',salary:'15–22K · 14薪',description:'这份工作主要负责海外注册申报和跨区域项目协同。',benefit:'收入上限更高，并能接触国际法规与完整项目',cost:'更高的英文与协作要求，以及关键节点可能出现的集中加班',facts:[['待遇','15–22K · 14薪'],['工作','海外注册申报与项目协同'],['节奏','关键节点可能集中加班'],['成长','接触国际法规与完整项目']],positive:[
+    {id:'salary_priority',label:'薪资上限更高',fact:'15–22K · 14薪',carrier:'money.nominal_salary',delta:{V2:1,V6:1}},
+    {id:'learning_density',label:'能接触完整项目',fact:'接触国际法规与完整项目',carrier:'development.learning_density',delta:{V5:1,V10:1}},
+    {id:'work_novelty',label:'能接触国际法规',fact:'海外注册申报',carrier:'work.novelty',delta:{V5:1,V10:1}},
+    {id:'collaboration',label:'喜欢跨区域协作',fact:'跨区域项目协同',carrier:'work.people_or_objects',delta:{V3:-1,V8:1}}
+  ],negative:[
+    {id:'avoid_intensity',label:'集中加班难接受',fact:'关键节点可能集中加班',carrier:'time.intensity',delta:{V3:1}},
+    {id:'avoid_collaboration_load',label:'跨区域协作负担重',fact:'跨区域项目协同',carrier:'time.emotional_labor',delta:{V3:1,V7:1}},
+    {id:'prefer_familiar_work',label:'更喜欢熟悉的工作',fact:'海外注册申报',carrier:'work.novelty',delta:{V5:-1,V10:-1}}
+  ]},
+  {category:'高性价比机会',company:'海正药业',role:'制剂研发助理',city:'浙江 · 台州',salary:'10–14K · 13薪',description:'这份工作主要参与制剂研发，专业相关度较高。',benefit:'通勤和生活成本更可控，工作节奏相对稳定，研发路径也更清晰',cost:'收入上限相对有限，项目之外的成长速度可能没有那么快',facts:[['待遇','10–14K · 13薪'],['生活','通勤约 25 分钟，租住成本较低'],['节奏','常规双休，项目节点偶有加班'],['成长','研发路径清晰，专业相关度高']],positive:[
+    {id:'living_cost',label:'租住成本更可控',fact:'租住成本较低',carrier:'city.living_cost',delta:{V1:1,V2:1}},
+    {id:'short_commute',label:'通勤时间更短',fact:'通勤约 25 分钟',carrier:'time.commute',delta:{V3:1}},
+    {id:'leave_integrity',label:'常规双休',fact:'常规双休',carrier:'time.leave_integrity',delta:{V2:1,V3:1}},
+    {id:'professional_fit',label:'专业更对口',fact:'专业相关度高',carrier:'work.professional_relevance',delta:{V7:1}},
+    {id:'promotion_clarity',label:'研发路径更清晰',fact:'研发路径清晰',carrier:'development.promotion_clarity',delta:{V1:1,V5:1}}
+  ],negative:[
+    {id:'salary_priority',label:'薪资上限偏低',fact:'10–14K · 13薪',carrier:'money.nominal_salary',delta:{V2:1,V6:1}},
+    {id:'growth_ceiling',label:'成长上限有限',fact:'项目之外的成长速度较慢',carrier:'development.ceiling',delta:{V5:1}},
+    {id:'prefer_novel_work',label:'工作内容不够新鲜',fact:'制剂研发工作',carrier:'work.novelty',delta:{V5:1,V10:1}}
+  ]},
+  {category:'非本专业机会',company:'药明康德',role:'项目运营管培生',city:'上海',salary:'12–18K · 13薪',description:'这份工作主要负责项目排期、客户协同和交付推进。',benefit:'进入新方向，并接触项目管理和业务运营的机会',cost:'重新学习的成本、多任务并行的节奏，以及尚未完全确定的发展方向',facts:[['工作','项目排期、客户协同与交付推进'],['门槛','接受理工科跨专业申请'],['节奏','多任务并行，反馈速度快'],['成长','可向项目管理或业务运营发展']],positive:[
+    {id:'cross_profession',label:'愿意跨专业尝试',fact:'接受理工科跨专业申请',carrier:'work.professional_relevance',delta:{V7:-1}},
+    {id:'work_novelty',label:'工作内容有新鲜感',fact:'项目管理和业务运营',carrier:'work.novelty',delta:{V5:1,V10:1}},
+    {id:'skill_transferability',label:'能积累项目管理能力',fact:'项排期、客户协同与交付推进',carrier:'development.skill_transferability',delta:{V1:1,V4:1}},
+    {id:'multiple_paths',label:'未来发展方向更多',fact:'可向项目管理或业务运营发展',carrier:'development.ceiling',delta:{V5:1}}
+  ],negative:[
+    {id:'professional_identity',label:'不想离开本专业',fact:'跨专业岗位',carrier:'work.professional_relevance',delta:{V7:1}},
+    {id:'relearning_cost',label:'重新积累成本太高',fact:'跨专业申请',carrier:'development.skill_transferability',delta:{V1:1,V4:1}},
+    {id:'avoid_intensity',label:'多任务节奏太快',fact:'多任务并行，反馈速度快',carrier:'time.intensity',delta:{V3:1}},
+    {id:'prefer_certainty',label:'岗位方向不够确定',fact:'可向项目管理或业务运营发展',carrier:'work.outcome_uncertainty',delta:{V1:1,V5:-1}}
+  ]}
 ];
-const enterpriseRuleCopy=`<section class="enterprise-rules"><h3>企业偏好测试｜已定产品规则</h3><dl><dt>主路径</dt><dd>生活场景结果输出后，导师自动另起一个气泡，依次给出 3 个真实企业岗位。三类机会固定为高薪、高性价比、非本专业；每题必须完成“喜欢／不喜欢＋原因”，不存在“暂时无法判断”，3 题全部完成后才生成完整结果。</dd><dt>卡片与详情</dt><dd>岗位卡提供足以直接判断的企业、岗位、城市、薪资和机会特点。岗位详情是可选的决策证据页，不是必经步骤；复用常规岗位信息结构，但进入“测试查看态”，隐藏投递、收藏和咨询，底部只保留喜欢／不喜欢。</dd><dt>保存与计算</dt><dd>每题保存机会类别、企业岗位快照、喜欢／不喜欢、1–2 个原因标签。原因标签映射岗位事实字段，再沿用研发已有 carrier → V1–V10 映射；不重复给类别、判断按钮和原因三次计分。</dd><dt>结果生成</dt><dd>生活场景初步权重＋企业偏好增量＝本轮完整结果。企业偏好完成后，原有“正在形成的理解”记录原地升级，生成唯一正式类型、综合五项倾向、企业适配、选择交换与后续求职帮助。</dd><dt>恢复规则</dt><dd>允许中途退出并从未完成题目继续；已经提交的题目默认只回看、不重复作答。三题未完成时不提前显示类型名称或完整结果。</dd></dl></section>`;
+const enterpriseReasonAliases={
+  salary_priority:'prefer_high_salary',learning_density:'prefer_learning_density',work_novelty:'prefer_novel_work',collaboration:'prefer_collaboration',
+  avoid_intensity:'prefer_low_intensity',avoid_collaboration_load:'prefer_low_collaboration_load',prefer_familiar_work:'prefer_familiar_work',
+  living_cost:'prefer_low_living_cost',short_commute:'prefer_short_commute',leave_integrity:'prefer_complete_leave',professional_fit:'prefer_professional_fit',
+  promotion_clarity:'prefer_clear_path',growth_ceiling:'prefer_growth_ceiling',prefer_novel_work:'prefer_novel_work',cross_profession:'prefer_cross_profession',
+  skill_transferability:'prefer_transferable_skills',multiple_paths:'prefer_multiple_paths',professional_identity:'prefer_professional_fit',
+  relearning_cost:'prefer_low_transition_cost',prefer_certainty:'prefer_certainty'
+};
+const enterpriseCaseOrder=['high_salary','cost_effective','cross_industry'];
+enterpriseJobs.forEach((job,index)=>{
+  job.caseKey=enterpriseCaseOrder[index];
+  ['positive','negative'].forEach(group=>{
+  job[group]=job[group].map(binding=>{
+    const tagId=enterpriseReasonAliases[binding.id],tag=enterprisePreferenceTags[tagId];
+    return {tagId,label:binding.label,fact:binding.fact,...tag};
+  }).filter(binding=>enterpriseTestCases[job.caseKey].allowed.includes(binding.tagId));
+  });
+});
+const countHanText=value=>[...value.replace(/[\s·／/+−–—,.!?;:()（）、，。！？；：]/g,'')].length;
+const enterpriseCopyValidation={
+  displayMax:9,
+  preferenceNameMax:10,
+  displayOverflow:enterpriseJobs.flatMap(job=>[...job.positive,...job.negative]).filter(reason=>countHanText(reason.label)>9),
+  preferenceNameOverflow:Object.entries(enterprisePreferenceTags).filter(([,tag])=>countHanText(tag.name)>10)
+};
+const enterpriseTagRows=enterpriseJobs.flatMap(job=>[
+  ...job.positive.map(reason=>({job:job.role,verdict:'感兴趣',...reason})),
+  ...job.negative.map(reason=>({job:job.role,verdict:'暂不考虑',...reason}))
+]);
+const formatDelta=delta=>Object.entries(delta).map(([dimension,value])=>`${dimension}${value>0?'+':''}${value}`).join(' · ');
+document.querySelector('#inventory .inventory-nav')?.insertAdjacentHTML('beforeend','<a href="#enterprise-tag-mapping">企业反馈标签映射</a>');
+document.querySelector('#inventory .inventory>div')?.insertAdjacentHTML('beforeend',`<section id="enterprise-tag-mapping"><h3>企业反馈标签｜通用库与岗位绑定</h3><p>算法只认通用偏好 ID，不认具体岗位文案。岗位事实决定当题可出现哪些标签，用户看到的文案可随事实变化，但始终回写同一个通用 ID。</p><div class="summary"><b>展示文案规范：</b>用户可见 Tag 建议 4–8 个汉字，上限 9 个；通用偏好名称上限 10 个。手机内字号固定为 12px，不允许通过缩小字号容纳长文案。单个 Tag 不拆字换行；一组选项在 390px 手机框内可自然换成两行，不用横向滚动隐藏选项。当前校验：${enterpriseCopyValidation.displayOverflow.length===0&&enterpriseCopyValidation.preferenceNameOverflow.length===0?'全部通过':'存在超长文案，不可交付'}。</div><details open><summary>一｜通用偏好标签库（跨岗位复用）</summary><div class="table-wrap"><table><thead><tr><th>通用偏好 ID</th><th>统一含义</th><th>carrier</th><th>V1–V10 增量</th></tr></thead><tbody>${Object.entries(enterprisePreferenceTags).map(([tagId,tag])=>`<tr><td><code>${tagId}</code></td><td>${tag.name}</td><td><code>${tag.carrier}</code></td><td>${formatDelta(tag.delta)}</td></tr>`).join('')}</tbody></table></div></details><details><summary>二｜样例岗位如何绑定通用标签</summary><div class="table-wrap"><table><thead><tr><th>岗位</th><th>判断</th><th>当题展示文案</th><th>岗位事实</th><th>回写的通用 ID</th></tr></thead><tbody>${enterpriseTagRows.map(reason=>`<tr><td>${reason.job}</td><td>${reason.verdict}</td><td><b>${reason.label}</b></td><td>${reason.fact}</td><td><code>${reason.tagId}</code></td></tr>`).join('')}</tbody></table></div></details><div class="summary"><b>实现口径：</b>前端提交 tagId 与 factId；通用标签库解析 carrier 和 delta。结果只计原因标签一次，不对机会类别或“感兴趣／暂不考虑”重复加权。</div></section>`);
+document.querySelector('#enterprise-tag-mapping>p')?.insertAdjacentHTML('afterend',`<details open><summary>三道题的固定测量边界</summary><div class="table-wrap"><table><thead><tr><th>固定案例</th><th>测量目标</th><th>允许调用的通用标签</th></tr></thead><tbody>${Object.values(enterpriseTestCases).map(testCase=>`<tr><td><b>${testCase.name}</b></td><td>${testCase.goal}</td><td>${testCase.allowed.map(tagId=>enterprisePreferenceTags[tagId].name).join('／')}</td></tr>`).join('')}</tbody></table></div><div class="summary">标签池边界由三道固定题决定，不追求覆盖所有 carrier。替换真实企业岗位时，只能从该案例的允许范围中选取有事实依据的标签；扩展标签池属于测量规则变更，不是单纯换文案。</div></details>`);
+document.querySelector('#enterprise-tag-mapping')?.insertAdjacentHTML('beforeend','<div class="summary"><b>展示数量：</b>实际项数由当前岗位能解析出的可靠事实决定，产品不规定最少数量；产品规定每个判断最多展示 5 项，超出时按与本题测量目标的相关性取前 5 项。用户选择 1–2 项；如果一项可用标签都没有，该岗位不符合入题条件，不得编造补齐。</div>');
+const enterpriseRuleCopy=`<section class="enterprise-rules"><h3>企业偏好测试｜已定产品规则</h3><dl><dt>主路径</dt><dd>生活场景结果输出后，导师自动另起一个气泡，依次给出 3 个真实企业岗位。三类机会固定为高薪、高性价比、非本专业；每题必须完成“感兴趣／暂不考虑＋原因”，不存在“暂时无法判断”，3 题全部完成后才生成完整结果。</dd><dt>评价对象</dt><dd>用户判断的是一份完整机会；岗位是核心内容，公司是承载方，城市是现实环境，生活是这份选择带来的结果与代价。卡片可侧重不同维度，但不拆成四套评价对象。</dd><dt>卡片与详情</dt><dd>导师先说明三份岗位分别拉开收入、工作与生活节奏、专业跨度，但卡片不显示“高薪／高性价比／非本专业”等后台类别，避免替用户预判。岗位卡只展示企业、岗位、城市、薪资和必要的机会交换；公开信息来源放在岗位详情页。岗位详情是可选证据页，隐藏投递、收藏和咨询，底部统一保留“感兴趣／暂不考虑”。</dd><dt>信息分层</dt><dd>主稿展示理想完整数据态，用来确定用户判断一份机会所需的信息结构，不代表当前采集链路已稳定获得全部字段。必需字段为企业、岗位、城市、工作内容、任职要求和信息来源；可选增强字段包括薪资福利、工作节奏、成长路径、通勤与生活成本。</dd><dt>数据与缺失处理</dt><dd>每份机会必须可追溯到来源链接、岗位 ID、采集时间和原始字段；这些数据要求只写在稿外备注，不进入手机页面。增强字段没有可靠数据时隐藏对应信息，不展示空值，也不由 AI 猜测补齐。“能获得什么／需要接受什么”必须能回指岗位事实。</dd><dt>保存与计算</dt><dd>每题保存机会类别、企业岗位快照、感兴趣／暂不考虑、1–2 个原因标签，并区分本次反馈来自偏好测试还是后续机会推荐。原因标签映射岗位、公司、城市、生活事实字段，再沿用研发已有 carrier → V1–V10 映射；不重复给类别、判断按钮和原因三次计分。</dd><dt>结果生成</dt><dd>生活场景初步权重＋企业偏好增量＝本轮完整结果。企业偏好完成后，原有“正在形成的理解”记录原地升级，生成唯一正式类型、综合五项倾向、企业适配、选择交换与后续求职帮助。</dd><dt>恢复规则</dt><dd>允许中途退出并从未完成题目继续。完整结果生成前可前后切换三道题，旧判断与原因自动回填并允许修改；三题未完成时不提前显示类型名称或完整结果。</dd></dl></section>`;
 document.querySelector('#about').insertAdjacentHTML('beforeend',enterpriseRuleCopy);
 
 function enterpriseCardMarkup(job,index,furthest){
   const historyNav=index>0||index<furthest?`<div class="question-history-nav">${index>0?'<button type="button" data-question-nav="previous">← 上一份</button>':'<span></span>'}${index<furthest?'<button type="button" data-question-nav="next">返回当前进度 →</button>':'<span></span>'}</div>`:'';
   return `<article class="enterprise-question-card" data-question="${index}">
-    <div class="enterprise-progress"><span>企业偏好测试</span><b>${index+1} / 3</b></div>
+    <div class="enterprise-progress"><div><span>${index+1} / 3</span></div><div class="enterprise-progress-track" aria-label="企业偏好测试进度 ${index+1}/3"><span style="width:${((index+1)/3)*100}%"></span></div></div>
     ${historyNav}
-    <div class="enterprise-category">${job.category}</div>
-    <h3>${job.company} · ${job.role}</h3>
-    <p>${job.city}<br>${job.salary}</p>
-    <div class="job-summary">${job.summary}</div>
-    <button class="job-detail-link" type="button">查看完整岗位 <span>→</span></button>
-    <p class="judgement-prompt">只看这份真实机会，你喜欢吗？</p>
-    <div class="judgement-actions"><button type="button" data-verdict="like">喜欢</button><button type="button" data-verdict="dislike">不喜欢</button></div>
+    <div class="job-title-row"><div class="job-title-main"><h3>${job.role}</h3></div><button class="job-detail-link" type="button">查看详情 <span>→</span></button></div>
+    <p class="job-meta">${job.company}｜${job.city}｜${job.salary}</p>
+    <p class="job-summary">${job.description}你能获得<strong class="opportunity-benefit">${job.benefit}</strong>；相应地，也需要接受<strong class="opportunity-cost">${job.cost}</strong>。</p>
+    <p class="judgement-prompt">这个机会，你感兴趣吗？</p>
+    <div class="judgement-actions"><button type="button" data-verdict="like">感兴趣</button><button type="button" data-verdict="dislike">暂不考虑</button></div>
     <div class="reason-sheet" aria-live="polite"></div>
   </article>`;
 }
 function reasonMarkup(job,verdict,submitLabel,selectedReasons=[]){
   const labels=verdict==='like'?job.positive:job.negative;
-  return `<div class="reason-head"><b>${verdict==='like'?'喜欢它的哪些地方？':'哪些地方让你不喜欢？'}</b><span>至少选择 1 项，最多选择 2 项</span></div><div class="reason-options">${labels.map(label=>`<button type="button" aria-pressed="${selectedReasons.includes(label)}">${label}</button>`).join('')}</div><button class="reason-submit" type="button" ${selectedReasons.length?'':'disabled'}>${submitLabel}</button>`;
+  return `<div class="verdict-summary"><span>你的判断：<b>${verdict==='like'?'感兴趣':'暂不考虑'}</b></span><button type="button" data-change-verdict>修改</button></div><div class="reason-head"><b>${verdict==='like'?'哪里吸引了你？':'什么让你有些犹豫？'} <span>选 1–2 项</span></b></div><div class="reason-options">${labels.map(reason=>`<button type="button" data-reason-id="${reason.tagId}" aria-pressed="${selectedReasons.includes(reason.tagId)}">${reason.label}</button>`).join('')}</div><button class="reason-submit" type="button" ${selectedReasons.length?'':'disabled'}>${submitLabel}</button>`;
 }
 function detailMarkup(job,index){
   return `<div class="screen-view enterprise-job-detail">
-    <div class="test-mode-label"><span>企业偏好测试 · ${index+1}/3</span><b>测试查看态</b></div>
-    <header class="job-detail-head"><span>${job.category}</span><h3>${job.role}</h3><p>${job.company} · ${job.city}</p></header>
+    <div class="test-mode-label"><span>企业偏好测试 · ${index+1}/3</span></div>
+    <header class="job-detail-head"><h3>${job.role}</h3><p>${job.company} · ${job.city}</p><small class="job-detail-source">信息来自企业公开招聘</small></header>
     <section class="job-fact-list">${job.facts.map(item=>`<div><b>${item[0]}</b><span>${item[1]}</span></div>`).join('')}</section>
     <section class="job-detail-note"><h4>判断时可以留意</h4><p>这里提供的是一份真实机会的必要事实。你不需要判断它“好不好”，只需要判断自己是否愿意接受它提供的条件与交换。</p></section>
-    <div class="detail-judgement"><p>了解完整信息后，你喜欢这份机会吗？</p><div class="judgement-actions"><button type="button" data-verdict="like">喜欢</button><button type="button" data-verdict="dislike">不喜欢</button></div><div class="reason-sheet" aria-live="polite"></div></div>
+    <div class="detail-judgement"><p>这个机会，你感兴趣吗？</p><div class="judgement-actions"><button type="button" data-verdict="like">感兴趣</button><button type="button" data-verdict="dislike">暂不考虑</button></div><div class="reason-sheet" aria-live="polite"></div></div>
   </div>`;
 }
 function mountEnterpriseTest(panelId){
   const panel=document.querySelector(`#${panelId}`),phone=panel.querySelector('.phone'),screen=phone.querySelector('.screen'),chat=phone.querySelector('.chat-view'),turn=chat.querySelector('.enterprise-test-turn');
   const state={index:0,furthest:0,answers:[],completed:false};
-  turn.querySelector('.message').innerHTML='<p class="enterprise-intro">我还想用三份真实机会，看看你更愿意接受怎样的工作与交换。我们一份一份看。</p><div class="enterprise-card-host"></div>';
+  turn.dataset.enterpriseLayout='split';
+  turn.querySelector('.message').innerHTML='<div class="enterprise-intro-block"><p class="enterprise-intro">接下来我想和你一起看三份来自真实企业的岗位。它们在<strong class="selection-axis">收入</strong>、<strong class="selection-axis">工作与生活节奏</strong>、<strong class="selection-axis">专业跨度</strong>上各有不同，放在一起，是想看看面对具体机会时，你更愿意接受什么，又会放弃什么。这里没有标准答案，按你的真实感受选择就好。</p></div><div class="enterprise-card-block"><div class="enterprise-card-host"></div></div>';
   const host=turn.querySelector('.enterprise-card-host');
   function selectReason(sheet,button){
     const active=[...sheet.querySelectorAll('.reason-options button[aria-pressed="true"]')];
@@ -347,10 +439,13 @@ function mountEnterpriseTest(panelId){
     return '确认并看下一个';
   }
   function bindReasonSheet(sheet,job,verdict,source,selectedReasons=[]){
-    sheet.classList.add('active');sheet.innerHTML=reasonMarkup(job,verdict,submitLabel(),selectedReasons);
+    source.classList.add('has-verdict');sheet.classList.add('active');sheet.innerHTML=reasonMarkup(job,verdict,submitLabel(),selectedReasons);
+    sheet.querySelector('[data-change-verdict]').onclick=()=>{source.classList.remove('has-verdict');sheet.classList.remove('active');sheet.innerHTML='';source.querySelectorAll('[data-verdict]').forEach(button=>button.setAttribute('aria-pressed','false'));};
     sheet.querySelectorAll('.reason-options button').forEach(button=>button.onclick=()=>selectReason(sheet,button));
     sheet.querySelector('.reason-submit').onclick=()=>{
-      const reasons=[...sheet.querySelectorAll('.reason-options button[aria-pressed="true"]')].map(button=>button.textContent);
+      const reasonPool=verdict==='like'?job.positive:job.negative;
+      const reasonIds=[...sheet.querySelectorAll('.reason-options button[aria-pressed="true"]')].map(button=>button.dataset.reasonId);
+      const reasons=reasonIds.map(id=>reasonPool.find(reason=>reason.tagId===id)).filter(Boolean);
       state.answers[state.index]={category:job.category,company:job.company,role:job.role,verdict,reasons};
       if(state.index<state.furthest)state.index=state.furthest;
       else if(state.index<enterpriseJobs.length-1){state.index+=1;state.furthest=Math.max(state.furthest,state.index);}
@@ -362,7 +457,7 @@ function mountEnterpriseTest(panelId){
   }
   function bindJudgement(container,job){
     container.querySelectorAll('[data-verdict]').forEach(button=>button.onclick=()=>{
-      const existing=state.answers[state.index],reasons=existing?.verdict===button.dataset.verdict?existing.reasons:[];
+      const existing=state.answers[state.index],reasons=existing?.verdict===button.dataset.verdict?existing.reasons.map(reason=>reason.tagId):[];
       bindReasonSheet(container.querySelector('.reason-sheet'),job,button.dataset.verdict,container,reasons);
     });
   }
@@ -385,13 +480,13 @@ function mountEnterpriseTest(panelId){
     if(nav){nav.classList.add('detail-mode');nav.querySelector('.phone-title').textContent='岗位详情';const left=nav.querySelector('.icon-btn');left.setAttribute('aria-label','返回企业偏好测试');left.innerHTML='<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>';left.onclick=closeDetail;}
     else detail.insertAdjacentHTML('afterbegin','<button class="inline-detail-back" type="button">← 返回企业偏好测试</button>');
     detail.querySelector('.inline-detail-back')?.addEventListener('click',closeDetail);
-    bindJudgement(detail,job);
-    const answer=state.answers[state.index];if(answer)bindReasonSheet(detail.querySelector('.reason-sheet'),job,answer.verdict,detail,answer.reasons);
+    const detailJudgement=detail.querySelector('.detail-judgement');bindJudgement(detailJudgement,job);
+    const answer=state.answers[state.index];if(answer)bindReasonSheet(detailJudgement.querySelector('.reason-sheet'),job,answer.verdict,detailJudgement,answer.reasons.map(reason=>reason.tagId));
   }
   function render(){
     if(state.completed){
       host.innerHTML='<article class="final-profile-card"><span class="final-card-state">生活场景＋企业偏好 · 完整结果</span><div class="final-card-cover" role="img" aria-label="先行者结果封面占位"></div><h3>先行者</h3><p>你更愿意先走进真实选择，在行动中确认方向，也希望每一次尝试都能留下积累。</p><div class="final-value-preview"><span>一直在成长</span><span>未来有余地</span><span>自己能做主</span></div><div class="final-fit"><b>更适合你的企业环境</b><span>学习密度高 · 允许试错 · 方向可转换</span></div><div class="final-card-actions"><button type="button" class="view-complete-result">查看完整结果</button><button type="button" class="share-complete-result">分享结果</button></div><button type="button" class="restart-enterprise-test">重新测企业偏好</button></article>';
-      host.querySelector('.view-complete-result').onclick=()=>document.querySelector('[data-target="about"]').click();
+      host.querySelector('.view-complete-result').onclick=()=>showJourneyStage('about');
       host.querySelector('.share-complete-result').onclick=()=>{
         phone.querySelector('.share-result-sheet')?.remove();
         phone.insertAdjacentHTML('beforeend','<section class="share-result-sheet active"><div class="share-sheet-head"><b>分享结果</b><button type="button" aria-label="关闭">×</button></div><div class="share-poster"><span>我的求职选择方式</span><strong>先行者</strong><p>在行动中确认方向<br>让每次尝试都留下积累</p><small>生活场景＋企业偏好 · 完整结果</small></div><div class="share-sheet-actions"><button type="button">保存分享海报</button><button type="button">发给朋友</button></div></section>');
@@ -405,7 +500,7 @@ function mountEnterpriseTest(panelId){
     card.querySelector('.job-detail-link').onclick=()=>openDetail(job);bindJudgement(card,job);
     card.querySelector('[data-question-nav="previous"]')?.addEventListener('click',()=>{state.index-=1;render()});
     card.querySelector('[data-question-nav="next"]')?.addEventListener('click',()=>{state.index=state.furthest;render()});
-    const answer=state.answers[state.index];if(answer)bindReasonSheet(card.querySelector('.reason-sheet'),job,answer.verdict,card,answer.reasons);
+    const answer=state.answers[state.index];if(answer)bindReasonSheet(card.querySelector('.reason-sheet'),job,answer.verdict,card,answer.reasons.map(reason=>reason.tagId));
   }
   render();
 }
@@ -423,7 +518,7 @@ aTerms.find(term=>term.textContent.includes('Figma 页面')).nextElementSibling.
 aTerms.find(term=>term.textContent.includes('企业偏好测试承接')).nextElementSibling.textContent='生活结果气泡输出完成后，导师自动另起气泡进入第 1/3 题；没有过渡按钮，不模拟用户发言。岗位卡可直接作答，也可进入测试态岗位详情补充证据。';
 bTerms.find(term=>term.textContent.includes('Figma 页面')).nextElementSibling.textContent='B 专属 1 张：生活结果凝练披露＋企业第 1/3 题同屏的完整对话页。B 不设置生活结果详情页；企业测试流程与 A 共用。';
 bTerms.find(term=>term.textContent.includes('企业偏好测试承接')).nextElementSibling.textContent='导师讲完生活结果后自动另起气泡进入第 1/3 题；没有过渡按钮，不模拟用户发言。岗位卡、原因选择和测试态岗位详情与 A 完全相同。';
-[aHandoff,bHandoff].forEach(dl=>dl.insertAdjacentHTML('beforeend','<dt>企业偏好测试共用稿</dt><dd>共用 5 张补充状态：① 喜欢／不喜欢后的原因选择；② 常规岗位详情的测试查看态；③ 返回上一份并回填旧答案的修改态；④ 3/3 后直接输出可分享的完整结果卡；⑤ 分享结果面板。测试完成前可前后切换并改选；没有中立、跳过或暂时无法判断。完成后不再出现“测试完成—查看结果”的过渡卡。</dd><dt>结果卡操作</dt><dd>“查看完整结果”进入与「关于你」共用的详情页；“分享结果”打开分享海报；“重新测企业偏好”沿用本轮生活结果重启三道企业题，刚生成的完整结果已保存到「关于你」，不被覆盖。</dd><dt>企业测试新增素材</dt><dd>企业 Logo、岗位事实图标沿用现有素材。分享海报复用既定 8 张结果封面与类型文案，新增 1 套通用分享海报版式，不新增企业测试插图或三张机会宣传海报。</dd>'));
+[aHandoff,bHandoff].forEach(dl=>dl.insertAdjacentHTML('beforeend','<dt>企业偏好测试共用稿</dt><dd>共用 5 张补充状态：① 感兴趣／暂不考虑后的原因选择；② 常规岗位详情的测试内查看态；③ 返回上一份并回填旧答案的修改态；④ 3/3 后直接输出可分享的完整结果卡；⑤ 分享结果面板。测试完成前可前后切换并改选；没有中立、跳过或暂时无法判断。完成后不再出现“测试完成—查看结果”的过渡卡。</dd><dt>机会内容示意</dt><dd>手机主稿按理想完整数据态排布，示例数值只用于检验信息层级，不代表已经核实或仍在招聘。上线时必须替换为数据组提供、可追溯的真实岗位信息。</dd><dt>岗位卡文案</dt><dd>测试开始前先解释三份真实岗位在收入、工作与生活节奏、专业跨度上的差异；卡片不展示后台机会类别。每张卡使用一段自然语言介绍岗位，并对“能获得什么”与“需要接受什么”做等权强调。用户侧只保留简洁来源说明，更新时间和字段完整度留在稿外数据备注。</dd><dt>数据交付边界</dt><dd>必需字段：企业、岗位、城市、工作内容、任职要求、来源；可选增强字段：薪资福利、工作节奏、成长路径、通勤、生活成本。缺失处理：必需字段不全则不进入测试样本池；增强字段不可靠则隐藏整个对应信息，不留空、不推测。研发需保存来源链接、岗位 ID、采集时间、原始字段及字段可用状态，且保证机会利弊文案可回指事实证据。</dd><dt>机会反馈组件</dt><dd>提问统一为“这个机会，你感兴趣吗？”，按钮统一为“感兴趣／暂不考虑”；后续机会推荐沿用同一套可见文案。测试与推荐在数据层区分反馈场景，原因标签继续识别岗位、公司、城市、生活四个维度。</dd><dt>结果卡操作</dt><dd>“查看完整结果”进入与「关于你」共用的详情页；“分享结果”打开分享海报；“重新测企业偏好”沿用本轮生活结果重启三道企业题，刚生成的完整结果已保存到「关于你」，不被覆盖。</dd><dt>企业测试新增素材</dt><dd>不需要企业 Logo、岗位图标或企业测试插图。分享海报复用既定 8 张结果封面与类型文案，只新增 1 套通用分享海报版式。</dd>'));
 document.querySelector('#a .handoff-note h3').textContent='A｜生活结果卡＋逐题企业测试';
 document.querySelector('#b .handoff-note h3').textContent='B｜生活结果凝练披露＋逐题企业测试';
 const missingEnterprise=[...document.querySelectorAll('#missing li')].find(li=>li.textContent.includes('企业偏好验证'));
@@ -431,12 +526,141 @@ if(missingEnterprise)missingEnterprise.innerHTML='<b>企业偏好实现</b><span
 const ruleTerms=[...document.querySelectorAll('#about .enterprise-rules dt')];
 ruleTerms.find(term=>term.textContent==='恢复规则').nextElementSibling.textContent='允许中途退出并从未完成题目继续。完整结果生成前，用户可前后切换三道题，旧判断与原因自动回填并允许修改；完成第三题并提交后，本轮答卷锁定，历史结果不被悄悄改写。';
 ruleTerms.find(term=>term.textContent==='结果生成').nextElementSibling.textContent='生活场景初步权重＋企业偏好增量＝本轮完整结果。第三题提交后不展示完成过渡卡，导师直接输出含正式类型、综合倾向和企业适配摘要的最终结果卡；结果可查看详情、分享，或沿用本轮生活结果重新测试企业偏好。';
-document.querySelector('#about .enterprise-rules').insertAdjacentHTML('afterend','<section class="delivery-matrix"><h3>本轮 Figma 交付计数</h3><p><b>共 12 张代表稿：</b>A 2 张、B 1 张、企业测试共用补充状态 5 张、「关于你」4 张。第 2/3 与第 3/3 只做组件内容适配，不增加独立版式；新增 1 套通用分享海报版式，复用既定 8 张结果封面与现有企业素材。</p></section>');
+document.querySelector('#about .enterprise-rules').insertAdjacentHTML('afterend','<section class="delivery-matrix"><h3>本轮 Figma 交付计数</h3><p><b>共 16 张代表稿：</b>生活测试题型稿 4 张、A 2 张、B 1 张、企业测试共用补充状态 5 张、「关于你」4 张。生活题型中 3 类已有研发接口，二选一作为设计预留；企业第 2/3 与第 3/3 只做内容适配，不增加独立版式。新增 1 套通用分享海报版式，复用既定 8 张结果封面与现有企业素材。</p></section>');
+document.querySelector('#about .delivery-matrix p').innerHTML=document.querySelector('#about .delivery-matrix p').innerHTML.replace('复用既定 8 张结果封面与现有企业素材','复用既定 8 张结果封面，企业测试不额外交付 Logo 或插图素材');
 
 const enterpriseStyle=document.createElement('style');enterpriseStyle.textContent=`
 .enterprise-rules{max-width:820px;margin:24px auto 0;padding:20px;border-top:2px solid var(--ink);background:var(--paper)}.enterprise-rules h3{margin:0 0 12px;font-size:18px}.enterprise-rules dl{display:grid;grid-template-columns:110px 1fr;margin:0}.enterprise-rules dt,.enterprise-rules dd{margin:0;padding:9px 0;border-top:1px solid var(--line);font-size:10px}.enterprise-rules dt{font-weight:800}.enterprise-rules dd{color:#384146}.delivery-matrix{max-width:820px;margin:12px auto 0;padding:16px 20px;background:var(--green-soft)}.delivery-matrix h3{margin:0 0 5px;font-size:14px}.delivery-matrix p{margin:0;color:#2f4b43;font-size:10px}.enterprise-intro{margin-bottom:10px!important}.enterprise-test-turn>.message{padding:14px!important}.enterprise-question-card{border:1px solid var(--ink);background:var(--paper)}.enterprise-progress{display:flex;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line);font-size:8px}.enterprise-progress span{color:var(--muted)}.question-history-nav{display:flex;min-height:28px;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--line)}.question-history-nav button{border:0;background:none;color:var(--green);font-size:8px;font-weight:800;cursor:pointer}.enterprise-progress span{color:var(--muted)}.enterprise-category{display:inline-block;margin:12px 12px 5px;padding:3px 7px;background:var(--green-soft);color:var(--green);font-size:8px;font-weight:800}.enterprise-question-card h3{margin:0;padding:0 12px;font-size:14px}.enterprise-question-card>p{margin:4px 0 0;padding:0 12px;color:var(--muted);font-size:8px}.job-summary{margin:10px 12px 0;padding:10px;background:var(--soft);font-size:9px}.job-detail-link{display:flex;width:calc(100% - 24px);justify-content:space-between;margin:0 12px;padding:9px 0;border:0;border-bottom:1px solid var(--line);background:none;color:var(--green);font-size:9px;font-weight:800;text-align:left;cursor:pointer}.enterprise-question-card>.judgement-prompt{margin-top:10px;color:var(--ink);font-size:9px;font-weight:750}.judgement-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 12px 12px}.judgement-actions button{min-height:34px;border:1px solid var(--ink);background:var(--paper);font-size:9px;font-weight:800;cursor:pointer}.judgement-actions button[aria-pressed=true]{background:var(--ink);color:var(--paper)}.reason-sheet{display:none;border-top:1px solid var(--line);background:#f5f7f6}.reason-sheet.active{display:block;padding:11px 12px}.reason-head{display:flex;justify-content:space-between;gap:8px}.reason-head b{font-size:9px}.reason-head span{color:var(--muted);font-size:7px}.reason-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px}.reason-options button{min-height:31px;padding:5px;border:1px solid var(--line);background:var(--paper);font-size:8px;cursor:pointer}.reason-options button[aria-pressed=true]{border-color:var(--green);background:var(--green-soft);color:var(--green);font-weight:800}.reason-submit{width:100%;min-height:34px;margin-top:9px;border:0;background:var(--green);color:var(--paper);font-size:9px;font-weight:800}.reason-submit:disabled{background:#c8cdcf;color:#727b7e}.enterprise-job-detail{padding-bottom:144px}.test-mode-label{display:flex;justify-content:space-between;padding:8px 10px;background:var(--green-soft);color:var(--green);font-size:8px}.job-detail-head{padding:15px 2px 12px;border-bottom:1px solid var(--line)}.job-detail-head>span{color:var(--green);font-size:8px;font-weight:800}.job-detail-head h3{margin:3px 0;font-size:20px}.job-detail-head p{margin:0;color:var(--muted);font-size:9px}.job-fact-list{display:grid}.job-fact-list div{display:grid;grid-template-columns:54px 1fr;gap:9px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:9px}.job-detail-note{margin-top:12px;padding:11px;background:var(--soft)}.job-detail-note h4{margin:0 0 4px;font-size:10px}.job-detail-note p{margin:0;color:#41494d;font-size:8px}.detail-judgement{position:absolute;right:15px;bottom:15px;left:15px;padding:9px;border:1px solid var(--line);background:var(--paper)}.detail-judgement>p{margin:0 0 2px;font-size:9px;font-weight:800}.detail-judgement .judgement-actions{padding:7px 0 0}.detail-judgement .reason-sheet.active{margin:8px -9px -9px}.inline-detail-back{margin-bottom:8px;border:0;background:none;color:var(--green);font-size:9px}.enterprise-complete{padding:14px;border:1px solid var(--ink);background:var(--paper)}.enterprise-complete>span{color:var(--green);font-size:8px;font-weight:800}.enterprise-complete h3{margin:4px 0;font-size:17px}.enterprise-complete p{margin:0!important;color:#3c4548;font-size:9px!important}.complete-preview{display:grid;gap:3px;margin-top:11px;padding:10px;background:var(--soft);font-size:8px}.complete-preview span{color:var(--muted)}.view-complete-result{width:100%;margin-top:10px;padding:9px;border:0;background:var(--green);color:var(--paper);font-size:9px;font-weight:800}.enterprise-test-placeholder{display:none}#a .phone,#b .phone{min-height:900px}#a .chat-view,#b .chat-view{padding-bottom:122px}@media(max-width:760px){.enterprise-rules dl{grid-template-columns:1fr}.enterprise-rules dt{padding-bottom:0}.enterprise-rules dd{border-top:0;padding-top:3px}}
+.enterprise-question-card>.job-summary{margin:10px 12px 0;padding:10px;background:var(--soft);color:var(--ink);font-size:9px;line-height:1.65}.opportunity-benefit,.opportunity-cost{font-weight:850}.enterprise-question-card>.job-source{margin:7px 0 0;padding:0 12px;color:var(--muted);font-size:7px}.enterprise-intro{line-height:1.65}
 `;document.head.appendChild(enterpriseStyle);
 const finalResultStyle=document.createElement('style');finalResultStyle.textContent=`
 .final-profile-card{padding:14px;border:1px solid var(--ink);background:var(--paper)}.final-card-state{color:var(--green);font-size:8px;font-weight:800}.final-card-cover{height:72px;margin:9px 0;background:var(--soft);border:1px dashed var(--line)}.final-profile-card h3{margin:0;font-size:22px}.final-profile-card>p{margin:4px 0 0!important;padding:0!important;color:#394246!important;font-size:9px!important}.final-value-preview{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}.final-value-preview span{padding:4px 7px;border-radius:99px;background:var(--green-soft);color:var(--green);font-size:7px}.final-fit{display:grid;gap:3px;margin-top:10px;padding:9px;background:var(--soft);font-size:8px}.final-fit span{color:var(--muted)}.final-card-actions{display:grid;grid-template-columns:1.35fr 1fr;gap:7px;margin-top:10px}.final-card-actions button{min-height:34px;border:1px solid var(--green);background:var(--paper);color:var(--green);font-size:9px;font-weight:800}.final-card-actions .view-complete-result{margin:0;background:var(--green);color:var(--paper)}.restart-enterprise-test{width:100%;margin-top:7px;padding:7px;border:0;background:none;color:var(--muted);font-size:8px;text-decoration:underline}.share-result-sheet{position:absolute;z-index:12;inset:0;display:none;padding:70px 24px 24px;background:rgba(238,240,239,.97)}.share-result-sheet.active{display:block}.share-sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.share-sheet-head b{font-size:14px}.share-sheet-head button{width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:var(--paper);font-size:16px}.share-poster{display:grid;min-height:430px;align-content:end;padding:24px;border:1px solid var(--ink);background:var(--paper)}.share-poster>span{color:var(--muted);font-size:9px}.share-poster strong{margin:3px 0;font-size:34px}.share-poster p{margin:0;font-size:13px}.share-poster small{margin-top:18px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:8px}.share-sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.share-sheet-actions button{min-height:38px;border:1px solid var(--ink);background:var(--paper);font-size:9px;font-weight:800}.share-sheet-actions button:last-child{background:var(--ink);color:var(--paper)}
 `;document.head.appendChild(finalResultStyle);
+
+// 交付阅读结构：完整流程为一级视角，A/B 仅是生活结果呈现环节的局部设计选择。
+const topTabs=document.querySelector('.tabs');
+topTabs.innerHTML='<button class="tab" aria-selected="true" data-target="a"><b>完整测试流程</b><span>生活结果到关于你沉淀</span></button><button class="tab" aria-selected="false" data-target="inventory"><b>内容与依据</b><span>产品／研发按需查看</span></button>';
+topTabs.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{
+  topTabs.querySelectorAll('.tab').forEach(item=>item.setAttribute('aria-selected','false'));
+  document.querySelectorAll('.panel').forEach(panel=>panel.classList.remove('active'));
+  tab.setAttribute('aria-selected','true');document.getElementById(tab.dataset.target).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+const mainPanel=document.querySelector('#a'),variantPanel=document.querySelector('#b');
+const aboutPanel=document.querySelector('#about');
+aboutPanel.classList.remove('active');aboutPanel.classList.add('journey-about');mainPanel.appendChild(aboutPanel);
+mainPanel.querySelector('.panel-head h2').textContent='完整测试主流程';
+mainPanel.querySelector('.panel-head p').textContent='A/B 只比较生活结果如何呈现；企业偏好测试、完整结果和「关于你」沉淀均为同一套共用流程。';
+mainPanel.querySelector('.flow').innerHTML='<button type="button" data-flow-state="life">生活场景测试</button><span>→</span><button type="button" class="branch-step" data-flow-state="initial">初步理解</button><span>→</span><button type="button" data-flow-state="enterprise">企业偏好测试</button><span>→</span><button type="button" data-flow-state="final">完整结果</button><span>→</span><button type="button" data-flow-state="about">关于你</button>';
+
+const mainStage=mainPanel.querySelector('.stage'),journeyAPhone=mainStage.querySelector('.phone'),journeyBPhone=variantPanel.querySelector('.phone');
+const phoneStack=document.createElement('div');phoneStack.className='variant-phone-stack';
+journeyAPhone.dataset.variantPhone='a';journeyBPhone.dataset.variantPhone='b';
+mainStage.insertBefore(phoneStack,journeyAPhone);phoneStack.append(journeyAPhone,journeyBPhone);journeyBPhone.hidden=true;
+mainStage.insertAdjacentHTML('beforebegin','<section class="variant-review"><div><b>初步理解呈现</b><span class="variant-caption">当前查看 A：结果卡可进入完整详情</span></div><div class="variant-switch" role="group" aria-label="初步理解呈现方案"><button type="button" aria-pressed="true" data-variant="a">A｜结果卡＋详情</button><button type="button" aria-pressed="false" data-variant="b">B｜对话内凝练</button></div></section>');
+const variantCaption=mainPanel.querySelector('.variant-caption');
+mainPanel.querySelectorAll('.variant-switch button').forEach(button=>button.onclick=()=>{
+  const variant=button.dataset.variant;
+  mainPanel.querySelectorAll('.variant-switch button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+  journeyAPhone.hidden=variant!=='a';journeyBPhone.hidden=variant!=='b';
+  variantCaption.textContent=variant==='a'?'当前查看 A：结果卡可进入完整详情':'当前查看 B：对话内凝练披露，无详情入口';
+});
+variantPanel.setAttribute('aria-hidden','true');
+
+const journeyAScreen=journeyAPhone.querySelector('.screen');
+journeyAScreen.insertAdjacentHTML('beforeend',`<div class="screen-view life-test-view">
+  <div class="test-page-nav"><button type="button" aria-label="退出生活场景测试">‹</button><strong>生活场景测试</strong><span class="miniapp-capsule" aria-label="微信小程序操作区占位"><i></i><i></i><i></i><b></b></span></div>
+  <section class="life-question-view" data-question-type="single"></section>
+</div><div class="screen-view flow-final-view">
+  <article class="flow-final-card"><span>生活场景＋企业偏好 · 完整结果</span><div class="flow-final-cover" role="img" aria-label="先行者结果封面占位"></div><h3>先行者</h3><p>你更愿意先走进真实选择，在行动中确认方向，也希望每一次尝试都能留下积累。</p><div class="final-value-preview"><span>一直在成长</span><span>未来有余地</span><span>自己能做主</span></div><div class="final-fit"><b>更适合你的企业环境</b><span>学习密度高 · 允许试错 · 方向可转换</span></div><div class="flow-final-actions"><button type="button">查看完整结果</button><button type="button">分享结果</button></div><button type="button" class="flow-restart">重新测企业偏好</button></article>
+</div>`);
+mainPanel.querySelector('.variant-review').insertAdjacentHTML('afterend','<section class="question-type-switch" hidden><div><b>生活测试题型</b><span>实现状态：单图判断、八选五、全排序已有研发接口；二选一为设计预留，落地前需补充题型与计分支持。</span></div><div><button type="button" aria-pressed="true" data-question-type="single">单图判断</button><button type="button" aria-pressed="false" data-question-type="pair">二选一</button><button type="button" aria-pressed="false" data-question-type="select">八选五</button><button type="button" aria-pressed="false" data-question-type="rank">全排序</button></div></section>');
+mainPanel.querySelector('.question-type-switch').insertAdjacentHTML('afterend','<section class="enterprise-layout-switch" hidden><div><b>企业测试信息层级</b><span class="enterprise-layout-caption">当前查看方案 2：说明与岗位分为两个连续气泡</span></div><div><button type="button" aria-pressed="false" data-enterprise-layout="single">方案 1｜单气泡</button><button type="button" aria-pressed="true" data-enterprise-layout="split">方案 2｜双气泡</button></div></section>');
+const lifeQuestionView=mainPanel.querySelector('.life-question-view'),questionTypeSwitch=mainPanel.querySelector('.question-type-switch'),enterpriseLayoutSwitch=mainPanel.querySelector('.enterprise-layout-switch');
+const lifeOptions=['下班时天还亮着','周末总有新鲜事','随时能和家人见面','有自己的长期爱好','生活不被催促','通勤只要一刻钟','保障带来安全感','身边有稳定的朋友'];
+function renderLifeQuestion(type){
+  const progress='<div class="life-progress"><div class="life-progress-meta"><span>4 / 9</span></div><div class="life-progress-track" aria-label="测试进度 4/9"><span class="life-progress-fill" style="width:44%"></span></div></div>';
+  if(type==='single')lifeQuestionView.innerHTML=`${progress}<h3 class="life-question-title">这样的生活，你向往吗？</h3><div class="life-hero-placeholder">生活场景图片</div><p class="life-scene-copy">单程通勤一刻钟。到家时天还亮着，晚饭可以慢慢做、好好吃。</p><div class="life-binary-actions"><button type="button">不向往</button><button type="button">向往</button></div>`;
+  if(type==='pair')lifeQuestionView.innerHTML=`${progress}<h3 class="life-question-title">哪一种生活更吸引你？</h3><div class="life-pair">${lifeOptions.slice(0,2).map((text,index)=>`<button type="button"><span>场景图片 ${index+1}</span><b>${text}</b></button>`).join('')}</div><p class="life-inline-hint">点击其中一个，自动进入下一题</p>`;
+  if(type==='select')lifeQuestionView.innerHTML=`${progress}<h3 class="life-question-title">选出你更向往的 5 种生活</h3><div class="life-option-grid">${lifeOptions.map((text,index)=>`<button type="button" aria-pressed="${index<3}"><span>图片</span><b>${text}</b></button>`).join('')}</div><div class="life-submit-row"><span>已选 3/5</span><button type="button" disabled>还需选择 2 个</button></div>`;
+  if(type==='rank')lifeQuestionView.innerHTML=`${progress}<h3 class="life-question-title">把 8 种生活按向往程度排序</h3><p class="life-inline-hint">越向往的放得越靠前</p><div class="life-rank-list">${lifeOptions.map((text,index)=>`<div><b>${String(index+1).padStart(2,'0')}</b><span class="life-rank-thumb">图片</span><span>${text}</span><i>拖动</i></div>`).join('')}</div><button type="button" class="life-rank-submit">排好了</button>`;
+  lifeQuestionView.dataset.questionType=type;
+}
+renderLifeQuestion('single');
+questionTypeSwitch.querySelectorAll('button').forEach(button=>button.onclick=()=>{
+  questionTypeSwitch.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+  renderLifeQuestion(button.dataset.questionType);
+});
+enterpriseLayoutSwitch.querySelectorAll('button').forEach(button=>button.onclick=()=>{
+  const layout=button.dataset.enterpriseLayout;
+  enterpriseLayoutSwitch.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+  enterpriseLayoutSwitch.querySelector('.enterprise-layout-caption').textContent=layout==='split'?'当前查看方案 2：说明与岗位分为两个连续气泡':'当前查看方案 1：说明与岗位在同一个扁平气泡内';
+  document.querySelectorAll('[data-variant-phone] .enterprise-test-turn').forEach(turn=>turn.dataset.enterpriseLayout=layout);
+});
+
+let activeJourneyStage='initial';
+function resetJourneyScreens(phone){phone.querySelectorAll('.screen-view').forEach(view=>view.classList.remove('active'))}
+function showJourneyStage(stage){
+  activeJourneyStage=stage;
+  mainPanel.dataset.journeyStage=stage;
+  mainPanel.querySelectorAll('.flow [data-flow-state]').forEach(button=>button.setAttribute('aria-current',button.dataset.flowState===stage?'step':'false'));
+  questionTypeSwitch.hidden=stage!=='life';enterpriseLayoutSwitch.hidden=stage!=='enterprise';mainPanel.querySelector('.variant-review').hidden=stage!=='initial';
+  if(stage==='about'){showGallery();return}
+  resetJourneyScreens(journeyAPhone);resetJourneyScreens(journeyBPhone);
+  journeyAPhone.classList.toggle('test-page-mode',stage==='life');journeyBPhone.classList.remove('test-page-mode');
+  journeyAPhone.hidden=false;journeyBPhone.hidden=true;
+  if(stage==='life'){journeyAPhone.querySelector('.life-test-view').classList.add('active');return}
+  if(stage==='final'){journeyAPhone.querySelector('.flow-final-view').classList.add('active');return}
+  const selectedVariant=mainPanel.querySelector('.variant-switch [aria-pressed="true"]').dataset.variant;
+  const activePhone=stage==='initial'&&selectedVariant==='b'?journeyBPhone:journeyAPhone;
+  journeyAPhone.hidden=activePhone!==journeyAPhone;journeyBPhone.hidden=activePhone!==journeyBPhone;
+  const chat=activePhone.querySelector('.chat-view');chat.classList.add('active');
+  chat.querySelectorAll('.turn').forEach(turn=>turn.hidden=stage==='enterprise'?!turn.classList.contains('enterprise-test-turn'):turn.classList.contains('enterprise-test-turn'));
+}
+mainPanel.querySelectorAll('.flow [data-flow-state]').forEach(button=>button.onclick=()=>showJourneyStage(button.dataset.flowState));
+mainPanel.querySelectorAll('.variant-switch button').forEach(button=>button.onclick=()=>{
+  mainPanel.querySelectorAll('.variant-switch button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+  variantCaption.textContent=button.dataset.variant==='a'?'当前查看 A：结果卡可进入完整详情':'当前查看 B：对话内凝练披露，无详情入口';
+  if(activeJourneyStage==='initial')showJourneyStage('initial');
+});
+showJourneyStage('life');
+
+mainPanel.querySelector('.handoff-note').innerHTML='<h3>本屏交付｜设计必看</h3><dl><dt>要画什么</dt><dd>生活测试 4 张题型稿，其中二选一为预留题型；A、B 各 1 张生活结果对话稿，A 另含 1 张详情；企业测试后续状态为两版共用稿。</dd><dt>流程查看</dt><dd>点击上方阶段名称切换手机状态。“企业偏好测试”对应导师吐出第一张企业岗位卡，而不是抽象说明页；“关于你”进入独立沉淀页。</dd><dt>企业测试层级方案</dt><dd>本页暂留两种局部方案，只比较说明与岗位是否拆分气泡：方案 1 为单气泡扁平排布；方案 2 为连续双气泡，当前推荐。两版共用完全相同的岗位内容与操作，评审确定其一后再计入正式 Figma 交付，不要求长期维护两套。</dd><dt>反馈状态</dt><dd>默认只显示轻量“感兴趣／暂不考虑”分段选择；点击后收起判断按钮，显示“你的判断＋修改”，再展开单行可横滑的原因标签，选择 1–2 项后激活确认按钮。原因标签用于补充判断，不做第二组重按钮。</dd><dt>手机可读性</dt><dd>岗位卡内只保留完成判断所需信息；公开信息来源放在岗位详情。手机内主文和操作不低于 13px，只有进度与补充提示可使用 11–12px，禁止使用 7–9px 承载用户必读信息。</dd><dt>题型文案</dt><dd>生活测试四类标题均保持单行，并统一使用“向往”语义；操作数量、进度和排序方法放在临近操作区。企业题继续使用“感兴趣／暂不考虑”，不与生活题混用。</dd></dl>';
+mainPanel.querySelector('.handoff-note').innerHTML=mainPanel.querySelector('.handoff-note').innerHTML.replace('单行可横滑的原因标签','最多两行自然换行的原因标签');
+mainPanel.querySelector('.handoff-note dl').insertAdjacentHTML('beforeend','<dt>标签复用规则</dt><dd>设计只需给出当题自然语言标签；产品与研发使用稳定的通用偏好 ID。同一偏好可在不同岗位中使用不同展示文案，但不得因换企业或岗位新建一套算法标签。</dd>');
+mainPanel.querySelector('.handoff-note dl').insertAdjacentHTML('beforeend','<dt>标签数量</dt><dd>数据实际能提供多少条有依据的标签，就展示多少项，不设产品最低数量；产品上限为每个判断 5 项，用户选择 1–2 项。零个有效标签时，该岗位不进入测试。</dd>');
+
+document.querySelector('#about .handoff-note').innerHTML='<h3>本屏交付｜设计必看</h3><dl><dt>要画什么</dt><dd>4 张代表状态：有进行中记录、无进行中记录、初步详情、完整详情。历史结果共用完整详情结构。</dd><dt>信息层级</dt><dd>“正在形成的理解”体现可继续；“目前对你的理解”是主视觉；“过去的理解”弱化为可回顾档案。同一类型可以重复出现。</dd><dt>素材</dt><dd>复用 8 张结果封面与 8 张人物典故图；进行中记录不用类型封面，只使用轻量进度纹理或 UI 图形。</dd></dl>';
+
+const inventoryPanel=document.querySelector('#inventory');
+topTabs.querySelector('[data-target="inventory"] b').textContent='内容、规则与依据';
+topTabs.querySelector('[data-target="inventory"] span').textContent='产品／研发按需查看';
+const ruleAppendix=document.createElement('section');ruleAppendix.className='rule-appendix';
+ruleAppendix.innerHTML='<header><span>产品／研发</span><h3>企业偏好测试完整规则</h3><p>这里集中保存不需要设计师逐屏阅读的产品、计算和数据规则。</p></header>';
+const fullEnterpriseRules=document.querySelector('#about .enterprise-rules'),deliveryCount=document.querySelector('#about .delivery-matrix');
+ruleAppendix.append(fullEnterpriseRules,deliveryCount);inventoryPanel.append(ruleAppendix);
+
+const readingStyle=document.createElement('style');readingStyle.textContent=`
+.tabs{grid-template-columns:repeat(3,1fr)}#b{display:none!important}.variant-review{display:flex;max-width:820px;align-items:center;justify-content:space-between;gap:18px;margin:0 auto 18px;padding:12px 14px;border:1px solid var(--line);background:var(--paper)}.variant-review>div:first-child{display:grid;gap:2px}.variant-review>div:first-child b{font-size:11px}.variant-review>div:first-child span,.variant-caption{color:var(--muted);font-size:9px}.variant-caption{flex-basis:100%;margin:0}.variant-switch{display:flex;flex:0 0 auto;padding:3px;background:var(--soft)}.variant-switch button{padding:7px 11px;border:0;background:transparent;color:var(--muted);font-size:9px;font-weight:800;cursor:pointer}.variant-switch button[aria-pressed=true]{background:var(--paper);color:var(--green);box-shadow:0 0 0 1px var(--line)}.variant-phone-stack{width:390px}.variant-phone-stack>.phone[hidden]{display:none}.branch-step{padding:2px 6px;background:var(--green-soft);color:var(--green)!important}.audience-briefs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:820px;margin:18px auto 0}.audience-briefs article{padding:16px;border-top:3px solid var(--ink);background:var(--paper)}.audience-briefs article span,.rule-appendix>header span{display:inline-block;padding:2px 6px;background:var(--green-soft);color:var(--green);font-size:8px;font-weight:800}.audience-briefs h3{margin:9px 0 5px;font-size:13px}.audience-briefs p{margin:0;color:var(--muted);font-size:9px}.handoff-note dl{display:grid;gap:0}.handoff-note dt{margin-top:9px}.handoff-note dd{line-height:1.55}.rule-appendix{max-width:820px;margin:42px auto 0}.rule-appendix>header{padding:18px;background:var(--paper);border-top:3px solid var(--ink)}.rule-appendix>header h3{margin:8px 0 2px;font-size:18px}.rule-appendix>header p{margin:0;color:var(--muted);font-size:10px}.rule-appendix .enterprise-rules{margin-top:10px}.rule-appendix .delivery-matrix{margin-bottom:18px}@media(max-width:860px){.variant-review{display:grid}.variant-switch{width:100%}.variant-switch button{flex:1}.audience-briefs{grid-template-columns:1fr}.variant-phone-stack{width:min(390px,100%)}}@media(max-width:760px){.tabs{grid-template-columns:1fr}.variant-review{align-items:stretch}}
+`;document.head.appendChild(readingStyle);
+const integratedAboutStyle=document.createElement('style');integratedAboutStyle.textContent=`
+.tabs{grid-template-columns:repeat(2,1fr)}.variant-review{display:flex;max-width:820px;align-items:center;justify-content:space-between;gap:16px;margin:-8px auto 18px;padding:11px 14px;border:0;background:var(--green-soft)}.variant-review[hidden]{display:none!important}.variant-review>div:first-child{display:grid;gap:0}.variant-review>div:first-child b{font-size:10px}.variant-review .variant-caption{color:var(--muted);font-size:8px}.variant-switch{display:flex;gap:5px;padding:0;background:transparent}.variant-switch button{padding:6px 9px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:8px;font-weight:800}.variant-switch button[aria-pressed=true]{border-color:var(--green);background:var(--paper);color:var(--green);box-shadow:none}.journey-about{display:none;margin-top:4px}.journey-about>.panel-head,.journey-about>.flow{display:none}#a[data-journey-stage="about"]>.stage,#a[data-journey-stage="about"]>.decision,#a[data-journey-stage="about"]>.handoff-note{display:none}#a[data-journey-stage="about"]>.journey-about{display:block}@media(max-width:760px){.tabs{grid-template-columns:repeat(2,1fr)}.variant-review{display:grid}.variant-switch{display:grid;grid-template-columns:1fr 1fr}.variant-switch button{width:100%}}
+`;document.head.appendChild(integratedAboutStyle);
+const journeyNavigationStyle=document.createElement('style');journeyNavigationStyle.textContent=`
+.flow{align-items:center}.flow button{padding:4px 7px;border:0;background:none;color:var(--ink);font-size:11px;font-weight:800;cursor:pointer}.flow button:hover,.flow button[aria-current=step]{background:var(--green-soft);color:var(--green)}.flow .branch-step{background:transparent}.turn[hidden]{display:none!important}.question-type-switch{display:flex;max-width:820px;align-items:center;justify-content:space-between;gap:16px;margin:-8px auto 18px;padding:11px 14px;background:var(--green-soft)}.question-type-switch[hidden]{display:none}.question-type-switch>div:first-child{display:grid}.question-type-switch b{font-size:10px}.question-type-switch span{color:var(--muted);font-size:8px}.question-type-switch>div:last-child{display:flex;gap:5px}.question-type-switch button{padding:6px 9px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:8px;font-weight:800}.question-type-switch button[aria-pressed=true]{border-color:var(--green);background:var(--paper);color:var(--green)}.life-test-view{padding-bottom:72px}.life-progress{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);color:var(--muted);font-size:8px}.life-question-title{margin:18px 0 12px;font-size:18px;white-space:nowrap}.life-hero-placeholder{display:grid;height:300px;place-items:center;background:var(--soft);color:var(--muted);font-size:9px}.life-scene-copy{margin:10px 0!important;padding:10px;background:var(--paper);font-size:10px!important}.life-binary-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.life-binary-actions button,.flow-final-actions button,.life-rank-submit{min-height:38px;border:1px solid var(--ink);background:var(--paper);font-size:9px;font-weight:800}.life-binary-actions button:last-child,.flow-final-actions button:first-child,.life-rank-submit{background:var(--green);color:var(--paper);border-color:var(--green)}.life-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.life-pair button,.life-option-grid button{padding:0;border:1px solid var(--line);background:var(--paper);text-align:left}.life-pair button>span{display:grid;height:230px;place-items:center;background:var(--soft);color:var(--muted);font-size:8px}.life-pair button>b{display:block;padding:9px;font-size:9px}.life-inline-hint{margin:10px 0 0!important;color:var(--muted);font-size:8px!important;text-align:center}.life-option-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.life-option-grid button>span{display:grid;height:62px;place-items:center;background:var(--soft);color:var(--muted);font-size:7px}.life-option-grid button>b{display:block;padding:6px;font-size:8px}.life-option-grid button[aria-pressed=true]{border:2px solid var(--green)}.life-submit-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:8px}.life-submit-row button{min-width:116px;min-height:34px;border:0;background:#c8cdcf;color:#727b7e;font-size:8px;font-weight:800}.life-rank-list{display:grid;margin-top:10px}.life-rank-list div{display:grid;grid-template-columns:24px 48px 1fr 34px;align-items:center;gap:7px;padding:6px;border-bottom:1px solid var(--line);font-size:8px}.life-rank-list b{color:var(--green)}.life-rank-thumb{display:grid;width:48px;height:36px;place-items:center;background:var(--soft);color:var(--muted);font-size:7px}.life-rank-list i{color:var(--muted);font-style:normal}.life-rank-submit{width:100%;margin-top:12px}.flow-final-view{padding:10px 0 80px}.flow-final-card{padding:14px;border:1px solid var(--ink)}.flow-final-card>span{color:var(--green);font-size:8px;font-weight:800}.flow-final-cover{height:210px;margin:10px 0;background:var(--soft);border:1px dashed var(--line)}.flow-final-card h3{margin:0;font-size:26px}.flow-final-card>p{margin:4px 0 0;font-size:10px}.flow-final-actions{display:grid;grid-template-columns:1.35fr 1fr;gap:7px;margin-top:12px}.flow-restart{width:100%;margin-top:8px;border:0;background:none;color:var(--muted);font-size:8px;text-decoration:underline}@media(max-width:860px){.question-type-switch{display:grid}.question-type-switch>div:last-child{display:grid;grid-template-columns:1fr 1fr}}@media(max-width:760px){.flow button{font-size:10px}}
+`;document.head.appendChild(journeyNavigationStyle);
+const testPageFrameStyle=document.createElement('style');testPageFrameStyle.textContent=`
+.test-page-mode>.mentor-nav,.test-page-mode>.chat-composer{display:none!important}.test-page-mode>.screen{padding-top:0}.test-page-nav{display:grid;grid-template-columns:76px 1fr 76px;align-items:center;height:48px;margin:0 -15px 8px;border-bottom:1px solid var(--line)}.test-page-nav>button{width:42px;height:40px;border:0;background:none;font-size:24px}.test-page-nav>strong{text-align:center;font-size:13px}.miniapp-capsule{display:flex;width:68px;height:28px;align-items:center;justify-content:center;gap:3px;border:1px solid var(--line);border-radius:99px;background:var(--paper)}.miniapp-capsule i{width:3px;height:3px;border-radius:50%;background:var(--ink)}.miniapp-capsule b{width:14px;height:14px;margin-left:7px;border:3px solid var(--ink);border-radius:50%}.life-progress{display:grid!important;grid-template-columns:minmax(0,1fr);justify-content:stretch!important;gap:6px;width:calc(100% + 20px);margin-left:-10px;padding:6px 0 10px!important;border-bottom:0!important}.life-progress-meta{display:flex;justify-content:flex-end;color:var(--muted);font-size:8px}.life-progress-track{display:block;width:100%;height:5px;overflow:hidden;border-radius:99px;background:#d7dddb}.life-progress-fill{display:block;height:100%;border-radius:inherit;background:var(--green)}
+`;document.head.appendChild(testPageFrameStyle);
+const reviewerControlStyle=document.createElement('style');reviewerControlStyle.textContent=`
+.flow .branch-step{background:none;color:var(--ink)!important}.flow .branch-step:hover,.flow .branch-step[aria-current="step"]{background:var(--green-soft);color:var(--green)!important}
+.variant-review,.question-type-switch,.enterprise-layout-switch{max-width:820px;background:var(--paper);border:1px solid var(--line)}.enterprise-layout-switch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:-8px auto 18px;padding:11px 14px}.enterprise-layout-switch[hidden]{display:none!important}.enterprise-layout-switch>div:first-child{display:grid}.enterprise-layout-switch b{font-size:10px}.enterprise-layout-switch span{color:var(--muted);font-size:8px}.variant-switch,.question-type-switch>div:last-child,.enterprise-layout-switch>div:last-child{display:flex;gap:0;padding:3px;background:var(--soft)}.variant-switch button,.question-type-switch button,.enterprise-layout-switch button{padding:6px 9px;border:0;background:transparent;color:var(--muted);font-size:8px;font-weight:800}.variant-switch button[aria-pressed=true],.question-type-switch button[aria-pressed=true],.enterprise-layout-switch button[aria-pressed=true]{border:0;background:var(--paper);color:var(--green);box-shadow:0 0 0 1px var(--line)}
+.enterprise-test-turn[data-enterprise-layout="split"]>.message{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important}.enterprise-test-turn[data-enterprise-layout="split"] .enterprise-intro-block{padding:14px;border:1px solid var(--line);border-radius:18px 18px 18px 6px;background:var(--paper)}.enterprise-test-turn[data-enterprise-layout="split"] .enterprise-card-block{margin-top:8px;padding:14px;border:1.5px solid var(--ink);border-top:4px solid var(--green);border-radius:13px;background:var(--paper)}.enterprise-test-turn[data-enterprise-layout="single"] .enterprise-intro-block{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}.enterprise-test-turn[data-enterprise-layout="single"] .company-logo{display:none}.enterprise-intro{margin:0!important}.enterprise-question-card{border:0;background:transparent}.enterprise-progress{display:grid;gap:5px;padding:0 0 10px;border:0;color:var(--muted)}.enterprise-progress>div:first-child{display:flex;justify-content:flex-end;font-size:8px}.enterprise-progress-track{display:block;width:100%;height:4px;overflow:hidden;border-radius:99px;background:#d7dddb}.enterprise-progress-track>span{display:block;height:100%;border-radius:inherit;background:var(--green)}.question-history-nav{padding:0 0 7px}.job-title-row{display:flex;align-items:start;justify-content:space-between;gap:10px}.job-title-main{display:flex;min-width:0;align-items:center;gap:8px}.company-logo{display:grid;flex:0 0 36px;width:36px;height:36px;place-items:center;border:1px dashed var(--line);border-radius:8px;background:var(--soft);color:var(--muted);font-size:7px}.enterprise-question-card .job-title-row h3{min-width:0;padding:0;font-size:15px}.job-title-row .job-detail-link{flex:0 0 auto;width:auto;margin:0;padding:2px 0;border:0;font-size:8px}.enterprise-question-card>p.job-meta{margin:6px 0 0;padding:0;color:var(--muted);font-size:8px}.enterprise-question-card>.job-summary{margin:10px 0 0;padding:0;background:transparent}.enterprise-question-card>.job-source{margin:8px 0 0;padding:0}.enterprise-question-card>.judgement-prompt{margin-top:0;padding:10px 0 0;border-top:1px solid var(--line)}.enterprise-question-card>.judgement-actions{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:7px;padding:3px;background:var(--soft)}.enterprise-question-card>.judgement-actions button{min-height:32px;border:0;background:transparent}.enterprise-question-card>.judgement-actions button[aria-pressed=true]{background:var(--paper);color:var(--green);box-shadow:0 0 0 1px var(--line)}.has-verdict>.judgement-prompt,.has-verdict>.judgement-actions{display:none}.enterprise-question-card>.reason-sheet.active{padding:10px 0 0;border-top:1px solid var(--line);background:transparent}.verdict-summary{display:flex;align-items:center;justify-content:space-between;font-size:8px}.verdict-summary button{padding:2px 0;border:0;background:none;color:var(--green);font-size:8px}.reason-head{margin-top:8px}.reason-options{display:flex;max-width:100%;gap:6px;margin-top:7px;overflow-x:auto;padding:1px 1px 5px;scrollbar-width:none}.reason-options::-webkit-scrollbar{display:none}.reason-options button{flex:0 0 auto;min-height:27px;padding:4px 9px;border:1px solid var(--line);border-radius:99px;background:var(--paper);white-space:nowrap}.reason-options button[aria-pressed=true]{border-color:#9fbfb7;background:var(--green-soft);color:var(--green);font-weight:800}.reason-submit{min-height:33px;margin-top:7px}
+.enterprise-progress{grid-template-columns:minmax(0,1fr);justify-content:stretch}
+@media(max-width:760px){.variant-switch,.question-type-switch>div:last-child,.enterprise-layout-switch>div:last-child{display:grid;grid-template-columns:repeat(2,1fr)}.enterprise-layout-switch{display:grid}}
+`;document.head.appendChild(reviewerControlStyle);
+const enterpriseReadabilityStyle=document.createElement('style');enterpriseReadabilityStyle.textContent=`
+.enterprise-intro{font-size:13px!important;line-height:1.7}.enterprise-progress>div:first-child{font-size:11px}.company-logo{font-size:11px}.enterprise-question-card .job-title-row h3{font-size:16px}.job-title-row .job-detail-link{font-size:12px}.enterprise-question-card>p.job-meta{font-size:12px;line-height:1.5}.enterprise-question-card>.job-summary{font-size:13px;line-height:1.7}.enterprise-question-card>.judgement-prompt{font-size:14px}.enterprise-question-card>.judgement-actions button{min-height:38px;font-size:13px}.verdict-summary,.verdict-summary button{font-size:12px}.reason-head b{font-size:14px}.reason-head b span{margin-left:4px;color:var(--muted);font-size:11px;font-weight:500}.reason-options{flex-wrap:wrap;overflow:visible;padding-bottom:1px}.reason-options button{flex:0 0 auto;min-height:32px;padding:5px 11px;font-size:12px;white-space:nowrap}.reason-submit{min-height:38px;font-size:13px}.question-history-nav button{font-size:12px}.test-mode-label{font-size:11px}.job-detail-head p{font-size:13px}.job-detail-source{display:block;margin-top:5px;color:var(--muted);font-size:11px}.job-fact-list div{grid-template-columns:62px 1fr;font-size:13px}.job-detail-note h4{font-size:14px}.job-detail-note p{font-size:12px;line-height:1.65}.detail-judgement>p{font-size:14px}.inline-detail-back{font-size:12px}
+`;document.head.appendChild(enterpriseReadabilityStyle);
 </script></body></html>
