@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 导师 · 说服策略 Agent — 产品需求文档</title>
+<style>
+  :root {
+    --bg:#f6f7f9; --panel:#fff; --ink:#1a2233; --ink2:#4a5568; --ink3:#7a8699;
+    --line:#e5e8ee; --brand:#3b5bdb; --brandSoft:#edf1ff; --brandDeep:#2f46b0;
+    --warn:#c0392b; --warnSoft:#fdecea;
+  }
+  *{box-sizing:border-box} html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.75;font-size:15px;-webkit-font-smoothing:antialiased}
+  a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--brand);display:inline-block}
+  .repo{font-size:13px;color:var(--ink2);background:var(--brandSoft);border:1px solid #dbe4ff;padding:5px 12px;border-radius:999px;max-width:46%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .layout{display:grid;grid-template-columns:250px 1fr;gap:32px;max-width:1160px;margin:0 auto;padding:32px 24px 80px;align-items:start}
+  .toc{position:sticky;top:80px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 16px;box-shadow:0 1px 3px rgba(16,24,40,.06)}
+  .toc-title{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;margin-bottom:12px}
+  .toc a{display:block;padding:7px 10px;border-radius:8px;color:var(--ink2);font-size:13.5px;line-height:1.5}
+  .toc a:hover{background:var(--brandSoft);color:var(--brandDeep);text-decoration:none}
+  main{min-width:0}
+  .hero,.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:32px 36px;box-shadow:0 1px 3px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.05);margin-bottom:24px}
+  .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--brandDeep);background:var(--brandSoft);padding:3px 10px;border-radius:999px;margin-bottom:14px;letter-spacing:.04em}
+  h1{margin:0 0 10px;font-size:26px;line-height:1.35;font-weight:800;letter-spacing:-.01em}
+  .subtitle{margin:0;color:var(--ink2);font-size:15.5px}
+  h2{font-size:20px;font-weight:800;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+  .num{font-size:13px;font-weight:800;color:var(--brand);background:var(--brandSoft);width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .lead{color:var(--ink2);font-size:14.5px;margin:6px 0 20px;border-left:3px solid var(--brand);padding-left:14px}
+  h3{font-size:15.5px;font-weight:700;margin:24px 0 10px}
+  p{margin:10px 0} strong{font-weight:700}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .mini{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fbfcfe}
+  .mini .t{font-weight:700;font-size:14px;margin-bottom:6px}
+  .mini .d{color:var(--ink2);font-size:13.5px;line-height:1.65}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#fafbfd;color:var(--ink2);font-weight:600;font-size:12.5px;white-space:nowrap}
+  tr:last-child td{border-bottom:none} td:first-child{font-weight:600;white-space:nowrap}
+  .flow{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+  .step{flex:1 1 130px;min-width:130px;background:var(--brandSoft);border:1px solid #dbe4ff;border-radius:10px;padding:14px;text-align:center}
+  .step .sn{font-size:11px;font-weight:700;color:var(--brandDeep);letter-spacing:.05em}
+  .step .st{font-weight:700;font-size:14px;margin-top:4px}
+  .step .sd{color:var(--ink2);font-size:12px;margin-top:4px;line-height:1.5}
+  .callout{border-radius:10px;padding:16px 18px;margin:16px 0;font-size:14px;line-height:1.7}
+  .callout.brand{background:var(--brandSoft);border:1px solid #dbe4ff}
+  .callout.warn{background:var(--warnSoft);border:1px solid #f5c6c0}
+  .callout .ct{font-weight:700;margin-bottom:4px}
+  ul{margin:10px 0;padding-left:20px} li{margin:5px 0}
+  .foot{max-width:1160px;margin:0 auto;padding:0 24px 48px;color:var(--ink3);font-size:12.5px;text-align:center}
+  @media(max-width:860px){
+    .layout{grid-template-columns:1fr;padding:20px 16px 60px}
+    .toc{position:static} .toc a{display:inline-block;margin:2px 4px 2px 0;font-size:12.5px;padding:5px 9px;background:#f4f5f8}
+    .grid3{grid-template-columns:1fr} .hero,.card{padding:24px 20px} h1{font-size:22px}
+    .repo{display:none} table{display:block;overflow-x:auto;white-space:nowrap}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> AI 导师 · 说服策略 Agent</div>
+  <a class="repo" href="https://github.com/zyting-723/hlpp-ai-persuade-strategy" target="_blank" rel="noopener">github.com/zyting-723/hlpp-ai-persuade-strategy</a>
+</div>
+
+<div class="layout">
+  <nav class="toc">
+    <div class="toc-title">目录</div>
+    <a href="#s0">0 · 文档说明</a>
+    <a href="#s1">1 · 背景与问题</a>
+    <a href="#s2">2 · 产品目标</a>
+    <a href="#s3">3 · 方案期望</a>
+    <a href="#s4">4 · 功能范围与边界</a>
+    <a href="#s5">5 · 核心产品原则</a>
+    <a href="#s6">6 · 验收标准</a>
+    <a href="#s7">7 · 配套文档索引</a>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <span class="tag">产品需求文档 · PRD</span>
+      <h1>AI 导师 · 说服策略 Agent — 产品需求文档</h1>
+      <p class="subtitle">本 PRD 定义「说服策略」这个能力的<strong>方案期望</strong>——它要达成什么、给用户什么体验、边界在哪、怎么算做对。具体「怎么做」的对话方法与理论依据，在配套 GitHub 仓库里，本文档只讲「要什么」。</p>
+    </div>
+
+    <section class="card" id="s0">
+      <h2><span class="num">0</span>文档说明</h2>
+      <p class="lead">给研发交接用的产品需求文档，配合 GitHub 仓库的策略文档一起读。</p>
+      <h3>与 GitHub 仓库的分工</h3>
+      <table>
+        <tr><th>想知道</th><th>看哪</th></tr>
+        <tr><td>这个能力要达成什么、给用户什么体验、边界与验收</td><td>本文档（产品 PRD，方案期望层）</td></tr>
+        <tr><td>每一步「为什么这么做」+ 理论来源 + 行为规则</td><td>仓库 <code>策略与范式/</code> 目录（方法层）</td></tr>
+      </table>
+      <div class="callout brand">
+        <div class="ct">一句话边界</div>
+        本文档是「方案期望」，不是「实现规格」。不写状态机、数据结构、字段提取、接口依赖这些工程细节——那些由研发在方法层文档的基础上自行设计。
+      </div>
+    </section>
+
+    <section class="card" id="s1">
+      <h2><span class="num">1</span>背景与问题</h2>
+      <p class="lead">说服策略 agent 是 AI 导师 agent 群里的一项全局能力，不是一个只服务某个具体动作的局部功能。</p>
+      <p>AI 导师不是一个单一的对话助手，而是由<strong>一群 agent 协作</strong>完成的产品。说服策略 agent 是这群 agent 里的一个，并且是横跨全局的底层能力——它回答的是一个贯穿所有对话场景的问题：</p>
+      <div class="callout brand" style="text-align:center;font-size:16px">
+        <strong>「用户卡住了，怎么在对话里帮他往前走、做决定、迈出那一步。」</strong>
+      </div>
+      <p>用户在求职里卡住的地方各不相同，但卡点的底层是同一个：</p>
+      <div class="grid3">
+        <div class="mini"><div class="t">纠结</div><div class="d">在两个选项里反复权衡，知道一点但出不来，不敢下判断。</div></div>
+        <div class="mini"><div class="t">回避</div><div class="d">其实是怕，但用「再想想」「还不急」躲着，不面对。</div></div>
+        <div class="mini"><div class="t">慌乱</div><div class="d">时间压力下乱投一气，不做比较，逮谁是谁。</div></div>
+      </div>
+      <p>这些卡点的共同点，不是「缺信息」，而是<strong>「没想通 + 不敢迈」</strong>。说服策略 agent 就是解决这个共同点的能力——它不绑定在某一个环节（投递、简历、面试），而是在所有环节里，负责「推进决策」这件事。</p>
+    </section>
+
+    <section class="card" id="s2">
+      <h2><span class="num">2</span>产品目标</h2>
+      <p class="lead">全局能力：横跨 AI 导师所有对话场景，按需被各场景调用。</p>
+      <h3>用户价值</h3>
+      <p>让用户在求职的每一个卡点上，都能<strong>自己想通、自己认下方向、迈出当下那一步</strong>——不是被 AI 灌输结论，而是自己确认、自己认领。</p>
+      <h3>业务目标</h3>
+      <p>推动求职决策落地。现阶段的说服目标 = <strong>「让用户投出成功率高的岗位、迈出那一步」</strong>，这是说服目标集合的第一个目标，后续会拓展。</p>
+      <h3>定位</h3>
+      <p>全局能力，不是某一个功能的局部实现。它按需被投递、简历、面试、等待结果等各场景调用，回答的都是同一个问题——「怎么推进用户做决定」。</p>
+    </section>
+    <section class="card" id="s3">
+      <h2><span class="num">3</span>方案期望</h2>
+      <p class="lead">核心章节：这个能力在对话里，应该让用户感受到什么、经历什么。</p>
+
+      <h3>3.1 一句话体验</h3>
+      <div class="callout brand" style="text-align:center;font-size:16px">
+        <strong>「一个懂我、不替我做决定，却总能在关键处轻轻推我一把的导师。」</strong>
+      </div>
+
+      <h3>3.2 推进路径（四过程）</h3>
+      <div class="flow">
+        <div class="step"><div class="sn">过程 1</div><div class="st">接触</div><div class="sd">让用户感到被理解，是一切推进的前提</div></div>
+        <div class="step"><div class="sn">过程 2</div><div class="st">聚焦</div><div class="sd">把「什么都纠结」收敛到真正卡住的那一个点</div></div>
+        <div class="step"><div class="sn">过程 3</div><div class="st">唤起</div><div class="sd">让改变的理由从用户自己嘴里说出来</div></div>
+        <div class="step"><div class="sn">过程 4</div><div class="st">计划</div><div class="sd">动机足够后，落到具体的第一步</div></div>
+      </div>
+      <p>四过程可循环、非线性，不要求一次对话走完；一次对话走到哪，取决于用户此刻卡在哪。</p>
+
+      <h3>3.3 关键动作</h3>
+      <table>
+        <tr><th>阶段</th><th>动作</th><th>产品期望（用户感受到什么）</th></tr>
+        <tr><td>进入前</td><td>判断入口</td><td>识别用户今天带来什么事，判断要不要推进决策</td></tr>
+        <tr><td>进入前</td><td>卡点识别</td><td>搞清楚卡住的性质：真纠结 / 假逃避 / 慌乱，处理方向不同</td></tr>
+        <tr><td>接触</td><td>点明情绪</td><td>复述他说的话 + 点出没明说的情绪，让他感到「被听懂」</td></tr>
+        <tr><td>聚焦</td><td>锁定卡点</td><td>把几件事理成线，收敛到最放不下的那一个</td></tr>
+        <tr><td>聚焦</td><td>翻译诉求</td><td>挖出表面立场背后的真实诉求（「想离家近」→ 真正在意的是什么）</td></tr>
+        <tr><td>唤起</td><td>唤起动机</td><td>引导用户自己说出「我其实想要……」，而非 AI 灌输</td></tr>
+        <tr><td>唤起</td><td>给出依据</td><td>有结构、可追溯地给信息（数据 + 来源 + 不确定标注）</td></tr>
+        <tr><td>唤起</td><td>调整详略</td><td>按用户此刻愿意投入的注意力，决定论证给多深</td></tr>
+        <tr><td>唤起</td><td>描绘愿景</td><td>让用户具象化「问题解决之后的生活」</td></tr>
+        <tr><td>计划</td><td>交还决定权</td><td>把决定权还给用户，拒绝权始终保留</td></tr>
+        <tr><td>计划</td><td>拆解行动</td><td>落到具体的第一步（下一步做什么）</td></tr>
+      </table>
+
+      <h3>3.4 期望的用户感知</h3>
+      <ul>
+        <li><strong>被听懂</strong>：情绪被准确点出，而不是被敷衍安抚。</li>
+        <li><strong>被尊重</strong>：AI 替他说出方向，但始终「请确认」，决定权在他。</li>
+        <li><strong>被推进</strong>：不逼他，但总能在关键处轻轻推一把。</li>
+        <li><strong>落点明确</strong>：每次对话都朝着「迈出当下那一步」走，不停在「聊得挺好」。</li>
+      </ul>
+    </section>
+
+    <section class="card" id="s4">
+      <h2><span class="num">4</span>功能范围与边界</h2>
+      <p class="lead">它负责「怎么推进决策」，不负责「算出来」的那些事。</p>
+      <h3>做什么（In Scope）</h3>
+      <ul>
+        <li>在对话中推进用户的求职决策：听懂 → 聚焦卡点 → 唤起动机 → 落到行动。</li>
+        <li>判断用户当前卡在哪、卡点是什么性质，据此决定怎么推。</li>
+        <li>作为全局能力，按需被投递、简历、面试、等待结果等各场景调用。</li>
+      </ul>
+      <h3>不做什么（Out of Scope）</h3>
+      <ul>
+        <li>不实现岗位匹配、成功率计算、简历解析、画像采集、内容数据生产——只<strong>调用</strong>它们的结果。</li>
+        <li>不越出「推进决策」这个职责去替用户操作（比如直接代投简历）。</li>
+      </ul>
+      <div class="callout warn">
+        <div class="ct">底线（四条红线，详见第 5 节）</div>
+        不编数据 · 不替用户做决定 · 不趁人之危收钱 · 呈现中立。
+      </div>
+    </section>
+
+    <section class="card" id="s5">
+      <h2><span class="num">5</span>核心产品原则</h2>
+      <p class="lead">两条统领原则贯穿所有动作，四条红线是硬约束、可校验拦截。</p>
+
+      <h3>统领原则一：情绪是机会点</h3>
+      <p>情绪不是「先安抚再推进」的前置关卡，而是推进材料——<strong>害怕说明在乎，纠结说明正在权衡</strong>。Agent 看到情绪不停下转去「安抚」，而是顺势把情绪当作唤起动机的入口。</p>
+
+      <h3>统领原则二：替你说出来，请确认</h3>
+      <p>用户常常说不清自己心里已有的方向。Agent 基于碎片表达做引申推测，<strong>替他说出来</strong>，再<strong>请确认</strong>把决定权交还。两者必须成对：只替说不请确认 = 灌输；只请确认不替说 = 用户卡在「说不清」里走不动。</p>
+
+      <h3>四条红线</h3>
+      <table>
+        <tr><th>红线</th><th>含义</th></tr>
+        <tr><td>不编数据</td><td>论证必须真实、可追溯，不确定就标「待验证」</td></tr>
+        <tr><td>不替用户做决定</td><td>建议可给，选择权永远交还</td></tr>
+        <tr><td>不趁人之危收钱</td><td>不在用户情绪谷底触发收费</td></tr>
+        <tr><td>呈现中立</td><td>选项呈现本身不导向某个答案</td></tr>
+      </table>
+    </section>
+
+    <section class="card" id="s6">
+      <h2><span class="num">6</span>验收标准</h2>
+      <p class="lead">产品层面，怎么算「做对了」。</p>
+      <ul>
+        <li><strong>用户能说出取舍理由</strong>：不是「AI 让我投」，而是「我自己想清楚了要投哪个、为什么」。</li>
+        <li><strong>决策冲突下降</strong>：对话之后，用户比之前更清楚自己卡在哪、要往哪走。</li>
+        <li><strong>有行动落地</strong>：目标确认后，用户实际迈出了那一步（投递 / 补材料 / 练面试等）。</li>
+        <li><strong>红线零触碰</strong>：四条红线在对抗样例里全部拦截，且可审计。</li>
+      </ul>
+      <div class="callout warn">
+        <div class="ct">不接受的指标</div>
+        不把「聊天轮数」「回复点赞」「使用时长」当作说服有效性指标——它们衡量的是「聊得久」，不是「想通了、迈出去了」。
+      </div>
+    </section>
+
+    <section class="card" id="s7">
+      <h2><span class="num">7</span>配套文档索引</h2>
+      <p class="lead">研发实现时，配合以下仓库文档读。</p>
+      <table>
+        <tr><th>文档</th><th>作用</th></tr>
+        <tr><td><a href="https://github.com/zyting-723/hlpp-ai-persuade-strategy/blob/main/策略与范式/Agent%20说服策略设计%20—%20理论选型与行为规则.md" target="_blank" rel="noopener">Agent 说服策略设计 — 理论选型与行为规则</a></td><td>中心（Agent 的魂）：规定对话每一步怎么推进决策</td></tr>
+        <tr><td><a href="https://github.com/zyting-723/hlpp-ai-persuade-strategy/blob/main/策略与范式/Agent关系范式%20—%20四种范式的理解与选择.md" target="_blank" rel="noopener">Agent 关系范式 — 四种范式的理解与选择</a></td><td>Agent-用户关系前提，所有行为规则运行于此</td></tr>
+        <tr><td><a href="https://github.com/zyting-723/hlpp-ai-persuade-strategy/blob/main/策略与范式/说服案例拆解.md" target="_blank" rel="noopener">说服案例拆解</a></td><td>真实对话案例，规则提炼的原料</td></tr>
+        <tr><td><a href="https://github.com/zyting-723/hlpp-ai-persuade-strategy/blob/main/策略与范式/对话策略与语言范式%20—%20求职认知五层递进.md" target="_blank" rel="noopener">求职认知五层递进</a></td><td>用户认知素材：用户走一次决策要跨过的认知关口</td></tr>
+        <tr><td><a href="https://github.com/zyting-723/hlpp-ai-persuade-strategy/blob/main/数据溯源与报告索引.md" target="_blank" rel="noopener">数据溯源与报告索引</a></td><td>文档间的引用关系与阅读顺序</td></tr>
+      </table>
+      <div class="callout brand">
+        <div class="ct">仓库地址</div>
+        <a href="https://github.com/zyting-723/hlpp-ai-persuade-strategy" target="_blank" rel="noopener">github.com/zyting-723/hlpp-ai-persuade-strategy</a>（Private，仅供团队内部）
+      </div>
+    </section>
+  </main>
+</div>
+<div class="foot">AI 导师 · 说服策略 Agent 产品需求文档 · 2026-09-08</div>
+</body>
+</html>
