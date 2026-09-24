@@ -1355,7 +1355,7 @@ const planningStage=document.createElement('div');planningStage.className='plann
   <div class="planning-report">
     <section class="complete-result-hero"><h2>你的求职期待</h2><p class="plan-lead">你更看重能形成积累、同时保留后续选择空间的工作。</p><div class="scan-keywords"><span>成长优先</span><span>保留余地</span><span>自主判断</span></div>
       <div class="plan-evidence-list" aria-label="求职期待的判断依据"><p><b>你想获得的</b><span>参与实际业务，并留下能够带往下一份工作的经验。</span></p><p><b>你不想失去的</b><span>继续探索其他职业方向的可能，不因第一份工作过早定型。</span></p><p><b>你愿意尝试的</b><span>以药学背景为起点，也愿意比较相关方向和跨专业机会。</span></p></div>
-      <button type="button" class="plan-test-entry" aria-label="查看完整测试结果"><span>我们怎么得出这些判断？</span><b aria-hidden="true">→</b></button>
+      <button type="button" class="plan-test-entry" aria-label="参考你之前的选择特征，可回顾完整报告"><span>参考你之前的选择特征，可回顾完整报告</span><b aria-hidden="true">→</b></button>
     </section>
     <section class="complete-result-section"><h3>推荐逻辑</h3>
       <section class="plan-logic-block plan-supply"><h4><span class="plan-section-number">01</span>优质机会范围</h4><p>平台目前覆盖 8000+ 上市公司、1.76万+ 小巨人企业、10万+ 国央企和 1000+ 优质科创企业。较广的企业信息范围，让推荐不必局限在少数熟悉的公司里，也能继续寻找更接近你个人期待的机会。</p></section>
@@ -1371,7 +1371,7 @@ const planningStage=document.createElement('div');planningStage.className='plann
 </article>
 <aside class="planning-content-guide" aria-label="求职规划逐区内容来源">
   <article data-guide-target=".planning-nav"><b>页面头部</b><p><i class="source-fixed">产品固定</i>返回、更多操作与日期展示格式</p><p><i class="source-data">本轮数据</i>本次规划生成日期</p></article>
-  <article data-guide-target=".complete-result-hero"><b>求职期待</b><p><i class="source-fixed">产品固定</i>标题、三条依据的字段结构、查看依据入口</p><p><i class="source-data">本轮数据</i>结果类型、测试选择、简历／基本信息与补充回答中的事实</p><p><i class="source-ai">AI 生成</i>主结论、关键词及三条个性化依据；每条必须能回指本轮信息</p></article>
+  <article data-guide-target=".complete-result-hero"><b>求职期待</b><p><i class="source-fixed">产品固定</i>标题、三条依据的字段结构、完整结果报告入口</p><p><i class="source-data">本轮数据</i>结果类型、测试选择、简历／基本信息与补充回答中的事实</p><p><i class="source-ai">AI 生成</i>主结论、关键词及三条个性化依据；每条必须能回指本轮信息</p></article>
   <article data-guide-target=".plan-supply"><b>01 优质机会范围</b><p><i class="source-fixed">产品固定</i>平台能力说明、企业覆盖类别与数量口径</p></article>
   <article data-guide-target=".plan-personalization"><b>02 个性化筛选</b><p><i class="source-fixed">产品固定</i>三项判断标准及内容结构</p><p><i class="source-data">本轮数据</i>专业背景、跨专业意愿及其他已确认的求职条件</p><p><i class="source-ai">AI 生成</i>把本轮信息与三项标准连接起来的筛选说明</p></article>
   <article data-guide-target=".plan-daily" data-guide-end=".plan-basis-note"><b>03 每日更新</b><p><i class="source-fixed">产品固定</i>当前推荐话题的定义、每日更新机制、依据边界和决定权说明</p><p><i class="source-ai">AI 生成</i>解释当前话题为什么与用户有关，以及后续需要怎样校准</p></article>
@@ -1383,8 +1383,8 @@ const planningStage=document.createElement('div');planningStage.className='plann
   <p class="handoff-legend">本步骤只新增规划入口与单页报告，不新增推荐承接页。</p>
   <dl class="handoff-bullets">
     <dt>要出什么</dt><dd><ul><li>在首次生成推荐的页面中展示求职规划入口，并与当前的求职动态、宝藏企业、职业方向同时出现。</li><li>输出 1 张求职规划完整报告，内容与本页手机稿一致。</li></ul></dd>
-    <dt>必须保持的结构</dt><dd><ul><li>头部呈现求职期待与三条个性化依据，保留查看完整测试结果的轻量入口。</li><li>正文按 01 优质机会范围、02 个性化筛选、03 每日更新展开。</li><li>正文结束后依次放依据说明、更多话题反馈邀请、整份规划评价；不把评价插入任何单个章节。</li><li>产品固定、本轮数据与 AI 生成内容按左侧逐区标注落稿。</li></ul></dd>
-    <dt>需要连接的跳转</dt><dd><ul><li>规划入口进入本报告；返回键回到首次同时展示规划入口与三个推荐话题的页面。</li><li>“我们怎么得出这些判断？”进入本轮完整测试结果。</li></ul></dd>
+    <dt>必须保持的结构</dt><dd><ul><li>头部呈现求职期待与三条个性化依据，保留说明参考来源并进入完整结果报告的轻量入口。</li><li>正文按 01 优质机会范围、02 个性化筛选、03 每日更新展开。</li><li>正文结束后依次放依据说明、更多话题反馈邀请、整份规划评价；不把评价插入任何单个章节。</li><li>产品固定、本轮数据与 AI 生成内容按左侧逐区标注落稿。</li></ul></dd>
+    <dt>需要连接的跳转</dt><dd><ul><li>规划入口进入本报告；返回键回到首次同时展示规划入口与三个推荐话题的页面。</li><li>“参考你之前的选择特征，可回顾完整报告”进入同一轮「完整结果－完整报告」。</li></ul></dd>
     <dt>反馈组件</dt><dd><ul><li>复用 List 完整报告反馈组件，评价对象改为「这份求职规划」。</li><li>覆盖未反馈、比较符合、不太符合、补充原因、修改原因状态。</li><li>原因中允许选择或填写还想了解的话题，不新增第二套话题反馈入口。</li></ul></dd>
     <dt>展示生命周期</dt><dd><ul><li>规划入口只服务首次生成后的承接；次日再次登录时不再出现。</li><li>推荐内容继续按日更新，后续可增加新话题，不要求规划报告跟随重写。</li></ul></dd>
     <dt>不需要新增</dt><dd><ul><li>不设计第二层推荐承接页，不增加行动结尾。</li><li>不新增插画；沿用完整结果的白底、细线与文字入口规范。</li></ul></dd>
@@ -1395,7 +1395,7 @@ const planningHandoff=planningStage.querySelector('.planning-handoff');
 addHandoffRoleSwitch(planningHandoff,`<p class="handoff-legend">本栏只验收求职规划出现、生成、跳转与内容边界。</p><dl class="handoff-bullets">
   <dt>出现条件</dt><dd><ul><li>用户完成偏好测试、简历／基本信息与必要细节补充后，生成一次求职规划。</li><li>首次展示时，规划入口与当前可用的推荐话题同时出现，不串成前后两步。</li><li>记录首次展示状态；次日再次登录时隐藏规划入口，直接展示当日推荐内容。</li></ul></dd>
   <dt>数据与生成</dt><dd><ul><li>生成日期、测试结果、简历／基本信息与补充回答按本轮记录读取。</li><li>平台企业覆盖从产品配置读取，不写入本轮用户数据。</li><li>产品固定、本轮数据和 AI 生成正文严格按中间逐区标注提供；AI 文案必须能回指本轮信息。</li></ul></dd>
-  <dt>页面与跳转</dt><dd><ul><li>点击规划入口进入单页报告；返回后仍停留在三个推荐话题同时出现的页面。</li><li>点击“我们怎么得出这些判断？”进入同一轮完整测试结果，不创建第二份结果。</li></ul></dd>
+  <dt>页面与跳转</dt><dd><ul><li>点击规划入口进入单页报告；返回后仍停留在三个推荐话题同时出现的页面。</li><li>点击“参考你之前的选择特征，可回顾完整报告”进入同一轮「完整结果－完整报告」，不创建第二份结果。</li></ul></dd>
   <dt>内容边界</dt><dd><ul><li>不补造未提供的经历、能力、底线或情绪；来源冲突时不自动覆盖，以用户确认结果为准。</li><li>企业覆盖数字只表示平台信息范围，不得作为当前在招或个人匹配数量展示。</li></ul></dd>
   <dt>反馈与迭代</dt><dd><ul><li>整份规划反馈复用 List 报告反馈能力，反馈对象标记为求职规划报告；保存态度、原因、自由输入和提交时间，并允许修改。</li><li>原因项需覆盖理解不准确、推荐重点不符合、想增加其他话题和其他；用户提出的话题供产品汇总后进入迭代。</li><li>新增话题作为独立内容配置上线，不要求重新生成已展示的规划正文。</li></ul></dd>
   <dt>失败与留存</dt><dd><ul><li>生成失败沿用既有 AI 导师异常反馈，并保留本轮输入供重新生成。</li><li>保存规划生成日期、输入版本、内容版本与首次展示状态；每日推荐更新或扩展话题时不重新生成规划正文。</li></ul></dd>
