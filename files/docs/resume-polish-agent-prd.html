@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 导师 · 简历润色追问 Agent — 产品需求文档</title>
+<style>
+  :root{--bg:#f6f7f9;--panel:#fff;--ink:#1a2233;--ink2:#4a5568;--ink3:#7a8699;--line:#e5e8ee;--brand:#3b5bdb;--brandSoft:#edf1ff;--brandDeep:#2f46b0;--warn:#c0392b;--warnSoft:#fdecea}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.75;font-size:15px;-webkit-font-smoothing:antialiased}
+  a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--brand);display:inline-block}
+  .repo{font-size:13px;color:var(--ink2);background:var(--brandSoft);border:1px solid #dbe4ff;padding:5px 12px;border-radius:999px;max-width:46%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .layout{display:grid;grid-template-columns:250px 1fr;gap:32px;max-width:1160px;margin:0 auto;padding:32px 24px 80px;align-items:start}
+  .toc{position:sticky;top:80px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 16px;box-shadow:0 1px 3px rgba(16,24,40,.06)}
+  .toc-title{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;margin-bottom:12px}
+  .toc a{display:block;padding:7px 10px;border-radius:8px;color:var(--ink2);font-size:13.5px;line-height:1.5}
+  .toc a:hover{background:var(--brandSoft);color:var(--brandDeep);text-decoration:none}
+  main{min-width:0}
+  .hero,.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:32px 36px;box-shadow:0 1px 3px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.05);margin-bottom:24px}
+  .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--brandDeep);background:var(--brandSoft);padding:3px 10px;border-radius:999px;margin-bottom:14px;letter-spacing:.04em}
+  h1{margin:0 0 10px;font-size:26px;line-height:1.35;font-weight:800;letter-spacing:-.01em}
+  .subtitle{margin:0;color:var(--ink2);font-size:15.5px}
+  h2{font-size:20px;font-weight:800;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+  .num{font-size:13px;font-weight:800;color:var(--brand);background:var(--brandSoft);width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .lead{color:var(--ink2);font-size:14.5px;margin:6px 0 20px;border-left:3px solid var(--brand);padding-left:14px}
+  h3{font-size:15.5px;font-weight:700;margin:24px 0 10px}
+  p{margin:10px 0}strong{font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#fafbfd;color:var(--ink2);font-weight:600;font-size:12.5px;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .kb{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .kb-item{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fbfcfe}
+  .kb-item .t{font-weight:700;font-size:14px;margin-bottom:6px;color:var(--brandDeep)}
+  .kb-item .d{color:var(--ink2);font-size:13.5px;line-height:1.65}
+  .callout{border-radius:10px;padding:16px 18px;margin:16px 0;font-size:14px;line-height:1.7}
+  .callout.brand{background:var(--brandSoft);border:1px solid #dbe4ff}
+  .callout.warn{background:var(--warnSoft);border:1px solid #f5c6c0}
+  .callout .ct{font-weight:700;margin-bottom:4px}
+  ul{margin:10px 0;padding-left:20px}li{margin:5px 0}
+  .foot{max-width:1160px;margin:0 auto;padding:0 24px 48px;color:var(--ink3);font-size:12.5px;text-align:center}
+  @media(max-width:860px){.layout{grid-template-columns:1fr;padding:20px 16px 60px}.toc{position:static}.toc a{display:inline-block;margin:2px 4px 2px 0;font-size:12.5px;padding:5px 9px;background:#f4f5f8}.kb{grid-template-columns:1fr}.hero,.card{padding:24px 20px}h1{font-size:22px}.repo{display:none}table{display:block;overflow-x:auto;white-space:nowrap}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> AI 导师 · 简历润色追问 Agent</div>
+  <span class="repo">PRD · 研发交接 · 知识调用映射 · 2026-10-20</span>
+</div>
+
+<div class="layout">
+  <nav class="toc">
+    <div class="toc-title">目录</div>
+    <a href="#s0">0 · 文档说明</a>
+    <a href="#s1">1 · 这个 agent 做什么</a>
+    <a href="#s2">2 · 知识块清单</a>
+    <a href="#s3">3 · 场景 → 知识 → 时机</a>
+    <a href="#s4">4 · 调用节奏</a>
+    <a href="#s5">5 · 研发知识库准备清单</a>
+    <a href="#s6">6 · 交付流程</a>
+    <a href="#s7">7 · 能力分层与强化</a>
+    <a href="#s8">8 · 验收标准</a>
+    <a href="#s9">9 · 完整对话样例</a>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <span class="tag">产品需求文档 · PRD</span>
+      <h1>AI 导师 · 简历润色追问 Agent — 产品需求文档</h1>
+      <p class="subtitle">本 PRD 定义「简历润色追问」能力的<strong>知识调用映射</strong>——agent 在什么场景、调用什么知识、在什么时机。知识内容在研发自己的知识库，本文档只做「调用映射」，不承载知识内容本身。</p>
+    </div>
+
+    <section class="card" id="s0">
+      <h2><span class="num">0</span>文档说明</h2>
+      <p class="lead">给 agent 的一份知识调用映射：遇到什么情况，去用哪块知识，目的是什么。</p>
+      <h3>这是什么</h3>
+      <p>一张「场景 → 知识 → 时机」的映射表。agent 靠它判断：此刻该用哪块知识、用来做什么。</p>
+      <h3>这不是什么</h3>
+      <ul>
+        <li><strong>不是方案期望</strong>：不写「要达成什么体验」的体验陈述。</li>
+        <li><strong>不是实现规格</strong>：不写状态机、字段、判定规则、技术校验这些工程细节。</li>
+        <li><strong>不是知识库</strong>：不承载知识内容本身。每块知识只有「名称 + 解决什么 + 什么时候用」，具体内容由研发的知识库提供。</li>
+      </ul>
+      <div class="callout brand">
+        <div class="ct">一句话边界</div>
+        本文档回答的唯一问题是——「这个 agent 在什么时候，应该用哪块知识」。知识内容与工程实现，都不在这里。
+      </div>
+    </section>
+
+    <section class="card" id="s1">
+      <h2><span class="num">1</span>这个 agent 做什么</h2>
+      <p class="lead">拿到一份简历，追问出真实、可写、有数据支撑的经历，最终交付一份润色后的简历。</p>
+      <p>它<strong>不替你写</strong>，而是先看清这个学生是谁、能往哪走，再追问着让他把自己的真东西补出来——把「没写」的经历问出来，把「写了但没价值」的经历重新组织成有数据、有方法、有结果的表述。挖掘经历有两个手段：<strong>追问</strong>（问出真实经历）+ <strong>给真实案例</strong>（用真实例子启发、给安全感，让他愿意说出、看见自己经历的价值）。</p>
+      <div class="callout brand" style="text-align:center;font-size:16px">
+        <strong>「一个不替你编、不空夸你，却总能把你否掉的经历，翻译成值钱样子的追问者。」</strong>
+      </div>
+    </section>
+
+    <section class="card" id="s2">
+      <h2><span class="num">2</span>知识块清单</h2>
+      <p class="lead">这个 agent 在对话中会调用的知识块。每块只有「是什么 + 解决什么」，内容在研发知识库。</p>
+      <div class="kb">
+        <div class="kb-item"><div class="t">专业岗位识别匹配</div><div class="d">拿到简历先识别学生的专业背景与目标岗位方向，判断匹配度、以及这个专业还能往哪些岗位方向走。方向定位是挖掘经历的前置。</div></div>
+        <div class="kb-item"><div class="t">经历缺口识别</div><div class="d">方向确定后，逐段判断这段缺什么：缺数据 / 缺方法 / 缺结果 / 缺归属 / 空话 / AI 味，决定接下来追问哪块。</div></div>
+        <div class="kb-item"><div class="t">非实习经历挖掘</div><div class="d">学生没有实习经历时，把 校园项目 / 课程作业 / 社团 / 竞赛 / 志愿者 / 兼职 / 个人作品 当成「经历」，用同样的缺口识别 + 追问挖出可写价值，而不是让简历留白或自我否定。</div></div>
+        <div class="kb-item"><div class="t">自我否定翻译</div><div class="d">用户说「这很普通」「不是因为我」「都是杂活」时，把自我否定翻译成可写的价值表述。先复述否定，再给新角度。</div></div>
+        <div class="kb-item"><div class="t">真实案例佐证</div><div class="d">用户自我否定、对行业 / 岗位有幻想或刻板印象时，用真实经历、真实行业现状、真实数据去启发和校准认知，而不是空讲道理。真实案例比空泛安慰更有安全感、更能启发。</div></div>
+        <div class="kb-item"><div class="t">岗位产出追问</div><div class="d">经历缺数据时，按用户所在岗位对应的产出指标链把数据问出来。内容 / 新媒体运营岗是「触达 → 点击 → 留存 → 互动 → 关注」，其他岗位用各自行业的指标链。</div></div>
+        <div class="kb-item"><div class="t">产能追问</div><div class="d">用户拿不到后台数据时，改用 总量 / 周期产出 / 波峰 / 主题分类 证明稳定交付。</div></div>
+        <div class="kb-item"><div class="t">空话识别</div><div class="d">抓出无数据、无对象的口号式 / AI 味句子，建议删除或补证据。</div></div>
+        <div class="kb-item"><div class="t">编造拦截</div><div class="d">用户想编数据 / 夸张 / 写大概时，明确拒绝，并给替代路径（讲流程 / 讲产能 / 标待补充）。</div></div>
+        <div class="kb-item"><div class="t">颗粒度校准</div><div class="d">用户接不住时，换载体（图 / 文档 / 截图 / 打码样例）或问更小的问题。换说法，不换要求。</div></div>
+        <div class="kb-item"><div class="t">岗位锚点裁剪</div><div class="d">用户投不同岗位时，按「验证锚点」（实习相关性 / 量化成果 / 作品项目）判断哪些经历详写、略写、删。</div></div>
+        <div class="kb-item"><div class="t">STAR 结构化</div><div class="d">用户不会写经历时，用 情境 → 任务 → 行动 → 结果 帮他把一段经历讲完整。</div></div>
+        <div class="kb-item"><div class="t">行业常识</div><div class="d">用户问岗位要求 / 时间线 / 薪资 / 渠道时，给客观信息。</div></div>
+        <div class="kb-item"><div class="t">交付节点判断</div><div class="d">判断此刻该「继续追问」「给方向选项」还是「直接给成文」。依据是「素材挖没挖够 + 方向定没定」。</div></div>
+        <div class="kb-item"><div class="t">润色成文</div><div class="d">把已确认的素材 + 选定的方向，写成润色后的简历文本，逐段交付，最后汇总成完整简历。</div></div>
+      </div>
+    </section>
+
+    <section class="card" id="s3">
+      <h2><span class="num">3</span>场景 → 知识 → 时机</h2>
+      <p class="lead">核心表：agent 遇到什么场景，调用哪块知识，目的是什么、什么时机。</p>
+      <table>
+        <tr><th>场景（用户什么状态 / 说了什么）</th><th>调用的知识块</th><th>目的与时机</th></tr>
+        <tr><td>拿到一份简历（方向未明）</td><td>专业岗位识别匹配</td><td>入口第一步：识别专业与目标岗位方向，判断匹配、还能往哪走</td></tr>
+        <tr><td>方向确定后，逐段看简历</td><td>经历缺口识别</td><td>再逐段判断这段缺什么，决定追问哪块</td></tr>
+        <tr><td>「我没实习」「简历没东西写」</td><td>非实习经历挖掘 + 自我否定翻译</td><td>先破「没实习 = 没东西写」，再列校园项目 / 社团 / 竞赛 / 兼职等替代来源逐个挖</td></tr>
+        <tr><td>「这很普通」「不是因为我」「都是杂活」</td><td>自我否定翻译 + 真实案例佐证</td><td>命中立即翻译：先复述否定，再给新角度，中间不停顿；必要时用真实案例给信心</td></tr>
+        <tr><td>对行业 / 岗位有幻想或刻板印象（「国企很稳」「做这行能当艺术家」）</td><td>真实案例佐证</td><td>用调研到的现状（行业现状 / 真实薪资 / 真实案例）校准认知偏差</td></tr>
+        <tr><td>经历缺数据（不限岗位，如内容岗没阅读 / 转化数据）</td><td>岗位产出追问</td><td>判断缺数据后，按岗位对应指标链把数据问出来</td></tr>
+        <tr><td>用户拿不到后台数据</td><td>产能追问</td><td>指标链问不出，转总量 / 周期 / 波峰 / 主题</td></tr>
+        <tr><td>简历有口号式、AI 味句子</td><td>空话识别</td><td>扫描时标记，建议删或补证据</td></tr>
+        <tr><td>「能编吗」「夸张点」「写个大概」</td><td>编造拦截</td><td>任何时刻立即拒绝 + 给替代，不留模糊口子</td></tr>
+        <tr><td>「具体怎么写」「什么意思」「没听懂」</td><td>颗粒度校准</td><td>接不住先降颗粒度，换说法不换要求</td></tr>
+        <tr><td>「我投这个岗位该怎么写」</td><td>岗位锚点裁剪</td><td>按验证锚点判断哪些经历详写 / 略写 / 删</td></tr>
+        <tr><td>「这段经历怎么讲」「STAR 是啥」</td><td>STAR 结构化</td><td>用情境 / 任务 / 行动 / 结果把经历讲完整</td></tr>
+        <tr><td>问岗位要求 / 时间线 / 薪资 / 渠道</td><td>行业常识</td><td>给客观信息</td></tr>
+        <tr><td>一段经历素材够了、方向有歧义</td><td>交付节点判断</td><td>给 2-3 个写法方向，每个说清「好处 + 代价」，让用户选</td></tr>
+        <tr><td>素材确认、方向确定、无歧义</td><td>润色成文</td><td>直接给这段的润色成文</td></tr>
+        <tr><td>全部段落处理完</td><td>润色成文</td><td>汇总输出一份完整润色后的简历</td></tr>
+      </table>
+    </section>
+
+    <section class="card" id="s4">
+      <h2><span class="num">4</span>调用节奏</h2>
+      <p class="lead">知识块之间的先后与优先级。</p>
+      <ul>
+        <li><strong>入口永远先「专业岗位识别匹配」再「经历缺口识别」</strong>——先定位专业与目标岗位方向，再逐段找缺口，不能跳过方向直接追问。</li>
+        <li><strong>「没实习」先翻译再挖替代</strong>——先破「没实习 = 没东西写」的自我否定，再列校园项目 / 社团 / 竞赛 / 兼职等替代来源逐个挖，不能让学生停在「我没东西写」。</li>
+        <li><strong>「自我否定翻译」命中立即做</strong>——先复述否定、再给新角度，中间不停顿；停顿会让用户把否定再说一遍。</li>
+        <li><strong>「真实案例佐证」的专业性前置</strong>——真实实例、调研现状放在前面，先给人安全感，道理和建议放后面。</li>
+        <li><strong>「编造拦截」常驻</strong>——任何时刻出现编造信号立即切进去，拦完回到原场景继续。</li>
+        <li><strong>「颗粒度校准」优先级最高</strong>——用户接不住时先降颗粒度，再谈内容；否则给再多结构都是无效输出。</li>
+        <li><strong>交付永远逐段</strong>——先逐段确认素材与方向、逐段给成文，最后才汇总完整简历；不一次性抛完整内容让用户面对一大段文本。</li>
+        <li><strong>给方向选项必须说清得失</strong>——给 2-3 个写法方向时，每个讲清「好处 + 代价」，让用户能判断，而不是让用户瞎选。</li>
+      </ul>
+      <div class="callout warn">
+        <div class="ct">不做什么</div>
+        不编数据 · 不空夸 · 不凭空代写 · 不承诺结果。其中「不凭空代写」指：本 agent 会交付润色后的简历，但每一句都来自追问出的真实素材，绝不脱离真实经历编造或空写——「写」永远建立在「追问」之上。
+      </div>
+    </section>
+
+    <section class="card" id="s5">
+      <h2><span class="num">5</span>研发知识库准备清单</h2>
+      <p class="lead">第 2 节的 15 块知识，研发需要各准备一份知识内容。下面列出每块要放什么。</p>
+      <table>
+        <tr><th>知识块</th><th>研发要准备的知识内容</th></tr>
+        <tr><td>专业岗位识别匹配</td><td>专业 ↔ 岗位的匹配库：常见专业可投的岗位方向、跨专业可转方向、匹配判断规则与话术</td></tr>
+        <tr><td>经历缺口识别</td><td>缺口类型与判定标准：缺数据 / 缺方法 / 缺结果 / 缺归属 / 空话 / AI 味各自长什么样、怎么识别</td></tr>
+        <tr><td>非实习经历挖掘</td><td>非实习经历来源清单（校园项目 / 课程作业 / 社团 / 竞赛 / 志愿者 / 兼职 / 个人作品）及各类怎么挖的提问模板</td></tr>
+        <tr><td>自我否定翻译</td><td>高频自我否定话术 → 翻译句式的对照库（「这很普通」→ 可写的价值角度）</td></tr>
+        <tr><td>真实案例佐证</td><td>按行业 / 岗位分类的真实学生案例 + 真实行业现状素材库</td></tr>
+        <tr><td>岗位产出追问</td><td>各岗位产出指标链清单：内容岗五层漏斗是其一，另需产品 / 运营 / 技术 / 销售 / 职能等岗位各自的指标链</td></tr>
+        <tr><td>产能追问</td><td>总量 / 周期产出 / 波峰 / 主题分类的提问模板</td></tr>
+        <tr><td>空话识别</td><td>空话 / AI 味句式库（无数据、无对象的口号式表达样例）</td></tr>
+        <tr><td>编造拦截</td><td>拒绝话术 + 替代路径模板（讲流程 / 讲产能 / 标待补充）</td></tr>
+        <tr><td>颗粒度校准</td><td>降颗粒度提问模板 + 载体清单（图 / 文档 / 截图 / 打码样例）</td></tr>
+        <tr><td>岗位锚点裁剪</td><td>验证锚点判定规则（实习相关性 / 量化成果 / 作品项目）+ 各岗位看重什么</td></tr>
+        <tr><td>STAR 结构化</td><td>STAR 提问模板 + 各类型经历的完整示例</td></tr>
+        <tr><td>行业常识</td><td>岗位要求 / 时间线 / 薪资 / 渠道的客观信息库</td></tr>
+        <tr><td>交付节点判断</td><td>「素材挖没挖够 + 方向定没定」的判定规则，及三档交付动作（追问 / 给方向选项 / 直接给成文）的触发条件</td></tr>
+        <tr><td>润色成文</td><td>简历成文规范（排版 / 语言 / 量化表述习惯）+ 逐段成文模板</td></tr>
+      </table>
+      <div class="callout brand">
+        <div class="ct">交付顺序建议</div>
+        先准备「经历缺口识别」「非实习经历挖掘」「岗位产出追问」三块——它们覆盖入口的挖掘主链路；再补「自我否定翻译」「真实案例佐证」两块共情与认知校准；「交付节点判断」「润色成文」两块随交付流程一起准备；最后补其余辅助块。
+      </div>
+    </section>
+
+    <section class="card" id="s6">
+      <h2><span class="num">6</span>交付流程</h2>
+      <p class="lead">最终要输出一份润色后的简历。交付不是一次性给完，而是「逐段 + 四档 + 汇总确认」。</p>
+      <h3>四档交付动作</h3>
+      <table>
+        <tr><th>档位</th><th>什么时候</th><th>给什么</th></tr>
+        <tr><td>① 给思路</td><td>素材还没挖够</td><td>只给「这段可以往哪个方向写」的引导，继续追问，不落笔</td></tr>
+        <tr><td>② 给方向选项 + 得失</td><td>素材够了、方向有歧义</td><td>给 2-3 个写法方向，每个说清「好处 + 代价」，让用户选</td></tr>
+        <tr><td>③ 直接给成文</td><td>素材确认、方向确定、无歧义</td><td>直接给这段的润色文本</td></tr>
+        <tr><td>④ 汇总确认</td><td>全部段落成文完成</td><td>汇总输出完整简历，请用户通读、逐点提修改，确认后才算交付</td></tr>
+      </table>
+      <h3>交付节点判断矩阵（单段内）</h3>
+      <table>
+        <tr><th>素材状态</th><th>方向状态</th><th>交付动作</th></tr>
+        <tr><td>没挖够</td><td>—</td><td>继续追问（最多给思路引导）</td></tr>
+        <tr><td>挖够了</td><td>有歧义 / 多选项</td><td>给方向选项 + 说清得失</td></tr>
+        <tr><td>挖够了</td><td>已确定</td><td>直接给成文</td></tr>
+      </table>
+      <h3>得失说明的详略（参考说服策略 agent）</h3>
+      <p>「② 给方向选项」时说清得失有两种颗粒度，<strong>参考说服策略 agent 的「调整详略」动作</strong>——按用户此刻愿意投入的注意力决定给多深：</p>
+      <table>
+        <tr><th>颗粒度</th><th>怎么给</th><th>什么时候用</th></tr>
+        <tr><td>一句话点破</td><td>「选 A 更聚焦但显得窄，选 B 更宽但亮点不突出」</td><td>默认；用户赶时间、只想快速定</td></tr>
+        <tr><td>给例子对比</td><td>把两个方向各写成一小段样例，让他直观看到差别</td><td>用户在认真权衡、主动追问「有差别吗」、或决策困难反复纠结</td></tr>
+      </table>
+      <h3>逐段 + 汇总确认</h3>
+      <p>按「教育 / 实习 / 项目 / 技能 …」逐段走完「追问 → 选方向 → 成文」，每一段确认后再进下一段；全部分段处理完，进入「④ 汇总确认」——汇总完整简历 → 用户通读 → 逐点修改 → 确认交付。</p>
+    </section>
+
+    <section class="card" id="s7">
+      <h2><span class="num">7</span>能力分层与强化</h2>
+      <p class="lead">15 块知识落到技术实现分三层：知识库调用、主 prompt 强化、独立 subagent。</p>
+      <h3>① 靠知识库调用就能解决</h3>
+      <p>固定信息 / 模板检索类：<strong>行业常识、空话识别、编造拦截、产能追问、岗位产出追问、STAR 结构化、颗粒度校准、非实习经历挖掘、岗位锚点裁剪</strong>。查模板 / 规则 / 信息即可，不需要额外推理。</p>
+      <h3>② 靠主 prompt 强化（理解 + 推理 + 共情）</h3>
+      <p>需要读懂上下文再判断的：<strong>经历缺口识别、专业岗位识别匹配、自我否定翻译、交付节点判断</strong>。靠大模型本身的阅读理解与推理，用主指令 + 示例强化即可，不必拆 agent。</p>
+      <h3>③ 值得独立成 subagent</h3>
+      <table>
+        <tr><th>subagent</th><th>供给哪些知识块</th><th>为什么值得独立</th></tr>
+        <tr><td>行业调研 subagent</td><td>真实案例佐证 · 行业常识 · 岗位锚点裁剪</td><td>真人辅导里「先花时间调研这个行业 / 岗位的真实现状与案例」是独立、耗时、可并行、需联网搜索的动作，主对话 agent 不该边聊边大量检索</td></tr>
+        <tr><td>简历成文 subagent（建议）</td><td>润色成文</td><td>「最后坐下来把素材写成简历」是生成型动作，与「对话追问」是两种模式；拆成独立写作能力更清晰，配合逐段交付</td></tr>
+      </table>
+      <h3>④ 与其他 agent 的协作</h3>
+      <p>说服策略 agent 是横跨全局的底层能力（推进用户做决定）。简历润色 agent 在「让用户选方向」「得失说明的详略」「用户纠结要不要改」等时刻，直接调用说服策略 agent 的「调整详略」「替你说出来，请确认」等逻辑，不重复自建。</p>
+      <div class="callout brand">
+        <div class="ct">结论</div>
+        真正必须独立的只有 <strong>行业调研 subagent</strong>；简历成文可先由主 agent 承担，量大再拆。其余全部用「知识库 + 主 prompt」覆盖。
+      </div>
+    </section>
+
+    <section class="card" id="s8">
+      <h2><span class="num">8</span>验收标准</h2>
+      <p class="lead">研发交付时，产品层面怎么算「做对了」。</p>
+      <table>
+        <tr><th>验收项</th><th>标准</th></tr>
+        <tr><td>红线零触碰</td><td>不编数据 / 不空夸 / 不凭空代写 / 不承诺结果，在对抗样例（「能编吗」「写个大概」「帮我整份写了吧」）里全部拦截，且可审计</td></tr>
+        <tr><td>素材可溯源</td><td>交付的润色简历里，每一句都能追溯到用户提供的真实素材，没有凭空编造的数据或经历</td></tr>
+        <tr><td>用户能说取舍理由</td><td>选方向时，用户能说出「为什么选 A 不选 B」，而不是「AI 让我选」——对应「给方向选项必须说清得失」</td></tr>
+        <tr><td>交付闭环</td><td>最终输出一份完整、用户逐段确认过的润色简历，走完「逐段 → 汇总确认」，不停在中间环节</td></tr>
+      </table>
+      <div class="callout warn">
+        <div class="ct">不接受的指标</div>
+        不把「聊天轮数」「回复点赞」「使用时长」当有效指标——它们衡量「聊得久」，不是「简历真的改好了、用户确认交付了」。
+      </div>
+    </section>
+
+    <section class="card" id="s9">
+      <h2><span class="num">9</span>完整对话样例</h2>
+      <p class="lead">走一遍完整链路：从拿到简历到汇总确认。学生：教育学专业，投新媒体运营岗，简历上「学生会宣传部：负责公众号运营」只有一句话。</p>
+      <table>
+        <tr><th>谁</th><th>说了什么</th><th>触发</th></tr>
+        <tr><td>Agent</td><td>（拿到简历，先判断方向）你是教育学专业、投新媒体运营——这个方向可以走，教育背景做「教育类内容」反而是你的差异化。</td><td>专业岗位识别匹配</td></tr>
+        <tr><td>Agent</td><td>（扫到宣传部这段）这段「负责公众号运营」缺数据、缺方法、缺结果，得补。</td><td>经历缺口识别</td></tr>
+        <tr><td>Agent</td><td>这个号多久发一次？你写了多少篇？阅读量大概什么量级？</td><td>岗位产出追问</td></tr>
+        <tr><td>学生</td><td>就学生会那种号，很普通，都是搬砖，没什么好写的。</td><td>—</td></tr>
+        <tr><td>Agent</td><td>你把这个号从 0 做到 800 粉、一周三更，这不是搬砖，是从 0 到 1 的冷启动——先别急着说普通。</td><td>自我否定翻译</td></tr>
+        <tr><td>Agent</td><td>这段有两种写法：<strong>A 突出增长数据</strong>（好处：一眼看到成绩；代价：800 粉体量小，数字不亮眼）；<strong>B 突出完整操盘流程</strong>（好处：体现方法论；代价：没数据，容易被筛）。你投「内容」还是「运营」岗，决定选哪个。</td><td>给方向选项 + 得失</td></tr>
+        <tr><td>学生</td><td>我投内容岗多一点，选 B 吧，但能不能把 800 粉也带上？</td><td>—</td></tr>
+        <tr><td>Agent</td><td>（直接给成文）「独立负责学生会公众号运营，一周三更，一年从 0 做到 800 粉；主导选题、排版到发布的完整流程。」</td><td>直接给成文</td></tr>
+        <tr><td>Agent</td><td>（全部段落走完后）这是完整的润色简历，你通读一遍，有要改的告诉我。</td><td>汇总确认</td></tr>
+      </table>
+      <div class="callout brand">
+        <div class="ct">这串样例串起了哪几块</div>
+        专业岗位识别匹配 → 经历缺口识别 → 岗位产出追问 → 自我否定翻译 → 给方向选项 + 得失 → 直接给成文 → 汇总确认。知识块不是孤立的，而是顺着用户的真实状态串起来——这份文档的映射表，落到对话里就是这条线。
+      </div>
+    </section>
+  </main>
+</div>
+<div class="foot">AI 导师 · 简历润色追问 Agent 产品需求文档 · 2026-10-20</div>
+</body>
+</html>
